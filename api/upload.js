@@ -14,7 +14,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Wrap busboy vào Promise để đảm bảo xử lý xong mới chạy tiếp
+    // 1. Lấy tên khách hàng từ header (đã được frontend xử lý an toàn)
+    const clientFolder = req.headers['x-client-name'] || 'general';
     const fileData = await new Promise((resolve, reject) => {
       const bb = Busboy({ headers: req.headers });
       let fileBuffer = null;
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
 
     // Thực hiện upload lên Vercel Blob
     // BLOB_READ_WRITE_TOKEN sẽ tự động được Vercel inject vào môi trường
-    const blob = await put(`audit/${Date.now()}-${fileData.filename}`, fileData.buffer, {
+    const blob = await put(`audit/${clientFolder}/${Date.now()}-${fileData.filename}`, fileData.buffer, {
       access: 'public',
       contentType: fileData.contentType
     });
