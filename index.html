@@ -88,7 +88,18 @@
                             <span class="text-sm font-mono" id="controlId"></span>
                         </div>
                         <h2 class="text-xl md:text-2xl font-semibold text-gray-900 mt-3" id="controlQuestion"></h2>
-                    </div>
+
+                        <div id="explanationArea" class="mt-3 hidden">
+                            <button id="toggleExplanation" type="button" class="text-sm flex items-center text-emerald-600 hover:text-emerald-800 focus:outline-none transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="font-medium">Xem Hướng dẫn / Gợi ý</span>
+                            </button>
+                            <div id="explanationContent" class="mt-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 text-sm leading-relaxed hidden">
+                                </div>
+                        </div>
+                        </div>
                     
                     <div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -135,7 +146,13 @@
 <script>
 // --- Database (dữ liệu từ checklist_data.json) ---
 const CHECKLIST_DATA = [
-  {"section": "Điều khoản 4-10", "id": "4.1", "question": "(4.1) Đã có tài liệu xác định các vấn đề nội bộ/bên ngoài liên quan đến ATTT chưa?"},
+  {
+    "section": "Điều khoản 4-10",
+    "id": "4.1",
+    "question": "(4.1) Đã có tài liệu xác định các vấn đề nội bộ/bên ngoài liên quan đến ATTT chưa?",
+    // THÊM PHẦN NÀY VÀO:
+    "explanation": "<b>Ý nghĩa:</b> Xác định 'hoàn cảnh' của tổ chức để đánh giá rủi ro chính xác.<br><b>Gợi ý chuẩn bị:</b><br>- <i>Vấn đề bên ngoài:</i> Luật pháp mới (NĐ13), xu hướng tấn công mạng, yêu cầu từ khách hàng.<br>- <i>Vấn đề nội bộ:</i> Văn hóa tuân thủ của nhân viên, ngân sách IT, hạ tầng cũ/mới.<br><b>Bằng chứng điển hình:</b> Tài liệu 'Bối cảnh tổ chức', Phân tích SWOT, Biên bản họp Lãnh đạo."
+  },
   {"section": "Điều khoản 4-10", "id": "4.2", "question": "(4.2) Đã có danh sách các bên quan tâm và các yêu cầu ATTT của họ chưa?"},
   {"section": "Điều khoản 4-10", "id": "4.3", "question": "(4.3) Đã có tài liệu định nghĩa Phạm vi ISMS (Scope document) rõ ràng và hợp lý chưa?"},
   {"section": "Điều khoản 4-10", "id": "4.4", "question": "(4.4) ISMS và các quy trình (Chính sách, Quy trình) đã được thiết lập chưa?"},
@@ -374,9 +391,8 @@ function loadQuestion(index) {
     controlId.textContent = item.id;
     controlQuestion.textContent = item.question;
     controlStatus.value = result.status;
-    
+
     if (result.evidence_file) {
-        // Link file đã lưu đổi sang emerald cho đồng bộ
         evidenceStatus.innerHTML = `Đã lưu: <a href="${result.evidence_file}" target="_blank" class="text-emerald-600 underline">${result.evidence_file.split('/').pop()}</a>`;
         evidenceStatus.className = 'mt-2 text-sm text-emerald-600';
     } else {
@@ -387,11 +403,10 @@ function loadQuestion(index) {
     controlNote.value = result.note;
     controlCounter.textContent = `${index + 1} / ${totalQuestions}`;
     updateSidebarHighlight(item.section);
-    
+
     prevButton.disabled = (index === 0);
     prevButton.classList.toggle('opacity-50', index === 0);
-    
-    // Đổi màu nút Next/Hoàn thành
+
     if (index === totalQuestions - 1) {
         nextButton.textContent = "Hoàn thành";
         nextButton.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
@@ -401,6 +416,27 @@ function loadQuestion(index) {
         nextButton.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
         nextButton.classList.remove('bg-green-700', 'hover:bg-green-800');
     }
+
+    // --- PHẦN MỚI THÊM VÀO Ở ĐÂY ---
+    const explanationArea = document.getElementById('explanationArea');
+    const explanationContent = document.getElementById('explanationContent');
+    const toggleExplanation = document.getElementById('toggleExplanation');
+
+    if (item.explanation) {
+        explanationArea.classList.remove('hidden');
+        explanationContent.innerHTML = item.explanation;
+        explanationContent.classList.add('hidden');
+
+        const newToggleButton = toggleExplanation.cloneNode(true);
+        toggleExplanation.parentNode.replaceChild(newToggleButton, toggleExplanation);
+
+        newToggleButton.addEventListener('click', () => {
+            explanationContent.classList.toggle('hidden');
+        });
+    } else {
+        explanationArea.classList.add('hidden');
+    }
+    // -------------------------------
 }
 
 async function handleFileUpload(event) {
