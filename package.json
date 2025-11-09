@@ -1,0 +1,14 @@
+{
+  "name": "iso-audit-api",
+  "version": "1.0.0",
+  "description": "Backend API for ISO Audit Tool",
+  "main": "api/upload.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@vercel/blob": "latest"
+  },
+  "author": "Mr-T",
+  "license": "ISC"
+}
