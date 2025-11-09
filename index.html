@@ -16,13 +16,13 @@
             width: var(--progress-width, 0%);
             transition: width 0.3s ease;
         }
-        /* Sidebar nav active state - Đã đổi sang xanh tre */
+        /* Sidebar nav active state (Màu xanh tre đậm) */
         #sectionList button.active {
             background-color: #059669; /* bg-emerald-600 */
             color: white;
             font-weight: 600;
         }
-        /* Style cho nút upload file - Đã đổi sang xanh tre nhạt */
+        /* Style cho nút upload file (Màu xanh tre nhạt) */
         input[type="file"]::file-selector-button {
             margin-right: 1rem;
             padding: 0.5rem 1rem;
@@ -40,111 +40,159 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 
-    <div id="screen-setup" class="screen active max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
+    <div id="screen-setup" class="screen active max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-xl mt-16 border border-emerald-100">
         <h1 class="text-3xl font-bold text-emerald-700 mb-4">Web Audit Tool ISO 27001:2022</h1>
-        <p class="text-gray-600 mb-6">Bắt đầu một phiên audit mới. Vui lòng nhập tên Công ty / Tổ chức để bắt đầu và đặt tên cho file báo cáo.</p>
+        <p class="text-gray-600 mb-8 leading-relaxed">Chào mừng chuyên gia. Bắt đầu một phiên đánh giá mới bằng cách nhập tên tổ chức khách hàng.</p>
         <div>
-            <label for="clientName" class="block text-sm font-medium text-gray-700">Tên Công ty / Tổ chức</label>
-            <input type="text" id="clientName" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 text-lg" placeholder="Ví dụ: Công ty ABC">
+            <label for="clientName" class="block text-sm font-medium text-gray-700 mb-2">Tên Khách hàng / Tổ chức</label>
+            <input type="text" id="clientName" class="block w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-lg placeholder-gray-400" placeholder="Ví dụ: Ngân hàng ABC, Công ty XYZ...">
         </div>
-        <button id="startButton" class="mt-6 w-full bg-emerald-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-emerald-700 transition duration-300">
+        <button id="startButton" class="mt-8 w-full bg-emerald-600 text-white py-4 px-6 rounded-lg text-xl font-semibold hover:bg-emerald-700 transition duration-200 shadow-md active:scale-[0.98]">
             Bắt đầu Audit
         </button>
     </div>
 
-    <div id="screen-audit" class="screen max-w-7xl mx-auto p-4 md:p-8 mt-4">
-        <div class="flex flex-col md:flex-row gap-6">
+    <div id="screen-audit" class="screen max-w-[90rem] mx-auto p-4 md:p-6 mt-4">
+        <div class="flex flex-col lg:flex-row gap-6">
             
-            <nav class="w-full md:w-1/4 lg:w-1/5">
-                <div class="bg-white p-4 shadow rounded-lg sticky top-4">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-3 border-b pb-2">Các Phần Audit</h2>
-                    <ul id="sectionList" class="space-y-2">
+            <nav class="w-full lg:w-1/4 xl:w-1/5">
+                <div class="bg-white p-5 shadow-md rounded-xl sticky top-6 border border-gray-100">
+                    <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">Nội dung Đánh giá</h2>
+                    <ul id="sectionList" class="space-y-1 max-h-[80vh] overflow-y-auto pr-2">
                         </ul>
                 </div>
             </nav>
 
             <div class="flex-1">
-                <div class="bg-white p-4 shadow rounded-lg mb-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h1 class="text-2xl font-bold text-emerald-700">Công ty / Tổ chức: <span id="clientNameDisplay" class="text-gray-900"></span></h1>
-                        <button id="saveReportButton" class="bg-green-700 text-white py-2 px-5 rounded-lg font-semibold hover:bg-green-800 transition">
+                <div class="bg-white p-5 shadow-md rounded-xl mb-6 border border-gray-100">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                        <h1 class="text-2xl font-bold text-gray-800 flex-1">
+                            <span class="text-sm font-normal text-gray-500 block mb-1">Đang audit cho:</span>
+                            <span id="clientNameDisplay" class="text-emerald-700"></span>
+                        </h1>
+                        <button id="saveReportButton" class="flex-shrink-0 bg-emerald-800 text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-emerald-900 transition shadow flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                            </svg>
                             Lưu Báo cáo & Thoát
                         </button>
                     </div>
-                    <div>
-                        <span class="text-sm font-medium text-gray-700">Tiến độ: <span id="progressText">0/121</span></span>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                            <div id="progressBar" class="progress-bar bg-emerald-600 h-2.5 rounded-full"></div>
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <div class="flex justify-between text-sm font-medium text-gray-700 mb-2">
+                            <span>Tiến độ hoàn thành</span>
+                            <span id="progressText" class="text-emerald-700 font-bold">0/121</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="progressBar" class="progress-bar bg-emerald-500 h-3 rounded-full relative">
+                                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-emerald-600 rounded-full shadow"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 shadow rounded-lg">
-                    <div class="border-b pb-4 mb-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-semibold text-emerald-700 bg-emerald-100 py-1 px-3 rounded-full" id="controlSection"></span>
-                            <span class="text-sm font-mono" id="controlId"></span>
+                <div class="bg-white p-6 md:p-8 shadow-md rounded-xl border border-gray-100">
+                    <div class="border-b border-gray-100 pb-6 mb-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs md:text-sm font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 py-1.5 px-4 rounded-full" id="controlSection"></span>
+                            <span class="text-sm font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded" id="controlId"></span>
                         </div>
-                        <h2 class="text-xl md:text-2xl font-semibold text-gray-900 mt-3" id="controlQuestion"></h2>
+                        <h2 class="text-xl md:text-3xl font-bold text-gray-800 leading-tight" id="controlQuestion"></h2>
 
-                        <div id="explanationArea" class="mt-3 hidden">
-                            <button id="toggleExplanation" type="button" class="text-sm flex items-center text-emerald-600 hover:text-emerald-800 focus:outline-none transition-colors duration-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <div id="explanationArea" class="mt-4 hidden">
+                            <button id="toggleExplanation" type="button" class="group flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-800 focus:outline-none transition-colors duration-200 bg-emerald-50 hover:bg-emerald-100 px-3 py-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="font-medium">Xem Hướng dẫn / Gợi ý</span>
+                                Xem Hướng dẫn / Gợi ý kiểm tra
                             </button>
-                            <div id="explanationContent" class="mt-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-gray-800 text-sm leading-relaxed hidden">
+                            <div id="explanationContent" class="mt-3 p-5 bg-emerald-50/50 border border-emerald-100 rounded-xl text-gray-800 text-sm leading-relaxed hidden">
                                 </div>
                         </div>
-                        </div>
+                    </div>
                     
-                    <div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                             <div>
-                                <label for="controlStatus" class="block text-sm font-medium text-gray-700">Trạng thái (Status)</label>
-                                <select id="controlStatus" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 text-base">
-                                    <option value="Bỏ qua">(Chưa chọn / Bỏ qua)</option>
-                                    <option value="Tuân thủ">Tuân thủ (C)</option>
-                                    <option value="Không Tuân thủ (NC)">Không Tuân thủ (K)</option>
-                                    <option value="Không Áp dụng">Không Áp dụng (A)</option>
-                                </select>
+                                <label for="controlStatus" class="block text-sm font-semibold text-gray-700 mb-2">Trạng thái (Status)</label>
+                                <div class="relative">
+                                    <select id="controlStatus" class="block w-full p-3 pl-4 pr-10 border border-gray-300 rounded-lg shadow-sm appearance-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-base bg-white">
+                                        <option value="Bỏ qua" class="text-gray-400">(Chưa chọn / Bỏ qua)</option>
+                                        <option value="Tuân thủ" class="font-medium text-green-700">✓ Tuân thủ (Compliant)</option>
+                                        <option value="Không Tuân thủ (NC)" class="font-medium text-red-700">✕ Không Tuân thủ (Non-Compliant)</option>
+                                        <option value="Không Áp dụng" class="text-gray-600">○ Không Áp dụng (N/A)</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                    </div>
+                                </div>
                             </div>
                             <div>
-                                <label for="controlEvidenceUpload" class="block text-sm font-medium text-gray-700">Đính kèm Bằng chứng (File)</label>
-                                <input type="file" id="controlEvidenceUpload" class="mt-1 block w-full text-sm text-gray-500">
-                                <div id="evidenceStatus" class="mt-2 text-sm text-gray-500">Chưa có file bằng chứng.</div>
+                                <label for="controlEvidenceUpload" class="block text-sm font-semibold text-gray-700 mb-2">Đính kèm Bằng chứng (File)</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="controlEvidenceUpload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-emerald-50 hover:border-emerald-400 transition">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click để tải lên</span> hoặc kéo thả file vào đây</p>
+                                            <p class="text-xs text-gray-500">(Ảnh, PDF, Excel, Word...)</p>
+                                        </div>
+                                        <input id="controlEvidenceUpload" type="file" class="hidden" />
+                                    </label>
+                                </div> 
+                                <div id="evidenceStatus" class="mt-3 text-sm font-medium flex items-center min-h-[24px]">
+                                    <span class="text-gray-400">Chưa có file bằng chứng.</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <label for="controlNote" class="block text-sm font-medium text-gray-700">Ghi chú / Phát hiện (Note / Finding)</label>
-                            <textarea id="controlNote" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" placeholder="Ghi bằng chứng (evidence) nếu 'Tuân thủ', ghi phát hiện (finding) nếu 'Không Tuân thủ'"></textarea>
+                        <div>
+                            <label for="controlNote" class="block text-sm font-semibold text-gray-700 mb-2">Ghi chú / Phát hiện (Note / Finding)</label>
+                            <textarea id="controlNote" rows="5" class="block w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-base resize-y" placeholder="• Ghi rõ tên bằng chứng nếu 'Tuân thủ'&#10;• Mô tả chi tiết lỗi nếu 'Không tuân thủ'"></textarea>
                         </div>
                     </div>
 
-                    <div class="flex justify-between items-center mt-8 pt-4 border-t">
-                        <button id="prevButton" class="bg-gray-200 text-gray-800 py-2 px-5 rounded-lg font-medium hover:bg-gray-300 transition">&lt; Quay lại</button>
-                        <span class="text-lg font-semibold" id="controlCounter">1 / 121</span>
-                        <button id="nextButton" class="bg-emerald-600 text-white py-2 px-5 rounded-lg font-medium hover:bg-emerald-700 transition">Tiếp theo &gt;</button>
+                    <div class="flex justify-between items-center mt-10 pt-6 border-t border-gray-100">
+                        <button id="prevButton" class="flex items-center px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Quay lại
+                        </button>
+                        <span class="text-lg font-bold text-gray-500" id="controlCounter">1 / 121</span>
+                        <button id="nextButton" class="flex items-center px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition shadow-md">
+                            Tiếp theo
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="screen-done" class="screen max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10 text-center">
-        <h1 class="text-3xl font-bold text-emerald-600 mb-4">Audit Hoàn tất!</h1>
-        <p class="text-gray-600 mb-6">File báo cáo <code id="reportFileName" class="font-mono bg-gray-100 p-1 rounded"></code> đã được tải về máy của bạn.</p>
-        <button id="restartButton" class="mt-4 w-full bg-emerald-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-emerald-700 transition">
-            Bắt đầu Audit mới
+    <div id="screen-done" class="screen max-w-2xl mx-auto p-10 bg-white shadow-xl rounded-2xl mt-20 text-center border border-emerald-50">
+        <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+        <h1 class="text-4xl font-bold text-emerald-700 mb-4">Audit Hoàn tất!</h1>
+        <p class="text-gray-600 mb-8 text-lg">Chúc mừng bạn đã hoàn thành phiên đánh giá. Báo cáo đã được lưu về máy.</p>
+        <div class="bg-gray-50 p-4 rounded-lg mb-8 border border-gray-200 inline-block">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <code id="reportFileName" class="font-mono text-emerald-700 font-medium"></code>
+        </div>
+        <button id="restartButton" class="block w-full bg-emerald-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-emerald-700 transition duration-200 shadow-md">
+            Bắt đầu phiên Audit mới
         </button>
     </div>
 
 
 <script>
-// --- Database (dữ liệu từ checklist_data.json) ---
+// --- FULL DATABASE ISO 27001:2022 (Đã bao gồm Explanation) ---
 const CHECKLIST_DATA = [
   // --- ĐIỀU KHOẢN 4-10 (Hệ thống quản lý) ---
   {
@@ -410,8 +458,9 @@ const CHECKLIST_DATA = [
   {
     "section": "A.5 Tổ chức",
     "id": "A.5.17",
-    "question": "(A.5.17) Chính sách Mật khẩu (1.4) có được tuân thủ không (đủ phức tạp, đổi định kỳ, cấm mật khẩu mặc định, có MFA)?"},
-	"explanation": "<b>Ý nghĩa:</b> Mật khẩu yếu là nguyên nhân hàng đầu bị hack. Cần bắt buộc độ phức tạp và khuyến nghị dùng MFA.<br><b>Bằng chứng:</b> Cấu hình Password Policy trên AD/các hệ thống, quan sát thực tế việc đăng nhập."
+    "question": "(A.5.17) Chính sách Mật khẩu (1.4) có được tuân thủ không (đủ phức tạp, đổi định kỳ, cấm mật khẩu mặc định, có MFA)?",
+    "explanation": "<b>Ý nghĩa:</b> Mật khẩu yếu là nguyên nhân hàng đầu bị hack. Cần bắt buộc độ phức tạp và khuyến nghị dùng MFA.<br><b>Bằng chứng:</b> Cấu hình Password Policy trên AD/các hệ thống, quan sát thực tế việc đăng nhập."
+  },
   {
     "section": "A.5 Tổ chức",
     "id": "A.5.18",
@@ -880,7 +929,7 @@ const CHECKLIST_DATA = [
 let currentQuestionIndex = 0;
 let clientName = "";
 let auditResults = [];
-let isDirty = false; // Cờ đánh dấu dữ liệu đã thay đổi chưa được lưu
+let isDirty = false;
 const totalQuestions = CHECKLIST_DATA.length;
 let sections = []; 
 
@@ -931,7 +980,7 @@ function populateSidebar() {
     sections.forEach(section => {
         const li = document.createElement('li');
         const button = document.createElement('button');
-        button.className = "w-full text-left p-3 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition duration-150";
+        button.className = "w-full text-left p-3 rounded-lg font-medium text-gray-700 hover:bg-emerald-50 transition duration-150";
         button.textContent = section;
         button.onclick = () => jumpToSection(section);
         li.appendChild(button);
@@ -943,11 +992,11 @@ function updateSidebarHighlight(currentSection) {
     const buttons = document.querySelectorAll('#sectionList button');
     buttons.forEach(button => {
         if (button.textContent === currentSection) {
-            // Đổi class active sang emerald
-            button.classList.remove('bg-emerald-600', 'text-white', 'font-semibold');
-            button.classList.add('active'); 
+											   
+																					 
+            button.classList.add('active');
         } else {
-             button.classList.remove('active');
+            button.classList.remove('active');
         }
     });
 }
@@ -993,33 +1042,34 @@ function loadQuestion(index) {
     controlId.textContent = item.id;
     controlQuestion.textContent = item.question;
     controlStatus.value = result.status;
-
+    
     if (result.evidence_file) {
-        evidenceStatus.innerHTML = `Đã lưu: <a href="${result.evidence_file}" target="_blank" class="text-emerald-600 underline">${result.evidence_file.split('/').pop()}</a>`;
-        evidenceStatus.className = 'mt-2 text-sm text-emerald-600';
+        evidenceStatus.innerHTML = `Đã lưu: <a href="${result.evidence_file}" target="_blank" class="text-emerald-600 underline font-medium hover:text-emerald-800">${result.evidence_file.split('/').pop()}</a>`;
+        evidenceStatus.className = 'mt-3 text-sm text-emerald-600 flex items-center';
     } else {
         evidenceStatus.textContent = 'Chưa có file bằng chứng.';
-        evidenceStatus.className = 'mt-2 text-sm text-gray-500';
+        evidenceStatus.className = 'mt-3 text-sm text-gray-400 flex items-center';
     }
     controlEvidenceUpload.value = null;
     controlNote.value = result.note;
     controlCounter.textContent = `${index + 1} / ${totalQuestions}`;
     updateSidebarHighlight(item.section);
-
+    
     prevButton.disabled = (index === 0);
     prevButton.classList.toggle('opacity-50', index === 0);
-
+    prevButton.classList.toggle('cursor-not-allowed', index === 0);
+    
     if (index === totalQuestions - 1) {
-        nextButton.textContent = "Hoàn thành";
+        nextButton.innerHTML = `Hoàn thành <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
         nextButton.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
-        nextButton.classList.add('bg-green-700', 'hover:bg-green-800');
+        nextButton.classList.add('bg-emerald-800', 'hover:bg-emerald-900');
     } else {
-        nextButton.textContent = "Tiếp theo >";
+        nextButton.innerHTML = `Tiếp theo <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>`;
         nextButton.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
-        nextButton.classList.remove('bg-green-700', 'hover:bg-green-800');
+        nextButton.classList.remove('bg-emerald-800', 'hover:bg-emerald-900');
     }
 
-    // --- PHẦN MỚI THÊM VÀO Ở ĐÂY ---
+    // --- Xử lý hiển thị Hướng dẫn/Gợi ý ---
     const explanationArea = document.getElementById('explanationArea');
     const explanationContent = document.getElementById('explanationContent');
     const toggleExplanation = document.getElementById('toggleExplanation');
@@ -1028,17 +1078,17 @@ function loadQuestion(index) {
         explanationArea.classList.remove('hidden');
         explanationContent.innerHTML = item.explanation;
         explanationContent.classList.add('hidden');
-
+        
         const newToggleButton = toggleExplanation.cloneNode(true);
         toggleExplanation.parentNode.replaceChild(newToggleButton, toggleExplanation);
-
+        
         newToggleButton.addEventListener('click', () => {
             explanationContent.classList.toggle('hidden');
         });
     } else {
         explanationArea.classList.add('hidden');
     }
-    // -------------------------------
+									  
 }
 
 async function handleFileUpload(event) {
@@ -1046,7 +1096,7 @@ async function handleFileUpload(event) {
     if (!file) return;
 
     evidenceStatus.textContent = `Đang tải lên: ${file.name}...`;
-    evidenceStatus.className = 'mt-2 text-sm text-yellow-600';
+    evidenceStatus.className = 'mt-3 text-sm text-amber-600 flex items-center font-medium';
 
     const formData = new FormData();
     formData.append('file', file);
@@ -1073,15 +1123,15 @@ async function handleFileUpload(event) {
         const fileUrl = data.url;
 
         auditResults[currentQuestionIndex].evidence_file = fileUrl;
-        // Đổi màu link thành công sang emerald
-        evidenceStatus.innerHTML = `Thành công: <a href="${fileUrl}" target="_blank" class="text-emerald-600 underline">${file.name.split('/').pop()}</a>`;
-        evidenceStatus.className = 'mt-2 text-sm text-emerald-600';
+													 
+        evidenceStatus.innerHTML = `Thành công: <a href="${fileUrl}" target="_blank" class="text-emerald-600 underline font-medium hover:text-emerald-800">${file.name.split('/').pop()}</a>`;
+        evidenceStatus.className = 'mt-3 text-sm text-emerald-600 flex items-center';
         event.target.value = null; 
 
     } catch (error) {
         console.error(error);
         evidenceStatus.textContent = `Lỗi: Tải file thất bại. ${error.message}`;
-        evidenceStatus.className = 'mt-2 text-sm text-red-600';
+        evidenceStatus.className = 'mt-3 text-sm text-red-600 flex items-center font-medium';
     }
 }
 
