@@ -146,132 +146,734 @@
 <script>
 // --- Database (dữ liệu từ checklist_data.json) ---
 const CHECKLIST_DATA = [
+  // --- ĐIỀU KHOẢN 4-10 (Hệ thống quản lý) ---
   {
     "section": "Điều khoản 4-10",
     "id": "4.1",
     "question": "(4.1) Đã có tài liệu xác định các vấn đề nội bộ/bên ngoài liên quan đến ATTT chưa?",
-    // THÊM PHẦN NÀY VÀO:
-    "explanation": "<b>Ý nghĩa:</b> Xác định 'hoàn cảnh' của tổ chức để đánh giá rủi ro chính xác.<br><b>Gợi ý chuẩn bị:</b><br>- <i>Vấn đề bên ngoài:</i> Luật pháp mới (NĐ13), xu hướng tấn công mạng, yêu cầu từ khách hàng.<br>- <i>Vấn đề nội bộ:</i> Văn hóa tuân thủ của nhân viên, ngân sách IT, hạ tầng cũ/mới.<br><b>Bằng chứng điển hình:</b> Tài liệu 'Bối cảnh tổ chức', Phân tích SWOT, Biên bản họp Lãnh đạo."
+    "explanation": "<b>Ý nghĩa:</b> Xác định 'bối cảnh' để biết tổ chức đang đứng ở đâu, gặp thách thức gì.<br><b>Gợi ý:</b> Bên ngoài (Luật pháp, đối thủ, công nghệ mới), Bên nội (Văn hóa, nguồn lực, hạ tầng).<br><b>Bằng chứng:</b> Tài liệu 'Bối cảnh tổ chức', Phân tích SWOT."
   },
-  {"section": "Điều khoản 4-10", "id": "4.2", "question": "(4.2) Đã có danh sách các bên quan tâm và các yêu cầu ATTT của họ chưa?"},
-  {"section": "Điều khoản 4-10", "id": "4.3", "question": "(4.3) Đã có tài liệu định nghĩa Phạm vi ISMS (Scope document) rõ ràng và hợp lý chưa?"},
-  {"section": "Điều khoản 4-10", "id": "4.4", "question": "(4.4) ISMS và các quy trình (Chính sách, Quy trình) đã được thiết lập chưa?"},
-  {"section": "Điều khoản 4-10", "id": "5.1", "question": "(5.1) Lãnh đạo cấp cao có thể hiện sự cam kết không? (Bằng chứng: cấp nguồn lực, ngân sách)"},
-  {"section": "Điều khoản 4-10", "id": "5.2", "question": "(5.2) Chính sách ATTT (1.1) đã được Lãnh đạo cấp cao phê duyệt và truyền thông chưa?"},
-  {"section": "Điều khoản 4-10", "id": "5.3", "question": "(5.3) Đã có tài liệu phân công vai trò, trách nhiệm ATTT chưa? (Ví dụ: Ma trận RACI 7.2)"},
-  {"section": "Điều khoản 4-10", "id": "6.1.1", "question": "(6.1.1) Đã có các hành động để giải quyết rủi ro và cơ hội (từ 4.1) chưa?"},
-  {"section": "Điều khoản 4-10", "id": "6.1.2", "question": "(6.1.2) Đã có Quy trình Quản lý Rủi ro (2.1) và Ma trận Rủi ro (3.4) nhất quán chưa?"},
-  {"section": "Điều khoản 4-10", "id": "6.1.2b", "question": "(6.1.2) Đã có kết quả đánh giá rủi ro (bảng rủi ro) và tiêu chí chấp nhận rủi ro được phê duyệt chưa?"},
-  {"section": "Điều khoản 4-10", "id": "6.1.3", "question": "(6.1.3) Đã có Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?"},
-  {"section": "Điều khoản 4-10", "id": "6.1.3b", "question": "(6.1.3) Đã có Tuyên bố Áp dụng (SoA) được phê duyệt, liên kết logic với RTP và liệt kê đủ 93 controls chưa?"},
-  {"section": "Điều khoản 4-10", "id": "6.2", "question": "(6.2) Đã có các mục tiêu ATTT đo lường được (KPIs) ngoài các mục tiêu trong chính sách 1.1 chưa?"},
-  {"section": "Điều khoản 4-10", "id": "7.1", "question": "(7.1) Đã có bằng chứng về việc cung cấp nguồn lực (ngân sách, nhân sự) cho ISMS chưa?"},
-  {"section": "Điều khoản 4-10", "id": "7.2", "question": "(7.2) Đã có hồ sơ năng lực (chứng chỉ) của các nhân sự ATTT chủ chốt chưa?"},
-  {"section": "Điều khoản 4-10", "id": "7.3", "question": "(7.3) Đã có bằng chứng về đào tạo nhận thức ATTT (A.6.3) chưa? (slide, danh sách tham dự, kết quả test)"},
-  {"section": "Điều khoản 4-10", "id": "7.4", "question": "(7.4) Đã có quy trình truyền thông nội bộ và bên ngoài về ISMS chưa?"},
-  {"section": "Điều khoản 4-10", "id": "7.5", "question": "(7.5) Đã có Quy trình Kiểm soát Thông tin dạng văn bản (Document Control) chưa? (Có mã, phiên bản, phê duyệt, thu hồi tài liệu cũ?)"},
-  {"section": "Điều khoản 4-10", "id": "8.1", "question": "(8.1) Đã có bằng chứng về việc lập kế hoạch và kiểm soát vận hành chưa? (Ví dụ: Quy trình 2.6 - Quản lý Thay đổi)"},
-  {"section": "Điều khoản 4-10", "id": "8.2", "question": "(8.2) Đã có Báo cáo Đánh giá Rủi ro (kết quả của Quy trình 2.1) chưa?"},
-  {"section": "Điều khoản 4-10", "id": "8.3", "question": "(8.3) Đã có bằng chứng về việc thực hiện các Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?"},
-  {"section": "Điều khoản 4-10", "id": "9.1", "question": "(9.1) Tổ chức có đo lường, giám sát, phân tích và đánh giá ISMS không? (Có báo cáo KPI/metric không?)"},
-  {"section": "Điều khoản 4-10", "id": "9.2", "question": "(9.2) Đã có Chương trình và Báo cáo Đánh giá Nội bộ (3.1) gần nhất chưa? Đánh giá có khách quan không?"},
-  {"section": "Điều khoản 4-10", "id": "9.3", "question": "(9.3) Đã có bằng chứng về cuộc họp Xem xét của Lãnh đạo (Management Review) gần nhất chưa? (slide, biên bản họp, danh sách tham dự)"},
-  {"section": "Điều khoản 4-10", "id": "9.3b", "question": "(9.3) Cuộc họp Xem xét của Lãnh đạo có đủ các đầu vào (inputs) theo yêu cầu 9.3.2 không? (kết quả rủi ro, audit, sự cố...)"},
-  {"section": "Điều khoản 4-10", "id": "10.1", "question": "(10.1) Đã có bằng chứng về các cơ hội cải tiến (từ 9.3) chưa?"},
-  {"section": "Điều khoản 4-10", "id": "10.2", "question": "(10.2) Các Điểm không phù hợp (NCs) (từ 9.2) đã được phân tích nguyên nhân gốc rễ và thực hiện hành động khắc phục chưa?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.1", "question": "(A.5.1) Chính sách ATTT (1.1) và các chính sách chuyên đề (1.2-1.10) đã được phê duyệt, ban hành, truyền thông chưa?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.2", "question": "(A.5.2) Đã có Ma trận RACI (7.2), Mô tả công việc? Nhân sự có hiểu trách nhiệm ATTT của mình không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.3", "question": "(A.5.3) Các quy trình nhạy cảm (Quản lý thay đổi, Cấp quyền) có đảm bảo phân tách nhiệm vụ (người yêu cầu, phê duyệt, thực hiện khác nhau) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.4", "question": "(A.5.4) Cấp quản lý (Trưởng phòng) có thúc đẩy nhân viên tuân thủ chính sách ATTT không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.5", "question": "(A.5.5) Tổ chức có xác định và duy trì liên lạc với các cơ quan có thẩm quyền (VNCERT/CC, A05...) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.6", "question": "(A.5.6) Tổ chức có tham gia các diễn đàn, hiệp hội ATTT chuyên ngành (ISACA, (ISC)²) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.7", "question": "(A.5.7) Tổ chức có thu thập và phân tích thông tin về mối đe dọa (Threat Intelligence) từ SOC/MSSP không? Có hành động gì được thực hiện không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.8", "question": "(A.5.8) Các dự án đang chạy có được đánh giá rủi ro ATTT trong quá trình thực hiện không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.9", "question": "(A.5.9) Danh sách Tài sản (3.2) có đầy đủ không (HW, SW, Data, Services...)?", "evidence_placeholder": "Xem file DanhSachTaiSan.xlsx"},
-  {"section": "A.5 Tổ chức", "id": "A.5.10", "question": "(A.5.10) Chính sách Sử dụng Chấp nhận được (AUP) đã được truyền thông (qua Sổ tay nhân viên) chưa?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.11", "question": "(A.5.11) Quy trình nghỉ việc (Off-boarding) của HR có đảm bảo nhân viên trả lại mọi tài sản (laptop, thẻ) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.12", "question": "(A.5.12) Thông tin đã được phân loại (Mật, Nội bộ...) trong Chính sách (1.7) và Danh sách Tài sản (3.2) chưa?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.13", "question": "(A.5.13) Thông tin nhạy cảm (tài liệu, email, ổ đĩa) có được dán nhãn \"Mật\" (hoặc tương đương) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.14", "question": "(A.5.14) Tổ chức có quy định về việc chuyển giao thông tin nhạy cảm ra ngoài (email, USB, Cloud) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.15", "question": "(A.5.15) Chính sách KSTC (1.2) và Quy trình (2.5) có dựa trên nguyên tắc \"Cần biết\" và \"Đặc quyền tối thiểu\" không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.16", "question": "(A.5.16) Quy trình tạo/xóa tài khoản có đảm bảo mọi tài khoản được liên kết duy nhất với một cá nhân/hệ thống không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.17", "question": "(A.5.17) Chính sách Mật khẩu (1.4) có được tuân thủ không (đủ phức tạp, đổi định kỳ, cấm mật khẩu mặc định, có MFA)?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.18", "question": "(A.5.18) Đã có hồ sơ (email, Biểu mẫu 3.6) rà soát quyền truy cập 6 tháng gần nhất? Chủ sở hữu tài sản có rà soát và phê duyệt không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.19", "question": "(A.5.19) Tổ chức có đánh giá rủi ro ATTT của NCC (Cloud, ICT) trước khi ký hợp đồng không? (Xem Chính sách 1.10)"},
-  {"section": "A.5 Tổ chức", "id": "A.5.20", "question": "(A.5.20) Hợp đồng NCC (sample) có bao gồm các điều khoản ATTT ràng buộc (tuân thủ, báo cáo sự cố, quyền audit) không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.21", "question": "(A.5.21) Tổ chức quản lý rủi ro từ chuỗi cung ứng ICT (nhà cung cấp phần cứng, phần mềm) như thế nào?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.22", "question": "(A.5.22) Tổ chức có rà soát hiệu suất ATTT của các NCC quan trọng hàng năm không (yêu cầu chứng chỉ, báo cáo)?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.23", "question": "(A.5.23) Khi NCC (ví dụ: nhà cung cấp Cloud) thay đổi dịch vụ, tổ chức có quy trình đánh giá rủi ro không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.24", "question": "(A.5.24) Kế hoạch Quản lý Sự cố (1.5, 2.2) đã rõ ràng vai trò, trách nhiệm (Đội IRT) chưa?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.25", "question": "(A.5.25) Các sự kiện ATTT (events) có được đánh giá để xác định xem chúng có phải là sự cố (incidents) không? Ai chịu trách nhiệm?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.26", "question": "(A.5.26) Đã xem Nhật ký Sự cố (3.3)? Các bước xử lý (Ngăn chặn, Tiêu diệt, Phục hồi) có được ghi lại không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.27", "question": "(A.5.27) Các sự cố nghiêm trọng (trong 3.3) có được phân tích nguyên nhân gốc rễ (root cause) và rút bài học kinh nghiệm không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.28", "question": "(A.5.28) Tổ chức có quy trình thu thập và bảo quản bằng chứng kỹ thuật số (digital forensics) khi xảy ra sự cố không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.29", "question": "(A.5.29) Kế hoạch Kinh doanh Liên tục (BCP) có tích hợp các yêu cầu ATTT (bảo mật, toàn vẹn) khi hoạt động ở trạng thái dự phòng không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.30", "question": "(A.5.30) Đã thực hiện BIA, xác định RTO/RPO chưa? Đã có báo cáo diễn tập DRP/BCP (theo Chính sách 1.6) chưa?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.31", "question": "(A.5.31) Tổ chức có danh sách các yêu cầu pháp lý (Luật An ninh mạng, Nghị định 13) và yêu cầu hợp đồng liên quan đến ATTT không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.32", "question": "(A.5.32) Tổ chức có biện pháp bảo vệ IP (mã nguồn, tài liệu thiết kế) và tuân thủ bản quyền phần mềm không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.33", "question": "(A.5.33) Các hồ sơ quan trọng (log, hợp đồng) có được bảo vệ khỏi mất mát, sửa đổi và được lưu trữ đủ thời gian không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.34", "question": "(A.5.34) Nếu tổ chức xử lý Thông tin Cá nhân (PII), các biện pháp nào được áp dụng để tuân thủ quy định (Nghị định 13)?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.35", "question": "(A.5.35) Việc rà soát ISMS (Đánh giá nội bộ 9.2) có được thực hiện bởi những người khách quan, độc lập không?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.36", "question": "(A.5.36) Tổ chức có cơ chế nào để đảm bảo nhân viên tuân thủ các chính sách ATTT (ví dụ: kiểm tra, kỷ luật)?"},
-  {"section": "A.5 Tổ chức", "id": "A.5.37", "question": "(A.5.37) Các quy trình vận hành (ví dụ: backup, vá lỗi) có được tài liệu hóa và sẵn có cho người thực hiện không?"},
-  {"section": "A.6 Con người", "id": "A.6.1", "question": "(A.6.1) Quy trình HR có bao gồm việc kiểm tra lý lịch (screening) cho các vị trí nhạy cảm (IT, Tài chính) trước khi tuyển dụng không?"},
-  {"section": "A.6 Con người", "id": "A.6.2", "question": "(A.6.2) Hợp đồng lao động hoặc thỏa thuận có bao gồm các điều khoản về trách nhiệm ATTT của nhân viên không?"},
-  {"section": "A.6 Con người", "id": "A.6.3", "question": "(A.6.3) Đã có bằng chứng đào tạo nhận thức ATTT hàng năm (slide, danh sách tham dự)? (Giống 7.3)"},
-  {"section": "A.6 Con người", "id": "A.6.4", "question": "(A.6.4) Tổ chức có quy trình kỷ luật (trong Nội quy lao động) nếu nhân viên vi phạm chính sách ATTT không?"},
-  {"section": "A.6 Con người", "id": "A.6.5", "question": "(A.6.5) Quy trình nghỉ việc (Off-boarding) có bao gồm việc nhắc nhở/ràng buộc trách nhiệm bảo mật sau khi nghỉ không?"},
-  {"section": "A.6 Con người", "id": "A.6.6", "question": "(A.6.6) Nhân viên và nhà thầu có ký Thỏa thuận Bảo mật (NDA / Confidentiality Agreement) không?"},
-  {"section": "A.6 Con người", "id": "A.6.7", "question": "(A.6.7) Đã có chính sách và các biện pháp kỹ thuật (VPN, MFA, mã hóa) cho nhân viên làm việc từ xa (Remote working) chưa?"},
-  {"section": "A.6 Con người", "id": "A.6.8", "question": "(A.6.8) Phỏng vấn nhân viên: Nếu nhận được email lạ, họ biết cách báo cáo sự cố (cho IT/Helpdesk) theo Quy trình 2.2 không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.1", "question": "(A.7.1) Vòng đai an ninh vật lý (cửa, tường, hàng rào) của văn phòng và phòng server có được xác định và bảo vệ không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.2", "question": "(A.7.2) Quan sát: Việc ra vào các khu vực nhạy cảm (văn phòng, phòng server) có được kiểm soát không (thẻ từ, khóa)? Khách có được giám sát/đeo thẻ không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.3", "question": "(A.7.3) Văn phòng và phòng server có được bảo vệ (khóa cửa, tủ rack) khi không có người giám sát không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.4", "question": "(A.7.4) Quan sát: Có hệ thống giám sát (CCTV) tại các lối ra vào và khu vực nhạy cảm không? Log camera có được lưu trữ và bảo vệ không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.5", "question": "(A.7.5) Phòng server có được bảo vệ khỏi các mối đe dọa môi trường không (cháy, ngập, nhiệt độ)? (Bằng chứng: bình chữa cháy, điều hòa, UPS)"},
-  {"section": "A.7 Vật lý", "id": "A.7.6", "question": "(A.7.6) Các quy tắc làm việc tại khu vực an toàn (phòng server) có được định nghĩa và tuân thủ không (ví dụ: hạn chế mang thiết bị cá nhân)?"},
-  {"section": "A.7 Vật lý", "id": "A.7.7", "question": "(A.7.7) Quan sát: Nhân viên có tuân thủ chính sách \"Bàn làm việc sạch\" (không để tài liệu nhạy cảm) và \"Màn hình sạch\" (khóa máy tính khi rời đi) không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.8", "question": "(A.7.8) Thiết bị (máy chủ, switch) có được đặt ở vị trí an toàn, giảm thiểu rủi ro bị nhìn trộm hoặc hư hỏng không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.9", "question": "(A.7.9) Các biện pháp nào được áp dụng để bảo vệ tài sản (ví dụ: laptop) khi nhân viên mang ra khỏi văn phòng (làm việc từ xa, công tác)?"},
-  {"section": "A.7 Vật lý", "id": "A.7.10", "question": "(A.7.10) Các thiết bị lưu trữ (USB, ổ cứng hỏng) có được quản lý (kiểm soát, cấp phát) và hủy bỏ an toàn (xóa dữ liệu, phá hủy vật lý) khi không còn sử dụng không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.11", "question": "(A.7.11) Các hệ thống hỗ trợ (điện, điều hòa, mạng) cho phòng server có được bảo vệ, dự phòng (UPS, máy nổ) và bảo trì định kỳ không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.12", "question": "(A.7.12) Hệ thống cáp (mạng, điện) có được bảo vệ khỏi việc bị can thiệp hoặc hư hỏng vật lý không (ví dụ: đi trong máng cáp, ống gen)?"},
-  {"section": "A.7 Vật lý", "id": "A.7.13", "question": "(A.7.13) Thiết bị (máy chủ, UPS) có được bảo trì định kỳ theo lịch của nhà cung cấp không? Hồ sơ bảo trì có được lưu lại không?"},
-  {"section": "A.7 Vật lý", "id": "A.7.14", "question": "(A.7.14) Khi thanh lý hoặc tái sử dụng thiết bị (laptop, máy chủ), tổ chức có đảm bảo mọi dữ liệu nhạy cảm đã được xóa an toàn không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.1", "question": "(A.8.1) Quan sát: Thiết bị đầu cuối (laptop, PC) có được bảo vệ không (cài Antivirus, bật mã hóa ổ cứng, chính sách màn hình khóa tự động)?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.2", "question": "(A.8.2) Quyền truy cập đặc quyền (admin, root) có bị hạn chế, giám sát và chỉ cấp khi thật sự cần thiết không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.3", "question": "(A.8.3) Việc truy cập thông tin (ví dụ: ổ đĩa dùng chung, CSDL) có được phân quyền (restriction) dựa trên vai trò, chức năng không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.4", "question": "(A.8.4) (Nếu có) Quyền truy cập mã nguồn (source code) có được kiểm soát chặt chẽ (phân quyền trên Git, SVN) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.5", "question": "(A.8.5) Hệ thống có cung cấp cơ chế xác thực an toàn không (ví dụ: không truyền mật khẩu clear text, có MFA)?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.6", "question": "(A.8.6) Tổ chức có giám sát dung lượng (capacity) của các hệ thống quan trọng (CPU, RAM, disk, bandwidth) để dự báo và mở rộng kịp thời không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.7", "question": "(A.8.7) Tổ chức có giải pháp bảo vệ chống mã độc (Antivirus/Antimalware) trên máy chủ, máy trạm không? Giải pháp này có được cập nhật thường xuyên không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.8", "question": "(A.8.8) Đã có báo cáo quét lỗ hổng (Vulnerability Scan) gần nhất chưa? Các lỗ hổng \"Nghiêm trọng\" (Critical) đã được xử lý (vá lỗi) chưa?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.9", "question": "(A.8.9) Tổ chức có áp dụng cấu hình an toàn (hardening) cho các hệ thống mới triển khai (tắt dịch vụ/cổng không cần thiết) không? (Xem Chính sách 1.9)"},
-  {"section": "A.8 Công nghệ", "id": "A.8.10", "question": "(A.8.10) Khi dữ liệu không còn cần thiết, tổ chức có quy trình và công cụ để xóa an toàn (secure deletion) (ví dụ: ghi đè, degauss) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.11", "question": "(A.8.11) (Nếu có) Tổ chức có sử dụng kỹ thuật che giấu dữ liệu (data masking) khi sử dụng dữ liệu thật (production data) cho môi trường thử nghiệm (test) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.12", "question": "(A.8.12) Tổ chức có các biện pháp ngăn chặn rò rỉ dữ liệu (DLP) không (ví dụ: chặn USB, giám sát email, DLP gateway)?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.13", "question": "(A.8.13) Đã có log sao lưu (backup) thành công của các hệ thống quan trọng (từ đêm qua) chưa? (Xem Chính sách 1.3)"},
-  {"section": "A.8 Công nghệ", "id": "A.8.14", "question": "(A.8.14) Các biện pháp nào (ví dụ: HA, clustering, load balancing) được sử dụng để đảm bảo tính sẵn sàng (availability) của thông tin/dịch vụ?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.15", "question": "(A.8.15) Các hệ thống quan trọng (máy chủ, firewall, CSDL) có được bật ghi nhật ký (logging) các sự kiện quan trọng không? (Xem Chính sách 1.8)"},
-  {"section": "A.8 Công nghệ", "id": "A.8.16", "question": "(A.8.16) Log có được thu thập tập trung (SIEM/Syslog) và rà soát định kỳ (hoặc tự động) để phát hiện bất thường không? Log có được bảo vệ khỏi sửa đổi không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.17", "question": "(A.8.17) Tất cả các hệ thống trong phạm vi có được đồng bộ hóa thời gian (clock synchronization) với một nguồn chuẩn (NTP server) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.18", "question": "(A.8.18) Việc sử dụng các tiện ích đặc quyền (ví dụ: các công cụ admin, debug) có được kiểm soát và hạn chế không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.19", "question": "(A.8.19) Việc cài đặt phần mềm trên hệ thống vận hành (production) có được kiểm soát (thông qua Quản lý Thay đổi) không? Người dùng có bị cấm tự ý cài đặt không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.20", "question": "(A.8.20) Xem cấu hình Tường lửa (Firewall): Mạng có được phân đoạn (network segregation) thành các vùng (DMZ, LAN, Wifi, Server) không? (Xem Chính sách 1.9)"},
-  {"section": "A.8 Công nghệ", "id": "A.8.21", "question": "(A.8.21) Các dịch vụ mạng (network services) có được cấu hình an toàn, tắt các tính năng không cần thiết không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.22", "question": "(A.8.22) Việc lọc và kiểm soát luồng thông tin (traffic) giữa các phân đoạn mạng có được thực hiện (trên Firewall/Router) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.23", "question": "(A.8.23) Tổ chức có giải pháp lọc web (web filtering) để chặn truy cập đến các trang web độc hại/không phù hợp không? (Xem Chính sách 1.9)"},
-  {"section": "A.8 Công nghệ", "id": "A.8.24", "question": "(A.8.24) Tổ chức có chính sách và biện pháp sử dụng mật mã (cryptography) để bảo vệ thông tin không (ví dụ: mã hóa ổ cứng, SSL/TLS, mã hóa backup)?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.25", "question": "(A.8.25) (Nếu có) Quy trình phát triển phần mềm có tuân theo một vòng đời phát triển an toàn (secure development life cycle - SDLC) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.26", "question": "(A.8.26) (Nếu có) Các yêu cầu ATTT (application security requirements) có được xác định và tích hợp vào quá trình phát triển không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.27", "question": "(A.8.27) (Nếu có) Các nguyên tắc kiến trúc và kỹ thuật an toàn có được áp dụng khi xây dựng hệ thống không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.28", "question": "(A.8.28) (Nếu có) Lập trình viên có được đào tạo và áp dụng các nguyên tắc lập trình an toàn (secure coding) (ví dụ: OWASP Top 10) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.29", "question": "(A.8.29) (Nếu có) Việc kiểm thử an toàn (security testing, ví dụ: VAPT, SAST/DAST) có được thực hiện trước khi triển khai (go-live) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.30", "question": "(A.8.30) (Nếu có) Nếu thuê ngoài phát triển phần mềm, tổ chức có các biện pháp kiểm soát ATTT (hợp đồng, rà soát code) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.31", "question": "(A.8.31) (Nếu có) Môi trường Phát triển (Dev), Thử nghiệm (Test) và Vận hành (Production) có được tách biệt (segregation) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.32", "question": "(A.8.32) Đã có bằng chứng (ticket, RFC) cho thấy các thay đổi (cấu hình, phần mềm) được phê duyệt, kiểm tra (theo QT 2.6) trước khi triển khai không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.33", "question": "(A.8.33) (Nếu có) Dữ liệu thử nghiệm (test information) có được bảo vệ và lựa chọn cẩn thận (tránh dùng dữ liệu PII thật) không?"},
-  {"section": "A.8 Công nghệ", "id": "A.8.34", "question": "(A.8.34) Các hoạt động đánh giá (audit tests, pentest) có được lập kế hoạch và giám sát để giảm thiểu rủi ro gián đoạn hệ thống vận hành không?"}
+  {
+    "section": "Điều khoản 4-10",
+    "id": "4.2",
+    "question": "(4.2) Đã có danh sách các bên quan tâm và các yêu cầu ATTT của họ chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Biết ai đang mong đợi gì ở mình để đáp ứng.<br><b>Gợi ý:</b> Khách hàng (mong bảo mật dữ liệu), Nhà nước (mong tuân thủ luật), Nhân viên (mong rõ ràng quy chế).<br><b>Bằng chứng:</b> Danh sách các bên liên quan và yêu cầu của họ."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "4.3",
+    "question": "(4.3) Đã có tài liệu định nghĩa Phạm vi ISMS (Scope document) rõ ràng và hợp lý chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Khoanh vùng áp dụng ISO 27001. Không áp dụng thì không cần đánh giá.<br><b>Gợi ý:</b> Phải ghi rõ địa điểm vật lý, phòng ban, hệ thống CNTT nào nằm trong phạm vi.<br><b>Bằng chứng:</b> Tài liệu 'Phạm vi ISMS' (Scope Statement)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "4.4",
+    "question": "(4.4) ISMS và các quy trình (Chính sách, Quy trình) đã được thiết lập chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Yêu cầu tổng quát, tổ chức phải xây dựng, vận hành và cải tiến hệ thống.<br><b>Bằng chứng:</b> Hệ thống tài liệu quy trình đã được ban hành."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "5.1",
+    "question": "(5.1) Lãnh đạo cấp cao có thể hiện sự cam kết không? (Bằng chứng: cấp nguồn lực, ngân sách)",
+    "explanation": "<b>Ý nghĩa:</b> ISO cần 'Lãnh đạo dẫn dắt', không phải chỉ giao khoán cho IT.<br><b>Gợi ý:</b> Lãnh đạo có tham gia họp xem xét không? Có duyệt chi ngân sách mua firewall/thuê nhân sự không?<br><b>Bằng chứng:</b> Biên bản họp, Quyết định phê duyệt ngân sách."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "5.2",
+    "question": "(5.2) Chính sách ATTT (1.1) đã được Lãnh đạo cấp cao phê duyệt và truyền thông chưa?",
+    "explanation": "<b>Ý nghĩa:</b> 'Kim chỉ nam' cao nhất về bảo mật của công ty.<br><b>Bằng chứng:</b> Chính sách ATTT có chữ ký của Giám đốc, email/bản tin thông báo cho toàn công ty."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "5.3",
+    "question": "(5.3) Đã có tài liệu phân công vai trò, trách nhiệm ATTT chưa? (Ví dụ: Ma trận RACI 7.2)",
+    "explanation": "<b>Ý nghĩa:</b> 'Rõ người, rõ việc'. Ai chịu trách nhiệm chính nếu hệ thống bị hack?<br><b>Bằng chứng:</b> Sơ đồ tổ chức ATTT, Mô tả công việc (JD), Ma trận phân nhiệm (RACI)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "6.1.1",
+    "question": "(6.1.1) Đã có các hành động để giải quyết rủi ro và cơ hội (từ 4.1) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Đảm bảo ISMS đạt được mục tiêu và giảm thiểu tác động không mong muốn.<br><b>Bằng chứng:</b> Kế hoạch xử lý rủi ro tích hợp vào các quy trình."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "6.1.2",
+    "question": "(6.1.2) Đã có Quy trình Quản lý Rủi ro (2.1) và Ma trận Rủi ro (3.4) nhất quán chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Phải có 'công thức' chung để tính rủi ro (ví dụ: Rủi ro = Tác động x Khả năng xảy ra).<br><b>Bằng chứng:</b> Quy trình đánh giá rủi ro, Bảng tiêu chí chấm điểm rủi ro."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "6.1.2b",
+    "question": "(6.1.2) Đã có kết quả đánh giá rủi ro (bảng rủi ro) và tiêu chí chấp nhận rủi ro được phê duyệt chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Kết quả thực hiện quy trình trên. Rủi ro mức nào thì chấp nhận được (ví dụ: Thấp), mức nào phải xử lý (ví dụ: Cao/Trung bình)?<br><b>Bằng chứng:</b> Báo cáo đánh giá rủi ro (file Excel chi tiết)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "6.1.3",
+    "question": "(6.1.3) Đã có Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Với các rủi ro Cao, ai làm gì, bao giờ xong để giảm nó xuống?<br><b>Bằng chứng:</b> Kế hoạch xử lý rủi ro (Risk Treatment Plan)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "6.1.3b",
+    "question": "(6.1.3) Đã có Tuyên bố Áp dụng (SoA) được phê duyệt, liên kết logic với RTP và liệt kê đủ 93 controls chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Tài liệu quan trọng nhất để Auditor kiểm tra. Liệt kê 93 controls, cái nào áp dụng, cái nào không (kèm lý do).<br><b>Bằng chứng:</b> Tài liệu SoA (Statement of Applicability)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "6.2",
+    "question": "(6.2) Đã có các mục tiêu ATTT đo lường được (KPIs) ngoài các mục tiêu trong chính sách 1.1 chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Mục tiêu phải cụ thể, đo được (SMART). Ví dụ: 'Giảm 20% số lượng sự cố', '100% nhân viên mới được đào tạo'.<br><b>Bằng chứng:</b> Bảng theo dõi mục tiêu/KPI ATTT."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "7.1",
+    "question": "(7.1) Đã có bằng chứng về việc cung cấp nguồn lực (ngân sách, nhân sự) cho ISMS chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Có thực mới vực được đạo. Muốn bảo mật phải có người và tiền.<br><b>Bằng chứng:</b> Ngân sách được duyệt, danh sách nhân sự đội dự án ISMS."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "7.2",
+    "question": "(7.2) Đã có hồ sơ năng lực (chứng chỉ) của các nhân sự ATTT chủ chốt chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Người làm bảo mật phải đủ trình độ.<br><b>Bằng chứng:</b> CV, bằng đại học, các chứng chỉ (CISSP, CISM, CEH...) của nhân sự chủ chốt."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "7.3",
+    "question": "(7.3) Đã có bằng chứng về đào tạo nhận thức ATTT (A.6.3) chưa? (slide, danh sách tham dự, kết quả test)",
+    "explanation": "<b>Ý nghĩa:</b> Con người là mắt xích yếu nhất. Phải đào tạo để họ không click vào link lạ.<br><b>Bằng chứng:</b> Slide đào tạo, danh sách điểm danh, bài kiểm tra sau đào tạo."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "7.4",
+    "question": "(7.4) Đã có quy trình truyền thông nội bộ và bên ngoài về ISMS chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Khi có sự cố thì báo cho ai? Ai được quyền phát ngôn với báo chí?<br><b>Bằng chứng:</b> Kế hoạch truyền thông, Quy trình ứng cứu sự cố (phần liên lạc)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "7.5",
+    "question": "(7.5) Đã có Quy trình Kiểm soát Thông tin dạng văn bản (Document Control) chưa? (Có mã, phiên bản, phê duyệt, thu hồi tài liệu cũ?)",
+    "explanation": "<b>Ý nghĩa:</b> Tránh dùng nhầm quy trình cũ đã lỗi thời. Tài liệu phải có mã số, phiên bản (v1.0, v1.1).<br><b>Bằng chứng:</b> Quy trình kiểm soát tài liệu, Master list danh mục tài liệu."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "8.1",
+    "question": "(8.1) Đã có bằng chứng về việc lập kế hoạch và kiểm soát vận hành chưa? (Ví dụ: Quy trình 2.6 - Quản lý Thay đổi)",
+    "explanation": "<b>Ý nghĩa:</b> Mọi thay đổi lên hệ thống phải được kiểm soát, không tự ý sửa trực tiếp (hotfix) mà không test.<br><b>Bằng chứng:</b> Các phiếu yêu cầu thay đổi (RFC), log hệ thống ticket."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "8.2",
+    "question": "(8.2) Đã có Báo cáo Đánh giá Rủi ro (kết quả của Quy trình 2.1) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Thực hiện đánh giá rủi ro định kỳ hoặc khi có thay đổi lớn.<br><b>Bằng chứng:</b> Các báo cáo đánh giá rủi ro đã thực hiện theo kế hoạch."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "8.3",
+    "question": "(8.3) Đã có bằng chứng về việc thực hiện các Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Đã nói là phải làm. Kế hoạch nói sẽ cài Antivirus thì phải có bằng chứng đã cài.<br><b>Bằng chứng:</b> Báo cáo tiến độ dự án, các cấu hình/biên bản nghiệm thu giải pháp đã triển khai."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "9.1",
+    "question": "(9.1) Tổ chức có đo lường, giám sát, phân tích và đánh giá ISMS không? (Có báo cáo KPI/metric không?)",
+    "explanation": "<b>Ý nghĩa:</b> Không đo lường thì không quản lý được. Phải có số liệu để biết hệ thống đang tốt lên hay xấu đi.<br><b>Bằng chứng:</b> Báo cáo giám sát định kỳ, dashboard SIEM, báo cáo KPI."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "9.2",
+    "question": "(9.2) Đã có Chương trình và Báo cáo Đánh giá Nội bộ (3.1) gần nhất chưa? Đánh giá có khách quan không?",
+    "explanation": "<b>Ý nghĩa:</b> Tự 'khám bệnh' trước khi bác sĩ (Auditor bên ngoài) đến khám. Người đánh giá không được tự đánh giá việc mình làm.<br><b>Bằng chứng:</b> Kế hoạch đánh giá nội bộ, Báo cáo đánh giá nội bộ, các phiếu ghi chép NC."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "9.3",
+    "question": "(9.3) Đã có bằng chứng về cuộc họp Xem xét của Lãnh đạo (Management Review) gần nhất chưa? (slide, biên bản họp, danh sách tham dự)",
+    "explanation": "<b>Ý nghĩa:</b> Cuộc họp quan trọng nhất năm của ISMS. Lãnh đạo nghe báo cáo và chỉ đạo hướng đi tiếp theo.<br><b>Bằng chứng:</b> Biên bản họp xem xét lãnh đạo (bắt buộc có đủ các nội dung theo yêu cầu chuẩn)."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "9.3b",
+    "question": "(9.3) Cuộc họp Xem xét của Lãnh đạo có đủ các đầu vào (inputs) theo yêu cầu 9.3.2 không? (kết quả rủi ro, audit, sự cố...)",
+    "explanation": "<b>Ý nghĩa:</b> Đảm bảo lãnh đạo có đủ thông tin để ra quyết định. Không được báo cáo thiếu các vấn đề nghiêm trọng.<br><b>Bằng chứng:</b> Slide báo cáo trong cuộc họp."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "10.1",
+    "question": "(10.1) Đã có bằng chứng về các cơ hội cải tiến (từ 9.3) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> ISMS phải 'sống' và tốt lên từng ngày. Luôn phải tìm cách làm tốt hơn.<br><b>Bằng chứng:</b> Danh sách các sáng kiến cải tiến, kế hoạch nâng cấp hệ thống."
+  },
+  {
+    "section": "Điều khoản 4-10",
+    "id": "10.2",
+    "question": "(10.2) Các Điểm không phù hợp (NCs) (từ 9.2) đã được phân tích nguyên nhân gốc rễ và thực hiện hành động khắc phục chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Sai thì phải sửa, và phải sửa tận gốc để không lặp lại.<br><b>Bằng chứng:</b> Các phiếu yêu cầu hành động khắc phục (CAR), báo cáo phân tích nguyên nhân gốc rễ (5 Why, Fishbone)."
+  },
+
+  // --- ANNEX A.5 (TỔ CHỨC) ---
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.1",
+    "question": "(A.5.1) Chính sách ATTT (1.1) và các chính sách chuyên đề (1.2-1.10) đã được phê duyệt, ban hành, truyền thông chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Bộ luật của tổ chức. Phải có các quy định cụ thể (ví dụ: Chính sách mật khẩu, Chính sách làm việc từ xa).<br><b>Bằng chứng:</b> Hệ thống văn bản chính sách đã ban hành trên portal nội bộ."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.2",
+    "question": "(A.5.2) Đã có Ma trận RACI (7.2), Mô tả công việc? Nhân sự có hiểu trách nhiệm ATTT của mình không?",
+    "explanation": "<b>Ý nghĩa:</b> Phân định rõ ai làm gì trong từng đầu việc bảo mật cụ thể.<br><b>Bằng chứng:</b> Ma trận RACI chi tiết cho các quy trình chính (Quản lý sự cố, Quản lý thay đổi)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.3",
+    "question": "(A.5.3) Các quy trình nhạy cảm (Quản lý thay đổi, Cấp quyền) có đảm bảo phân tách nhiệm vụ (người yêu cầu, phê duyệt, thực hiện khác nhau) không?",
+    "explanation": "<b>Ý nghĩa:</b> 'Vừa đá bóng vừa thổi còi' rất dễ sinh tiêu cực. Người code không nên là người deploy lên production.<br><b>Bằng chứng:</b> Quy trình cấp phát quyền, log hệ thống cho thấy các tài khoản khác nhau thực hiện các bước."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.4",
+    "question": "(A.5.4) Cấp quản lý (Trưởng phòng) có thúc đẩy nhân viên tuân thủ chính sách ATTT không?",
+    "explanation": "<b>Ý nghĩa:</b> Sếp phải làm gương. Nếu sếp chia sẻ mật khẩu thì nhân viên sẽ làm theo.<br><b>Bằng chứng:</b> Phỏng vấn nhân viên, các email nhắc nhở của quản lý."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.5",
+    "question": "(A.5.5) Tổ chức có xác định và duy trì liên lạc với các cơ quan có thẩm quyền (VNCERT/CC, A05...) không?",
+    "explanation": "<b>Ý nghĩa:</b> Biết gọi ai khi bị tấn công nghiêm trọng hoặc cần hỗ trợ pháp lý.<br><b>Bằng chứng:</b> Danh sách liên lạc khẩn cấp (công an, cơ quan điều phối ứng cứu sự cố)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.6",
+    "question": "(A.5.6) Tổ chức có tham gia các diễn đàn, hiệp hội ATTT chuyên ngành (ISACA, (ISC)²) không?",
+    "explanation": "<b>Ý nghĩa:</b> Để cập nhật kiến thức mới, không bị 'ếch ngồi đáy giếng'.<br><b>Bằng chứng:</b> Thẻ hội viên, chứng nhận tham gia các hội thảo chuyên ngành."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.7",
+    "question": "(A.5.7) Tổ chức có thu thập và phân tích thông tin về mối đe dọa (Threat Intelligence) từ SOC/MSSP không? Có hành động gì được thực hiện không?",
+    "explanation": "<b>Ý nghĩa:</b> Biết địch biết ta. Thu thập thông tin về các nhóm hacker đang nhắm vào ngành của mình để phòng thủ trước.<br><b>Bằng chứng:</b> Báo cáo Threat Intel hàng tuần/tháng, các rule firewall/IDS được cập nhật dựa trên Intel."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.8",
+    "question": "(A.5.8) Các dự án đang chạy có được đánh giá rủi ro ATTT trong quá trình thực hiện không?",
+    "explanation": "<b>Ý nghĩa:</b> Bảo mật phải đi cùng dự án từ đầu, không phải đợi làm xong mới đi 'vá' lỗi.<br><b>Bằng chứng:</b> Biên bản họp khởi động dự án có nội dung ATTT, báo cáo đánh giá rủi ro dự án."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.9",
+    "question": "(A.5.9) Danh sách Tài sản (3.2) có đầy đủ không (HW, SW, Data, Services...)?",
+    "explanation": "<b>Ý nghĩa:</b> Không biết mình có gì thì không thể bảo vệ được. Phải kiểm kê đầy đủ.<br><b>Bằng chứng:</b> File Inventory/CMDB quản lý tài sản CNTT."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.10",
+    "question": "(A.5.10) Chính sách Sử dụng Chấp nhận được (AUP) đã được truyền thông (qua Sổ tay nhân viên) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Quy định rõ nhân viên được làm gì và cấm làm gì trên máy công ty (ví dụ: cấm cài game, cấm xem web đen).<br><b>Bằng chứng:</b> Sổ tay nhân viên, cam kết tuân thủ đã ký."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.11",
+    "question": "(A.5.11) Quy trình nghỉ việc (Off-boarding) của HR có đảm bảo nhân viên trả lại mọi tài sản (laptop, thẻ) không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh mất mát tài sản khi nhân viên nghỉ. Quan trọng nhất là thu hồi quyền truy cập ngay lập tức.<br><b>Bằng chứng:</b> Checklist bàn giao nghỉ việc có chữ ký xác nhận của IT và nhân sự."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.12",
+    "question": "(A.5.12) Thông tin đã được phân loại (Mật, Nội bộ...) trong Chính sách (1.7) và Danh sách Tài sản (3.2) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Không phải dữ liệu nào cũng quan trọng như nhau. Cần phân loại để ưu tiên bảo vệ dữ liệu 'Mật'.<br><b>Bằng chứng:</b> Quy định phân loại thông tin, các tài liệu mẫu đã được dán nhãn."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.13",
+    "question": "(A.5.13) Thông tin nhạy cảm (tài liệu, email, ổ đĩa) có được dán nhãn \"Mật\" (hoặc tương đương) không?",
+    "explanation": "<b>Ý nghĩa:</b> Dán nhãn để người dùng biết cách ứng xử phù hợp (ví dụ: thấy chữ MẬT thì không được gửi ra ngoài).<br><b>Bằng chứng:</b> Quan sát thực tế các tài liệu, email."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.14",
+    "question": "(A.5.14) Tổ chức có quy định về việc chuyển giao thông tin nhạy cảm ra ngoài (email, USB, Cloud) không?",
+    "explanation": "<b>Ý nghĩa:</b> Kiểm soát đường đi của dữ liệu nhạy cảm. Cần mã hóa khi gửi đi.<br><b>Bằng chứng:</b> Quy định trao đổi thông tin, công cụ DLP (nếu có)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.15",
+    "question": "(A.5.15) Chính sách KSTC (1.2) và Quy trình (2.5) có dựa trên nguyên tắc \"Cần biết\" và \"Đặc quyền tối thiểu\" không?",
+    "explanation": "<b>Ý nghĩa:</b> Chỉ cấp quyền vừa đủ để làm việc. Không cấp dư thừa.<br><b>Bằng chứng:</b> Ma trận phân quyền truy cập (Access Matrix)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.16",
+    "question": "(A.5.16) Quy trình tạo/xóa tài khoản có đảm bảo mọi tài khoản được liên kết duy nhất với một cá nhân/hệ thống không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh dùng chung tài khoản (ví dụ: 'admin1', 'ketoan_chung') để đảm bảo tính quy trách nhiệm (accountability).<br><b>Bằng chứng:</b> Danh sách người dùng trên AD/hệ thống."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.17",
+    "question": "(A.5.17) Chính sách Mật khẩu (1.4) có được tuân thủ không (đủ phức tạp, đổi định kỳ, cấm mật khẩu mặc định, có MFA)?"},
+	"explanation": "<b>Ý nghĩa:</b> Mật khẩu yếu là nguyên nhân hàng đầu bị hack. Cần bắt buộc độ phức tạp và khuyến nghị dùng MFA.<br><b>Bằng chứng:</b> Cấu hình Password Policy trên AD/các hệ thống, quan sát thực tế việc đăng nhập."
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.18",
+    "question": "(A.5.18) Đã có hồ sơ (email, Biểu mẫu 3.6) rà soát quyền truy cập 6 tháng gần nhất? Chủ sở hữu tài sản có rà soát và phê duyệt không?",
+    "explanation": "<b>Ý nghĩa:</b> Định kỳ kiểm tra xem có ai chuyển bộ phận mà vẫn giữ quyền cũ không (user access review).<br><b>Bằng chứng:</b> Biên bản/email rà soát quyền định kỳ."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.19",
+    "question": "(A.5.19) Tổ chức có đánh giá rủi ro ATTT của NCC (Cloud, ICT) trước khi ký hợp đồng không? (Xem Chính sách 1.10)",
+    "explanation": "<b>Ý nghĩa:</b> Chọn bạn mà chơi. Đảm bảo nhà cung cấp cũng an toàn trước khi giao dữ liệu cho họ.<br><b>Bằng chứng:</b> Phiếu đánh giá an ninh nhà cung cấp trước khi ký HĐ."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.20",
+    "question": "(A.5.20) Hợp đồng NCC (sample) có bao gồm các điều khoản ATTT ràng buộc (tuân thủ, báo cáo sự cố, quyền audit) không?",
+    "explanation": "<b>Ý nghĩa:</b> 'Bút sa gà chết'. Phải có điều khoản ràng buộc trách nhiệm pháp lý nếu họ làm lộ dữ liệu.<br><b>Bằng chứng:</b> Hợp đồng mẫu, các phụ lục bảo mật (NDA/DPA)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.21",
+    "question": "(A.5.21) Tổ chức quản lý rủi ro từ chuỗi cung ứng ICT (nhà cung cấp phần cứng, phần mềm) như thế nào?",
+    "explanation": "<b>Ý nghĩa:</b> Đảm bảo phần mềm/thiết bị mua về không bị cài cắm mã độc từ trước (supply chain attack).<br><b>Bằng chứng:</b> Quy trình mua sắm CNTT, yêu cầu CQ/CO, scan thiết bị trước khi đưa vào mạng."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.22",
+    "question": "(A.5.22) Tổ chức có rà soát hiệu suất ATTT của các NCC quan trọng hàng năm không (yêu cầu chứng chỉ, báo cáo)?",
+    "explanation": "<b>Ý nghĩa:</b> Không chỉ đánh giá lúc đầu mà phải giám sát định kỳ xem họ còn giữ vững phong độ bảo mật không.<br><b>Bằng chứng:</b> Báo cáo đánh giá định kỳ nhà cung cấp."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.23",
+    "question": "(A.5.23) Khi NCC (ví dụ: nhà cung cấp Cloud) thay đổi dịch vụ, tổ chức có quy trình đánh giá rủi ro không?",
+    "explanation": "<b>Ý nghĩa:</b> Khi AWS/Azure thay đổi tính năng, phải xem nó có ảnh hưởng đến bảo mật hiện tại của mình không.<br><b>Bằng chứng:</b> Các đánh giá tác động khi có thay đổi lớn từ phía đối tác."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.24",
+    "question": "(A.5.24) Kế hoạch Quản lý Sự cố (1.5, 2.2) đã rõ ràng vai trò, trách nhiệm (Đội IRT) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Khi 'cháy nhà' (sự cố) thì ai cầm vòi nước, ai gọi cứu hỏa? Phải rõ ràng từ trước.<br><b>Bằng chứng:</b> Quyết định thành lập đội ứng cứu sự cố (IRT) và danh sách thành viên."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.25",
+    "question": "(A.5.25) Các sự kiện ATTT (events) có được đánh giá để xác định xem chúng có phải là sự cố (incidents) không? Ai chịu trách nhiệm?",
+    "explanation": "<b>Ý nghĩa:</b> Phân biệt 'cảnh báo giả' và 'sự cố thật'. Cần quy trình triage (phân loại).<br><b>Bằng chứng:</b> Quy trình phân loại mức độ sự cố (P1, P2, P3...)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.26",
+    "question": "(A.5.26) Đã xem Nhật ký Sự cố (3.3)? Các bước xử lý (Ngăn chặn, Tiêu diệt, Phục hồi) có được ghi lại không?",
+    "explanation": "<b>Ý nghĩa:</b> Mọi sự cố phải được ghi chép lại để rút kinh nghiệm và làm bằng chứng pháp lý nếu cần.<br><b>Bằng chứng:</b> File logbook/ticket ghi nhận các sự cố đã xảy ra."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.27",
+    "question": "(A.5.27) Các sự cố nghiêm trọng (trong 3.3) có được phân tích nguyên nhân gốc rễ (root cause) và rút bài học kinh nghiệm không?",
+    "explanation": "<b>Ý nghĩa:</b> Không để một cục đá vấp hai lần. Phải tìm ra nguyên nhân gốc để bịt lỗ hổng.<br><b>Bằng chứng:</b> Báo cáo 'Post-incident review' sau sự cố."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.28",
+    "question": "(A.5.28) Tổ chức có quy trình thu thập và bảo quản bằng chứng kỹ thuật số (digital forensics) khi xảy ra sự cố không?",
+    "explanation": "<b>Ý nghĩa:</b> Bảo vệ hiện trường vụ án số. Cần biết cách dump RAM, copy ổ cứng mà không làm hỏng bằng chứng.<br><b>Bằng chứng:</b> Quy trình điều tra số (Forensics procedure)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.29",
+    "question": "(A.5.29) Kế hoạch Kinh doanh Liên tục (BCP) có tích hợp các yêu cầu ATTT (bảo mật, toàn vẹn) khi hoạt động ở trạng thái dự phòng không?",
+    "explanation": "<b>Ý nghĩa:</b> Khi chạy site dự phòng (DR), vẫn phải đảm bảo bảo mật (ví dụ: vẫn phải có firewall, antivirus).<br><b>Bằng chứng:</b> Kế hoạch BCP/DRP có các mục về bảo mật."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.30",
+    "question": "(A.5.30) Đã thực hiện BIA, xác định RTO/RPO chưa? Đã có báo cáo diễn tập DRP/BCP (theo Chính sách 1.6) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Phải biết hệ thống nào quan trọng nhất (BIA) và bao lâu phải khôi phục xong (RTO). Diễn tập để đảm bảo kế hoạch chạy được.<br><b>Bằng chứng:</b> Báo cáo đánh giá tác động kinh doanh (BIA), báo cáo kết quả diễn tập."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.31",
+    "question": "(A.5.31) Tổ chức có danh sách các yêu cầu pháp lý (Luật An ninh mạng, Nghị định 13) và yêu cầu hợp đồng liên quan đến ATTT không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh bị phạt do không biết luật. Phải liệt kê hết các luật áp dụng cho mình.<br><b>Bằng chứng:</b> Danh mục các văn bản pháp luật liên quan ATTT."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.32",
+    "question": "(A.5.32) Tổ chức có biện pháp bảo vệ IP (mã nguồn, tài liệu thiết kế) và tuân thủ bản quyền phần mềm không?",
+    "explanation": "<b>Ý nghĩa:</b> Không dùng phần mềm lậu (tránh rủi ro pháp lý và malware). Bảo vệ tài sản trí tuệ của công ty.<br><b>Bằng chứng:</b> Chính sách quản lý bản quyền, các license phần mềm đã mua."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.33",
+    "question": "(A.5.33) Các hồ sơ quan trọng (log, hợp đồng) có được bảo vệ khỏi mất mát, sửa đổi và được lưu trữ đủ thời gian không?",
+    "explanation": "<b>Ý nghĩa:</b> Log phải được lưu đủ lâu (ví dụ: 6 tháng - 1 năm theo luật) để phục vụ điều tra.<br><b>Bằng chứng:</b> Chính sách lưu trữ hồ sơ, cấu hình retention trên hệ thống log."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.34",
+    "question": "(A.5.34) Nếu tổ chức xử lý Thông tin Cá nhân (PII), các biện pháp nào được áp dụng để tuân thủ quy định (Nghị định 13)?",
+    "explanation": "<b>Ý nghĩa:</b> Bảo vệ dữ liệu cá nhân của khách hàng/nhân viên. Cần có sự đồng ý khi thu thập.<br><b>Bằng chứng:</b> Chính sách bảo vệ dữ liệu cá nhân, các form lấy sự đồng ý (consent form)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.35",
+    "question": "(A.5.35) Việc rà soát ISMS (Đánh giá nội bộ 9.2) có được thực hiện bởi những người khách quan, độc lập không?",
+    "explanation": "<b>Ý nghĩa:</b> Đảm bảo tính công bằng. Tốt nhất là đánh giá chéo giữa các phòng ban hoặc thuê bên ngoài.<br><b>Bằng chứng:</b> Quyết định thành lập đoàn đánh giá nội bộ (đảm bảo không tự đánh giá mình)."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.36",
+    "question": "(A.5.36) Tổ chức có cơ chế nào để đảm bảo nhân viên tuân thủ các chính sách ATTT (ví dụ: kiểm tra, kỷ luật)?",
+    "explanation": "<b>Ý nghĩa:</b> Chính sách ban hành ra phải được thực thi. Cần có 'cây gậy và củ cà rốt'.<br><b>Bằng chứng:</b> Quy định khen thưởng/kỷ luật liên quan ATTT."
+  },
+  {
+    "section": "A.5 Tổ chức",
+    "id": "A.5.37",
+    "question": "(A.5.37) Các quy trình vận hành (ví dụ: backup, vá lỗi) có được tài liệu hóa và sẵn có cho người thực hiện không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh phụ thuộc vào trí nhớ của một cá nhân. Mọi việc vận hành lặp lại cần có hướng dẫn (SOP).<br><b>Bằng chứng:</b> Các tài liệu hướng dẫn vận hành (SOP) cho IT/Sysadmin."
+  },
+
+  // --- ANNEX A.6 (CON NGƯỜI) ---
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.1",
+    "question": "(A.6.1) Quy trình HR có bao gồm việc kiểm tra lý lịch (screening) cho các vị trí nhạy cảm (IT, Tài chính) trước khi tuyển dụng không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh tuyển 'sói vào nhà'. Cần kiểm tra xem ứng viên có tiền án tiền sự liên quan đến công nghệ/lừa đảo không.<br><b>Bằng chứng:</b> Quy trình tuyển dụng, hồ sơ check reference/background."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.2",
+    "question": "(A.6.2) Hợp đồng lao động hoặc thỏa thuận có bao gồm các điều khoản về trách nhiệm ATTT của nhân viên không?",
+    "explanation": "<b>Ý nghĩa:</b> Ràng buộc pháp lý ngay từ đầu. Nhân viên phải biết họ có trách nhiệm bảo mật.<br><b>Bằng chứng:</b> Hợp đồng lao động mẫu, bản cam kết bảo mật (NDA) nhân viên ký."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.3",
+    "question": "(A.6.3) Đã có bằng chứng đào tạo nhận thức ATTT hàng năm (slide, danh sách tham dự)? (Giống 7.3)",
+    "explanation": "<b>Ý nghĩa:</b> Nhắc lại kiến thức định kỳ vì các thủ đoạn lừa đảo luôn mới.<br><b>Bằng chứng:</b> Kế hoạch đào tạo năm, hồ sơ các lớp đã tổ chức."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.4",
+    "question": "(A.6.4) Tổ chức có quy trình kỷ luật (trong Nội quy lao động) nếu nhân viên vi phạm chính sách ATTT không?",
+    "explanation": "<b>Ý nghĩa:</b> Răn đe để đảm bảo tuân thủ.<br><b>Bằng chứng:</b> Nội quy lao động (có mục xử lý vi phạm ATTT)."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.5",
+    "question": "(A.6.5) Quy trình nghỉ việc (Off-boarding) có bao gồm việc nhắc nhở/ràng buộc trách nhiệm bảo mật sau khi nghỉ không?",
+    "explanation": "<b>Ý nghĩa:</b> Dù nghỉ rồi nhưng vẫn không được tiết lộ bí mật công ty cũ.<br><b>Bằng chứng:</b> Biên bản thanh lý hợp đồng có điều khoản bảo mật trọn đời/có thời hạn."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.6",
+    "question": "(A.6.6) Nhân viên và nhà thầu có ký Thỏa thuận Bảo mật (NDA / Confidentiality Agreement) không?",
+    "explanation": "<b>Ý nghĩa:</b> Văn bản pháp lý bắt buộc trước khi cho phép tiếp cận thông tin nhạy cảm.<br><b>Bằng chứng:</b> Các NDA đã ký được lưu trữ."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.7",
+    "question": "(A.6.7) Đã có chính sách và các biện pháp kỹ thuật (VPN, MFA, mã hóa) cho nhân viên làm việc từ xa (Remote working) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Làm ở nhà (WFH) rủi ro hơn ở công ty. Cần có kênh kết nối an toàn (VPN) và xác thực mạnh (MFA).<br><b>Bằng chứng:</b> Chính sách làm việc từ xa, cấu hình VPN/MFA."
+  },
+  {
+    "section": "A.6 Con người",
+    "id": "A.6.8",
+    "question": "(A.6.8) Phỏng vấn nhân viên: Nếu nhận được email lạ, họ biết cách báo cáo sự cố (cho IT/Helpdesk) theo Quy trình 2.2 không?",
+    "explanation": "<b>Ý nghĩa:</b> Kiểm tra xem việc đào tạo có hiệu quả không. Nhân viên phải biết nút 'Báo cáo Phishing' ở đâu.<br><b>Bằng chứng:</b> Kết quả phỏng vấn ngẫu nhiên, hoặc kết quả diễn tập phishing."
+  },
+
+  // --- ANNEX A.7 (VẬT LÝ) ---
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.1",
+    "question": "(A.7.1) Vòng đai an ninh vật lý (cửa, tường, hàng rào) của văn phòng và phòng server có được xác định và bảo vệ không?",
+    "explanation": "<b>Ý nghĩa:</b> Lớp bảo vệ đầu tiên. Ngăn người lạ đột nhập tự do.<br><b>Bằng chứng:</b> Sơ đồ bố trí mặt bằng, quan sát thực tế cửa ra vào, bảo vệ trực."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.2",
+    "question": "(A.7.2) Quan sát: Việc ra vào các khu vực nhạy cảm (văn phòng, phòng server) có được kiểm soát không (thẻ từ, khóa)? Khách có được giám sát/đeo thẻ không?",
+    "explanation": "<b>Ý nghĩa:</b> Kiểm soát ai được vào đâu. Khách đến phải có người kèm.<br><b>Bằng chứng:</b> Hệ thống kiểm soát ra vào (Access Control System), sổ nhật ký khách ra vào."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.3",
+    "question": "(A.7.3) Văn phòng và phòng server có được bảo vệ (khóa cửa, tủ rack) khi không có người giám sát không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh việc ai đó lẻn vào rút dây/cắm USB khi không có người.<br><b>Bằng chứng:</b> Quan sát thực tế các tủ rack có khóa không."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.4",
+    "question": "(A.7.4) Quan sát: Có hệ thống giám sát (CCTV) tại các lối ra vào và khu vực nhạy cảm không? Log camera có được lưu trữ và bảo vệ không?",
+    "explanation": "<b>Ý nghĩa:</b> Ghi lại hình ảnh để điều tra nếu có mất mát tài sản vật lý.<br><b>Bằng chứng:</b> Hệ thống camera, quy định thời gian lưu trữ video."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.5",
+    "question": "(A.7.5) Phòng server có được bảo vệ khỏi các mối đe dọa môi trường không (cháy, ngập, nhiệt độ)? (Bằng chứng: bình chữa cháy, điều hòa, UPS)",
+    "explanation": "<b>Ý nghĩa:</b> Đảm bảo thiết bị không bị hỏng do nóng, ẩm, cháy, mất điện.<br><b>Bằng chứng:</b> Hệ thống báo cháy/chữa cháy FM200, cảm biến nhiệt độ/độ ẩm, UPS/máy phát điện."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.6",
+    "question": "(A.7.6) Các quy tắc làm việc tại khu vực an toàn (phòng server) có được định nghĩa và tuân thủ không (ví dụ: hạn chế mang thiết bị cá nhân)?",
+    "explanation": "<b>Ý nghĩa:</b> Phòng server không phải cái kho. Cần quy định rõ ai được vào làm gì.<br><b>Bằng chứng:</b> Nội quy phòng máy chủ (dán trước cửa)."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.7",
+    "question": "(A.7.7) Quan sát: Nhân viên có tuân thủ chính sách \"Bàn làm việc sạch\" (không để tài liệu nhạy cảm) và \"Màn hình sạch\" (khóa máy tính khi rời đi) không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh lộ thông tin cho người đi ngang qua (shoulder surfing).<br><b>Bằng chứng:</b> Quan sát thực tế văn phòng giờ nghỉ trưa/cuối giờ."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.8",
+    "question": "(A.7.8) Thiết bị (máy chủ, switch) có được đặt ở vị trí an toàn, giảm thiểu rủi ro bị nhìn trộm hoặc hư hỏng không?",
+    "explanation": "<b>Ý nghĩa:</b> Không đặt màn hình máy chủ hướng ra cửa sổ công cộng.<br><b>Bằng chứng:</b> Quan sát vị trí lắp đặt thiết bị."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.9",
+    "question": "(A.7.9) Các biện pháp nào được áp dụng để bảo vệ tài sản (ví dụ: laptop) khi nhân viên mang ra khỏi văn phòng (làm việc từ xa, công tác)?",
+    "explanation": "<b>Ý nghĩa:</b> Laptop mang ra quán cafe rất dễ mất. Cần mã hóa ổ cứng (Bitlocker) để mất máy nhưng không mất dữ liệu.<br><b>Bằng chứng:</b> Chính sách sử dụng thiết bị di động, cấu hình mã hóa."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.10",
+    "question": "(A.7.10) Các thiết bị lưu trữ (USB, ổ cứng hỏng) có được quản lý (kiểm soát, cấp phát) và hủy bỏ an toàn (xóa dữ liệu, phá hủy vật lý) khi không còn sử dụng không?",
+    "explanation": "<b>Ý nghĩa:</b> Ổ cứng hỏng vứt sọt rác vẫn có thể bị khôi phục dữ liệu. Cần hủy vật lý (khoan, đập nát).<br><b>Bằng chứng:</b> Biên bản hủy tài sản, quy trình hủy dữ liệu."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.11",
+    "question": "(A.7.11) Các hệ thống hỗ trợ (điện, điều hòa, mạng) cho phòng server có được bảo vệ, dự phòng (UPS, máy nổ) và bảo trì định kỳ không?",
+    "explanation": "<b>Ý nghĩa:</b> Đảm bảo tính liên tục (Availability). Mất điện phải có UPS gánh trong lúc chờ máy nổ.<br><b>Bằng chứng:</b> Hồ sơ bảo trì hệ thống điện/lạnh, nhật ký chạy thử máy phát."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.12",
+    "question": "(A.7.12) Hệ thống cáp (mạng, điện) có được bảo vệ khỏi việc bị can thiệp hoặc hư hỏng vật lý không (ví dụ: đi trong máng cáp, ống gen)?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh chuột cắn hoặc ai đó cắt trộm/nghe lén. Cáp nên đi ngầm hoặc trong ống bảo vệ.<br><b>Bằng chứng:</b> Quan sát thực tế hệ thống máng cáp."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.13",
+    "question": "(A.7.13) Thiết bị (máy chủ, UPS) có được bảo trì định kỳ theo lịch của nhà cung cấp không? Hồ sơ bảo trì có được lưu lại không?",
+    "explanation": "<b>Ý nghĩa:</b> 'Của bền tại người'. Bảo trì để phát hiện sớm nguy cơ hỏng hóc.<br><b>Bằng chứng:</b> Kế hoạch và biên bản bảo trì thiết bị."
+  },
+  {
+    "section": "A.7 Vật lý",
+    "id": "A.7.14",
+    "question": "(A.7.14) Khi thanh lý hoặc tái sử dụng thiết bị (laptop, máy chủ), tổ chức có đảm bảo mọi dữ liệu nhạy cảm đã được xóa an toàn không?",
+    "explanation": "<b>Ý nghĩa:</b> Trước khi bán máy cũ hoặc chuyển cho nhân viên khác dùng, phải wipe sạch dữ liệu cũ.<br><b>Bằng chứng:</b> Quy trình thanh lý tài sản, biên bản xóa dữ liệu."
+  },
+
+  // --- ANNEX A.8 (CÔNG NGHỆ) ---
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.1",
+    "question": "(A.8.1) Quan sát: Thiết bị đầu cuối (laptop, PC) có được bảo vệ không (cài Antivirus, bật mã hóa ổ cứng, chính sách màn hình khóa tự động)?",
+    "explanation": "<b>Ý nghĩa:</b> Bảo vệ 'cửa ngõ' mà nhân viên dùng hàng ngày.<br><b>Bằng chứng:</b> Màn hình Antivirus trên máy nhân viên, policy trên AD (Group Policy)."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.2",
+    "question": "(A.8.2) Quyền truy cập đặc quyền (admin, root) có bị hạn chế, giám sát và chỉ cấp khi thật sự cần thiết không?",
+    "explanation": "<b>Ý nghĩa:</b> Tài khoản Admin là mục tiêu số 1 của hacker. Cần dùng PAM hoặc hạn chế tối đa số người biết password admin.<br><b>Bằng chứng:</b> Danh sách tài khoản đặc quyền, log sử dụng các tài khoản này."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.3",
+    "question": "(A.8.3) Việc truy cập thông tin (ví dụ: ổ đĩa dùng chung, CSDL) có được phân quyền (restriction) dựa trên vai trò, chức năng không?",
+    "explanation": "<b>Ý nghĩa:</b> Phòng nào chỉ xem dữ liệu phòng đó. Không share 'Everyone - Full Control'.<br><b>Bằng chứng:</b> Cấu hình phân quyền NTFS trên File Server, phân quyền trong Database."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.4",
+    "question": "(A.8.4) (Nếu có) Quyền truy cập mã nguồn (source code) có được kiểm soát chặt chẽ (phân quyền trên Git, SVN) không?",
+    "explanation": "<b>Ý nghĩa:</b> Source code là tài sản lõi của công ty phần mềm. Tránh lộ lọt hoặc bị nhân viên cũ sửa trộm.<br><b>Bằng chứng:</b> Cấu hình phân quyền trên GitLab/GitHub/Bitbucket."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.5",
+    "question": "(A.8.5) Hệ thống có cung cấp cơ chế xác thực an toàn không (ví dụ: không truyền mật khẩu clear text, có MFA)?",
+    "explanation": "<b>Ý nghĩa:</b> Đăng nhập phải an toàn. Bắt buộc dùng HTTPS và khuyến nghị MFA cho các hệ thống quan trọng.<br><b>Bằng chứng:</b> Cấu hình hệ thống xác thực (SSO, LDAP, MFA)."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.6",
+    "question": "(A.8.6) Tổ chức có giám sát dung lượng (capacity) của các hệ thống quan trọng (CPU, RAM, disk, bandwidth) để dự báo và mở rộng kịp thời không?",
+    "explanation": "<b>Ý nghĩa:</b> Tránh sập hệ thống do đầy ổ cứng hoặc quá tải CPU.<br><b>Bằng chứng:</b> Các công cụ giám sát (Zabbix, Prometheus, SolarWinds) và báo cáo capacity."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.7",
+    "question": "(A.8.7) Tổ chức có giải pháp bảo vệ chống mã độc (Antivirus/Antimalware) trên máy chủ, máy trạm không? Giải pháp này có được cập nhật thường xuyên không?",
+    "explanation": "<b>Ý nghĩa:</b> Lớp bảo vệ cơ bản nhất chống virus/ransomware.<br><b>Bằng chứng:</b> Dashboard quản lý Antivirus tập trung, kiểm tra ngày cập nhật signature."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.8",
+    "question": "(A.8.8) Đã có báo cáo quét lỗ hổng (Vulnerability Scan) gần nhất chưa? Các lỗ hổng \"Nghiêm trọng\" (Critical) đã được xử lý (vá lỗi) chưa?",
+    "explanation": "<b>Ý nghĩa:</b> Chủ động tìm lỗi trước khi hacker tìm thấy. Quan trọng là tìm xong phải vá.<br><b>Bằng chứng:</b> Báo cáo scan từ Nessus/OpenVAS/Qualys và ticket theo dõi việc vá lỗi."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.9",
+    "question": "(A.8.9) Tổ chức có áp dụng cấu hình an toàn (hardening) cho các hệ thống mới triển khai (tắt dịch vụ/cổng không cần thiết) không? (Xem Chính sách 1.9)",
+    "explanation": "<b>Ý nghĩa:</b> Không để cấu hình mặc định (default) vì rất dễ bị hack. Phải 'cứng hóa' (hardening) trước khi go-live.<br><b>Bằng chứng:</b> Hardening checklist cho OS/Database, kết quả scan compliance."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.10",
+    "question": "(A.8.10) Khi dữ liệu không còn cần thiết, tổ chức có quy trình và công cụ để xóa an toàn (secure deletion) (ví dụ: ghi đè, degauss) không?",
+    "explanation": "<b>Ý nghĩa:</b> 'Delete' thông thường vẫn khôi phục được. Cần xóa an toàn (ghi đè nhiều lần) đối với dữ liệu nhạy cảm.<br><b>Bằng chứng:</b> Công cụ xóa dữ liệu an toàn, quy trình hủy dữ liệu số."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.11",
+    "question": "(A.8.11) (Nếu có) Tổ chức có sử dụng kỹ thuật che giấu dữ liệu (data masking) khi sử dụng dữ liệu thật (production data) cho môi trường thử nghiệm (test) không?",
+    "explanation": "<b>Ý nghĩa:</b> Dev không cần biết số thẻ tín dụng thật của khách hàng để test. Cần làm mờ/ẩn đi.<br><b>Bằng chứng:</b> Quy trình tạo dữ liệu test, các script/công cụ masking."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.12",
+    "question": "(A.8.12) Tổ chức có các biện pháp ngăn chặn rò rỉ dữ liệu (DLP) không (ví dụ: chặn USB, giám sát email, DLP gateway)?",
+    "explanation": "<b>Ý nghĩa:</b> Ngăn chặn nhân viên (vô tình hoặc cố ý) gửi dữ liệu mật ra ngoài.<br><b>Bằng chứng:</b> Cấu hình giải pháp DLP, các quy định chặn cổng USB."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.13",
+    "question": "(A.8.13) Đã có log sao lưu (backup) thành công của các hệ thống quan trọng (từ đêm qua) chưa? (Xem Chính sách 1.3)",
+    "explanation": "<b>Ý nghĩa:</b> Cứu cánh cuối cùng khi bị ransomware. Backup phải thành công và phải test khôi phục (restore) định kỳ.<br><b>Bằng chứng:</b> Log backup hàng ngày, biên bản test restore định kỳ."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.14",
+    "question": "(A.8.14) Các biện pháp nào (ví dụ: HA, clustering, load balancing) được sử dụng để đảm bảo tính sẵn sàng (availability) của thông tin/dịch vụ?",
+    "explanation": "<b>Ý nghĩa:</b> Một máy chủ chết thì dịch vụ vẫn phải chạy. Cần có dự phòng nóng (HA).<br><b>Bằng chứng:</b> Sơ đồ kiến trúc hệ thống (thể hiện tính dự phòng), cấu hình Load Balancer."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.15",
+    "question": "(A.8.15) Các hệ thống quan trọng (máy chủ, firewall, CSDL) có được bật ghi nhật ký (logging) các sự kiện quan trọng không? (Xem Chính sách 1.8)",
+    "explanation": "<b>Ý nghĩa:</b> 'Hộp đen' của hệ thống. Phải ghi log để biết ai đã làm gì khi có sự cố.<br><b>Bằng chứng:</b> Cấu hình audit log trên OS, DB, Network device."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.16",
+    "question": "(A.8.16) Log có được thu thập tập trung (SIEM/Syslog) và rà soát định kỳ (hoặc tự động) để phát hiện bất thường không? Log có được bảo vệ khỏi sửa đổi không?",
+    "explanation": "<b>Ý nghĩa:</b> Log nằm rải rác rất khó xem và dễ bị hacker xóa. Cần gom về một chỗ (SIEM) để phân tích và bảo vệ.<br><b>Bằng chứng:</b> Hệ thống SIEM/Syslog server, các rule cảnh báo."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.17",
+    "question": "(A.8.17) Tất cả các hệ thống trong phạm vi có được đồng bộ hóa thời gian (clock synchronization) với một nguồn chuẩn (NTP server) không?",
+    "explanation": "<b>Ý nghĩa:</b> Để điều tra sự cố chính xác, mọi log phải cùng một mốc thời gian.<br><b>Bằng chứng:</b> Cấu hình NTP trên các thiết bị."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.18",
+    "question": "(A.8.18) Việc sử dụng các tiện ích đặc quyền (ví dụ: các công cụ admin, debug) có được kiểm soát và hạn chế không?",
+    "explanation": "<b>Ý nghĩa:</b> Các công cụ mạnh có thể vượt qua các kiểm soát bảo mật thông thường. Chỉ admin mới được dùng.<br><b>Bằng chứng:</b> Danh sách phần mềm được phép (whitelist) cho từng nhóm người dùng."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.19",
+    "question": "(A.8.19) Việc cài đặt phần mềm trên hệ thống vận hành (production) có được kiểm soát (thông qua Quản lý Thay đổi) không? Người dùng có bị cấm tự ý cài đặt không?",
+    "explanation": "<b>Ý nghĩa:</b> Production phải ổn định. Không được tùy tiện cài thêm phần mềm lạ.<br><b>Bằng chứng:</b> Quy định cài đặt phần mềm, cấu hình chặn quyền Admin local của user thường."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.20",
+    "question": "(A.8.20) Xem cấu hình Tường lửa (Firewall): Mạng có được phân đoạn (network segregation) thành các vùng (DMZ, LAN, Wifi, Server) không? (Xem Chính sách 1.9)",
+    "explanation": "<b>Ý nghĩa:</b> Chia để trị. Máy tính nhân viên (LAN) nhiễm virus không được lây lan sang máy chủ (Server VLAN).<br><b>Bằng chứng:</b> Sơ đồ mạng (Network diagram), cấu hình VLAN/Firewall zone."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.21",
+    "question": "(A.8.21) Các dịch vụ mạng (network services) có được cấu hình an toàn, tắt các tính năng không cần thiết không?",
+    "explanation": "<b>Ý nghĩa:</b> Nguyên tắc 'Least Functionality'. Chỉ bật những gì cần thiết (ví dụ: Web server thì chỉ mở port 80/443).<br><b>Bằng chứng:</b> Kết quả scan port (Nmap), cấu hình hardening thiết bị mạng."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.22",
+    "question": "(A.8.22) Việc lọc và kiểm soát luồng thông tin (traffic) giữa các phân đoạn mạng có được thực hiện (trên Firewall/Router) không?",
+    "explanation": "<b>Ý nghĩa:</b> Dùng firewall policy để chặn các kết nối không được phép giữa các vùng mạng.<br><b>Bằng chứng:</b> Review rule firewall (ví dụ: cấm từ Wifi Guest truy cập vào LAN nội bộ)."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.23",
+    "question": "(A.8.23) Tổ chức có giải pháp lọc web (web filtering) để chặn truy cập đến các trang web độc hại/không phù hợp không? (Xem Chính sách 1.9)",
+    "explanation": "<b>Ý nghĩa:</b> Ngăn nhân viên vào web đen, web chứa mã độc, hoặc upload dữ liệu lên web lạ.<br><b>Bằng chứng:</b> Cấu hình Web Proxy/Firewall Web Filter."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.24",
+    "question": "(A.8.24) Tổ chức có chính sách và biện pháp sử dụng mật mã (cryptography) để bảo vệ thông tin không (ví dụ: mã hóa ổ cứng, SSL/TLS, mã hóa backup)?",
+    "explanation": "<b>Ý nghĩa:</b> Dùng mã hóa chuẩn (AES, RSA...) để bảo vệ tính bí mật. Cần quản lý key an toàn.<br><b>Bằng chứng:</b> Chính sách mã hóa, cấu hình SSL/TLS trên web server."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.25",
+    "question": "(A.8.25) (Nếu có) Quy trình phát triển phần mềm có tuân theo một vòng đời phát triển an toàn (secure development life cycle - SDLC) không?",
+    "explanation": "<b>Ý nghĩa:</b> Bảo mật phải được đưa vào từ lúc thiết kế (Security by Design), không phải code xong mới test.<br><b>Bằng chứng:</b> Quy trình DevSecOps/SDLC, các tài liệu thiết kế an toàn."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.26",
+    "question": "(A.8.26) (Nếu có) Các yêu cầu ATTT (application security requirements) có được xác định và tích hợp vào quá trình phát triển không?",
+    "explanation": "<b>Ý nghĩa:</b> Trước khi code, phải xác định app này cần bảo mật những gì (ví dụ: cần login 2 yếu tố, cần mã hóa DB).<br><b>Bằng chứng:</b> Tài liệu yêu cầu phần mềm (SRS) có mục Non-functional/Security requirements."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.27",
+    "question": "(A.8.27) (Nếu có) Các nguyên tắc kiến trúc và kỹ thuật an toàn có được áp dụng khi xây dựng hệ thống không?",
+    "explanation": "<b>Ý nghĩa:</b> Xây nhà phải có móng vững. Áp dụng các mô hình chuẩn (ví dụ: Zero Trust, Defense in Depth).<br><b>Bằng chứng:</b> Tài liệu thiết kế kiến trúc hệ thống (HLD/LLD)."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.28",
+    "question": "(A.8.28) (Nếu có) Lập trình viên có được đào tạo và áp dụng các nguyên tắc lập trình an toàn (secure coding) (ví dụ: OWASP Top 10) không?",
+    "explanation": "<b>Ý nghĩa:</b> Coder phải biết tránh các lỗi cơ bản như SQL Injection, XSS.<br><b>Bằng chứng:</b> Chứng chỉ đào tạo Secure Coding, các guideline lập trình nội bộ."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.29",
+    "question": "(A.8.29) (Nếu có) Việc kiểm thử an toàn (security testing, ví dụ: VAPT, SAST/DAST) có được thực hiện trước khi triển khai (go-live) không?",
+    "explanation": "<b>Ý nghĩa:</b> Test kỹ trước khi tung ra thị trường. Cần cả scan tự động (SAST/DAST) và pentest thủ công.<br><b>Bằng chứng:</b> Báo cáo Pentest, báo cáo scan code trước khi go-live."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.30",
+    "question": "(A.8.30) (Nếu có) Nếu thuê ngoài phát triển phần mềm, tổ chức có các biện pháp kiểm soát ATTT (hợp đồng, rà soát code) không?",
+    "explanation": "<b>Ý nghĩa:</b> Code thuê ngoài thường nhiều lỗi bảo mật. Cần kiểm soát chặt đầu vào.<br><b>Bằng chứng:</b> Hợp đồng outsource có điều khoản bảo mật, biên bản review code khi nhận bàn giao."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.31",
+    "question": "(A.8.31) (Nếu có) Môi trường Phát triển (Dev), Thử nghiệm (Test) và Vận hành (Production) có được tách biệt (segregation) không?",
+    "explanation": "<b>Ý nghĩa:</b> Không để dev sửa trực tiếp trên production. Môi trường test bị hack không được ảnh hưởng đến môi trường thật.<br><b>Bằng chứng:</b> Kiến trúc mạng tách biệt các môi trường, quy trình deploy code."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.32",
+    "question": "(A.8.32) Đã có bằng chứng (ticket, RFC) cho thấy các thay đổi (cấu hình, phần mềm) được phê duyệt, kiểm tra (theo QT 2.6) trước khi triển khai không?",
+    "explanation": "<b>Ý nghĩa:</b> Kiểm soát chặt chẽ việc deploy để tránh downtime hoặc đưa lỗi mới vào hệ thống.<br><b>Bằng chứng:</b> Các ticket Change Management (RFC) đã được phê duyệt."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.33",
+    "question": "(A.8.33) (Nếu có) Dữ liệu thử nghiệm (test information) có được bảo vệ và lựa chọn cẩn thận (tránh dùng dữ liệu PII thật) không?",
+    "explanation": "<b>Ý nghĩa:</b> Giống control 8.11. Tránh dùng dữ liệu thật của khách hàng để test.<br><b>Bằng chứng:</b> Quy trình quản lý dữ liệu test."
+  },
+  {
+    "section": "A.8 Công nghệ",
+    "id": "A.8.34",
+    "question": "(A.8.34) Các hoạt động đánh giá (audit tests, pentest) có được lập kế hoạch và giám sát để giảm thiểu rủi ro gián đoạn hệ thống vận hành không?",
+    "explanation": "<b>Ý nghĩa:</b> Đừng để việc pentest làm sập hệ thống thật. Cần thỏa thuận rõ thời gian và phạm vi test.<br><b>Bằng chứng:</b> Kế hoạch đánh giá/pentest đã được phê duyệt, quy định Rules of Engagement (RoE)."
+  }
 ];
 
 // --- Trạng thái Ứng dụng ---
