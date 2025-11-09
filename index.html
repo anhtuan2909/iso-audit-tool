@@ -3,119 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Audit Tool - ISO 27001:2022</title>
+    <title>Audit Tool ISO 27001:2022 Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .screen { display: none; }
         .screen.active { display: block; }
-        /* ĐÃ FIX: Thêm lại dòng width để hiển thị thanh tiến độ */
-        .progress-bar { transition: width 0.3s ease; width: var(--progress-width, 0%); }
-        #sectionList button.active { background-color: #059669; color: white; font-weight: 600; }
-        #evidenceList { max-height: 150px; overflow-y: auto; }
-        #evidenceList::-webkit-scrollbar { width: 4px; }
-        #evidenceList::-webkit-scrollbar-thumb { background-color: #10b981; border-radius: 4px; }
-        input[type="file"]::file-selector-button { margin-right: 1rem; padding: 0.5rem 1rem; border-radius: 9999px; border: 0; font-size: 0.875rem; font-weight: 600; background-color: #ecfdf5; color: #047857; cursor: pointer; transition: background-color 0.2s; }
-        input[type="file"]::file-selector-button:hover { background-color: #d1fae5; }
+        .progress-bar { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        #sectionList button.active { background-color: #059669; color: white; font-weight: 600; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+        #evidenceList::-webkit-scrollbar { width: 6px; height: 6px; }
+        #evidenceList::-webkit-scrollbar-thumb { background-color: #d1fae5; border-radius: 9999px; }
+        #evidenceList::-webkit-scrollbar-thumb:hover { background-color: #10b981; }
+        /* Hiệu ứng nút bấm chuyên nghiệp hơn */
+        .btn-hover-effect { transition: all 0.2s; }
+        .btn-hover-effect:hover { transform: translateY(-1px); }
+        .btn-hover-effect:active { transform: translateY(0px); }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div id="screen-setup" class="screen active max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-xl mt-16 border border-emerald-100">
-        <h1 class="text-3xl font-bold text-emerald-700 mb-4">Web Audit Tool ISO 27001:2022</h1>
-        <p class="text-gray-600 mb-8 leading-relaxed">Chào mừng chuyên gia. Bắt đầu một phiên đánh giá mới bằng cách nhập tên tổ chức khách hàng.</p>
-        <div>
-            <label for="clientName" class="block text-sm font-medium text-gray-700 mb-2">Tên Khách hàng / Tổ chức</label>
-            <input type="text" id="clientName" class="block w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-lg placeholder-gray-400" placeholder="Ví dụ: Ngân hàng ABC, Công ty XYZ...">
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="screen-setup" class="screen active max-w-2xl mx-auto p-10 bg-white shadow-2xl rounded-2xl mt-20 border border-slate-100">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">ISO 27001:2022 <span class="text-emerald-600">Master Audit</span></h1>
+            <p class="text-slate-500 mt-2 text-lg">Công cụ đánh giá và tạo báo cáo chuyên nghiệp dành cho chuyên gia.</p>
         </div>
-        <button id="startButton" class="mt-8 w-full bg-emerald-600 text-white py-4 px-6 rounded-lg text-xl font-semibold hover:bg-emerald-700 transition duration-200 shadow-md active:scale-[0.98]">Bắt đầu Audit</button>
+        
+        <div class="space-y-6">
+            <div>
+                <label for="clientName" class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">Tên Khách hàng / Tổ chức</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                    </div>
+                    <input type="text" id="clientName" class="block w-full pl-11 pr-4 py-4 border-2 border-slate-200 rounded-xl text-lg focus:ring-0 focus:border-emerald-500 transition-colors" placeholder="Nhập tên tổ chức..." autofocus>
+                </div>
+            </div>
+            
+            <button id="startButton" class="btn-hover-effect w-full bg-emerald-600 text-white py-4 px-6 rounded-xl text-xl font-bold hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-200 transition shadow-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Bắt đầu Phiên Đánh giá
+            </button>
+        </div>
+         <div class="mt-8 text-center text-sm text-slate-400">
+            Developed by Mr-T | Version 3.0 Pro
+        </div>
     </div>
 
-    <div id="screen-audit" class="screen max-w-[90rem] mx-auto p-4 md:p-6 mt-4">
-        <div class="flex flex-col lg:flex-row gap-6">
-            <nav class="w-full lg:w-1/4 xl:w-1/5">
-                <div class="bg-white p-5 shadow-md rounded-xl sticky top-6 border border-gray-100">
-                    <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">Nội dung Đánh giá</h2>
-                    <ul id="sectionList" class="space-y-1 max-h-[80vh] overflow-y-auto pr-2"></ul>
+    <div id="screen-audit" class="screen max-w-[95rem] mx-auto p-6 mt-6">
+        <div class="flex flex-col lg:flex-row gap-8 h-[calc(100vh-6rem)]">
+            <nav class="w-full lg:w-1/4 xl:w-1/5 bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-200 flex flex-col">
+                <div class="p-5 bg-slate-50 border-b border-slate-200">
+                    <h2 class="text-lg font-extrabold text-slate-800 uppercase tracking-wider flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+                        Nội dung Audit
+                    </h2>
+                </div>
+                <div class="flex-1 overflow-y-auto p-3 custom-scrollbar">
+                    <ul id="sectionList" class="space-y-1.5"></ul>
                 </div>
             </nav>
-            <div class="flex-1">
-                <div class="bg-white p-5 shadow-md rounded-xl mb-6 border border-gray-100">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-                        <h1 class="text-2xl font-bold text-gray-800 flex-1">
-                            <span class="text-sm font-normal text-gray-500 block mb-1">Đang audit cho:</span>
-                            <span id="clientNameDisplay" class="text-emerald-700"></span>
-                        </h1>
-                        <button id="saveReportButton" class="flex-shrink-0 bg-emerald-800 text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-emerald-900 transition shadow flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
-                            Lưu Báo cáo & Thoát
+
+            <div class="flex-1 flex flex-col gap-6 overflow-hidden">
+                <div class="bg-white p-6 shadow-md rounded-2xl border border-slate-200 flex-shrink-0">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <div>
+                            <div class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-1">Đang đánh giá tổ chức</div>
+                            <h1 class="text-3xl font-bold text-slate-800 truncate" id="clientNameDisplay"></h1>
+                        </div>
+                         <button id="saveReportButton" class="btn-hover-effect flex-shrink-0 bg-slate-800 text-white py-3 px-6 rounded-xl font-bold hover:bg-slate-900 focus:ring-4 focus:ring-slate-200 transition flex items-center shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            Xuất Báo cáo Chuyên nghiệp
                         </button>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-lg">
-                        <div class="flex justify-between text-sm font-medium text-gray-700 mb-2"><span>Tiến độ hoàn thành</span><span id="progressText" class="text-emerald-700 font-bold">0/121</span></div>
-                        <div class="w-full bg-gray-200 rounded-full h-3"><div id="progressBar" class="progress-bar bg-emerald-500 h-3 rounded-full relative"><span class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-emerald-600 rounded-full shadow"></span></div></div>
+                    <div class="bg-slate-100 p-4 rounded-xl">
+                        <div class="flex justify-between text-sm font-bold text-slate-600 mb-2">
+                            <span>Tiến độ tổng thể</span>
+                            <span id="progressText" class="text-emerald-700">0/121</span>
+                        </div>
+                        <div class="w-full bg-slate-300 rounded-full h-4 overflow-hidden">
+                            <div id="progressBar" class="progress-bar bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full relative w-0"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 md:p-8 shadow-md rounded-xl border border-gray-100">
-                    <div class="border-b border-gray-100 pb-6 mb-6">
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs md:text-sm font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 py-1.5 px-4 rounded-full" id="controlSection"></span>
-                            <span class="text-sm font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded" id="controlId"></span>
-                        </div>
-                        <h2 class="text-xl md:text-3xl font-bold text-gray-800 leading-tight" id="controlQuestion"></h2>
-                        <div id="explanationArea" class="mt-4 hidden">
-                            <button id="toggleExplanation" type="button" class="group flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-800 focus:outline-none transition-colors duration-200 bg-emerald-50 hover:bg-emerald-100 px-3 py-2 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                Xem Hướng dẫn / Gợi ý kiểm tra
-                            </button>
-                            <div id="explanationContent" class="mt-3 p-5 bg-emerald-50/50 border border-emerald-100 rounded-xl text-gray-800 text-sm leading-relaxed hidden"></div>
-                        </div>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                            <div>
-                                <label for="controlStatus" class="block text-sm font-semibold text-gray-700 mb-2">Trạng thái (Status)</label>
-                                <div class="relative">
-                                    <select id="controlStatus" class="block w-full p-3 pl-4 pr-10 border border-gray-300 rounded-lg shadow-sm appearance-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-base bg-white">
-                                        <option value="Bỏ qua" class="text-gray-400">(Chưa chọn / Bỏ qua)</option>
-                                        <option value="Tuân thủ" class="font-medium text-green-700">✓ Tuân thủ (Compliant)</option>
-                                        <option value="Không Tuân thủ (NC)" class="font-medium text-red-700">✕ Không Tuân thủ (Non-Compliant)</option>
-                                        <option value="Không Áp dụng" class="text-gray-600">○ Không Áp dụng (N/A)</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500"><svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
-                                </div>
+
+                <div class="flex-1 bg-white p-8 shadow-xl rounded-2xl border border-slate-200 overflow-y-auto custom-scrollbar flex flex-col">
+                    <div class="flex-1">
+                         <div class="mb-8">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="px-4 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider rounded-full" id="controlSection"></span>
+                                <span class="font-mono text-sm text-slate-500 bg-slate-100 px-2 py-1 rounded-md border border-slate-200" id="controlId"></span>
                             </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Đính kèm Bằng chứng (Nhiều file)</label>
-                                <div class="flex items-center justify-center w-full">
-                                    <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-emerald-50 hover:border-emerald-400 transition group">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <svg class="w-8 h-8 mb-3 text-gray-400 group-hover:text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold text-emerald-600">Click để tải lên</span> hoặc kéo thả</p>
-                                            <p class="text-xs text-gray-400">(Giữ Ctrl/Shift để chọn nhiều file)</p>
+                            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 leading-tight" id="controlQuestion"></h2>
+                            
+                            <div id="explanationArea" class="mt-5">
+                                <details class="group border border-slate-200 rounded-xl overflow-hidden transition-all duration-300 open:shadow-sm open:border-emerald-200 open:bg-emerald-50/30">
+                                    <summary class="flex cursor-pointer items-center justify-between p-3 bg-slate-50 group-open:bg-emerald-100/50 hover:bg-slate-100 transition">
+                                        <span class="text-sm font-semibold text-emerald-700 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                            Hướng dẫn đánh giá & Gợi ý bằng chứng
+                                        </span>
+                                        <span class="transition group-open:rotate-180">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                        </span>
+                                    </summary>
+                                    <div id="explanationContent" class="p-5 text-sm text-slate-700 leading-relaxed border-t border-slate-200 group-open:border-emerald-100"></div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+                            <div class="xl:col-span-5 space-y-8">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">Trạng thái tuân thủ</label>
+                                    <div class="relative">
+                                         <select id="controlStatus" class="block w-full pl-4 pr-10 py-3.5 text-base border-2 border-slate-300 rounded-xl focus:ring-0 focus:border-emerald-500 appearance-none bg-white transition-colors font-medium shadow-sm">
+                                            <option value="Bỏ qua" class="text-slate-400">(Chưa đánh giá)</option>
+                                            <option value="Tuân thủ" class="text-emerald-600 font-bold">✓ Tuân thủ (Compliant)</option>
+                                            <option value="Không Tuân thủ (NC)" class="text-red-600 font-bold">✕ Không tuân thủ (Non-Compliant)</option>
+                                            <option value="Không Áp dụng" class="text-slate-600 font-bold">○ Không áp dụng (N/A)</option>
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                     <div class="flex justify-between items-center mb-3">
+                                        <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider">Bằng chứng (Files)</label>
+                                        <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-md">Đa tập tin</span>
+                                    </div>
+                                    
+                                    <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 transition group relative overflow-hidden">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10">
+                                            <svg class="w-10 h-10 mb-3 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                            <p class="text-sm text-slate-500 font-medium"><span class="text-emerald-600 underline">Click tải lên</span> hoặc kéo thả file</p>
+                                            <p class="text-xs text-slate-400 mt-1">(Ảnh, PDF, Office...)</p>
                                         </div>
                                         <input id="controlEvidenceUpload" type="file" class="hidden" multiple />
+                                        <div id="uploadLoading" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-20 hidden flex flex-col items-center justify-center">
+                                             <svg class="animate-spin h-8 w-8 text-emerald-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                             <span class="text-sm font-bold text-emerald-700 animate-pulse">Đang tải lên cloud...</span>
+                                        </div>
                                     </label>
-                                </div> 
-                                <div id="uploadLoading" class="mt-3 text-sm text-emerald-600 font-medium hidden flex items-center">
-                                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    Đang tải lên...
+
+                                    <div id="evidenceList" class="mt-4 space-y-2 max-h-[200px] overflow-y-auto pr-1"></div>
                                 </div>
-                                <div id="evidenceList" class="mt-3 space-y-2 empty:hidden"></div>
+                            </div>
+
+                            <div class="xl:col-span-7">
+                                <label for="controlNote" class="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">Ghi chú đánh giá / Phát hiện (Findings)</label>
+                                <div class="relative">
+                                    <textarea id="controlNote" rows="12" class="block w-full p-5 border-2 border-slate-300 rounded-xl shadow-sm focus:ring-0 focus:border-emerald-500 text-base resize-none bg-slate-50 focus:bg-white transition-colors leading-relaxed" placeholder="Nhập chi tiết đánh giá của chuyên gia tại đây...
+- Nếu Tuân thủ: Ghi rõ tên tài liệu/bằng chứng đã kiểm tra (VD: Đã xem chính sách mật khẩu v1.2 ngày 10/10/2025).
+- Nếu Không tuân thủ: Mô tả rõ lỗi (VD: Nhân viên A chưa đổi mật khẩu mặc định)."></textarea>
+                                    <div class="absolute top-3 right-3 pointer-events-none text-slate-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <label for="controlNote" class="block text-sm font-semibold text-gray-700 mb-2">Ghi chú / Phát hiện (Note / Finding)</label>
-                            <textarea id="controlNote" rows="5" class="block w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-base resize-y" placeholder="• Ghi rõ tên bằng chứng nếu 'Tuân thủ'&#10;• Mô tả chi tiết lỗi nếu 'Không tuân thủ'"></textarea>
-                        </div>
                     </div>
-                    <div class="flex justify-between items-center mt-10 pt-6 border-t border-gray-100">
-                        <button id="prevButton" class="flex items-center px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg> Quay lại
+
+                    <div class="flex justify-between items-center pt-6 mt-8 border-t border-slate-100">
+                        <button id="prevButton" class="btn-hover-effect flex items-center px-6 py-3 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                            Câu trước
                         </button>
-                        <span class="text-lg font-bold text-gray-500" id="controlCounter">1 / 121</span>
-                        <button id="nextButton" class="flex items-center px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition shadow-md">
-                            Tiếp theo <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                        <div class="text-xl font-black text-slate-300 select-none tracking-widest" id="controlCounter">1 / 121</div>
+                        <button id="nextButton" class="btn-hover-effect flex items-center px-8 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition shadow-lg hover:shadow-xl">
+                            Tiếp theo
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
                         </button>
                     </div>
                 </div>
@@ -123,145 +186,150 @@
         </div>
     </div>
 
-    <div id="screen-done" class="screen max-w-2xl mx-auto p-10 bg-white shadow-xl rounded-2xl mt-20 text-center border border-emerald-50">
-        <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+    <div id="screen-done" class="screen max-w-3xl mx-auto p-12 bg-white shadow-2xl rounded-3xl mt-24 text-center border border-slate-100">
+        <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
         </div>
-        <h1 class="text-4xl font-bold text-emerald-700 mb-4">Audit Hoàn tất!</h1>
-        <p class="text-gray-600 mb-8 text-lg">Chúc mừng bạn đã hoàn thành phiên đánh giá. Báo cáo đã được lưu về máy.</p>
-        <div class="bg-gray-50 p-4 rounded-lg mb-8 border border-gray-200 inline-block">
-             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            <code id="reportFileName" class="font-mono text-emerald-700 font-medium"></code>
+        <h1 class="text-4xl font-extrabold text-slate-800 mb-4">Đánh giá Hoàn tất!</h1>
+        <p class="text-slate-500 mb-10 text-xl">Báo cáo chuyên nghiệp đã được tạo và tải xuống máy của bạn.</p>
+        
+        <div class="bg-slate-50 p-6 rounded-2xl mb-10 border-2 border-slate-100 inline-block mx-auto">
+             <div class="flex items-center justify-center text-slate-700 font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-500 mr-3" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                <span id="reportFileName" class="text-lg break-all"></span>
+             </div>
         </div>
-        <button id="restartButton" class="block w-full bg-emerald-600 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-emerald-700 transition duration-200 shadow-md">Bắt đầu phiên Audit mới</button>
+        <button id="restartButton" class="btn-hover-effect w-full md:w-2/3 mx-auto block bg-slate-800 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:bg-slate-900 transition shadow-lg">
+            Bắt đầu phiên Audit mới
+        </button>
     </div>
 
 <script>
+// --- FULL DATABASE ISO 27001:2022 ---
 const CHECKLIST_DATA = [
-  {"section": "Điều khoản 4-10", "id": "4.1", "question": "(4.1) Đã có tài liệu xác định các vấn đề nội bộ/bên ngoài liên quan đến ATTT chưa?", "explanation": "<b>Ý nghĩa:</b> Xác định 'bối cảnh' để đánh giá rủi ro. Bên ngoài (Luật NĐ13, đối thủ, xu hướng tấn công), Bên trong (Văn hóa, ngân sách, hạ tầng cũ/mới).<br><b>Bằng chứng:</b> Tài liệu 'Bối cảnh tổ chức', Phân tích SWOT ATTT."},
-  {"section": "Điều khoản 4-10", "id": "4.2", "question": "(4.2) Đã có danh sách các bên quan tâm và các yêu cầu ATTT của họ chưa?", "explanation": "<b>Ý nghĩa:</b> Xác định rõ Khách hàng, Cơ quan quản lý, Cổ đông... đang mong đợi gì ở hệ thống bảo mật để đáp ứng.<br><b>Bằng chứng:</b> Danh sách các bên liên quan và yêu cầu cụ thể."},
-  {"section": "Điều khoản 4-10", "id": "4.3", "question": "(4.3) Đã có tài liệu định nghĩa Phạm vi ISMS (Scope document) rõ ràng và hợp lý chưa?", "explanation": "<b>Ý nghĩa:</b> Khoanh vùng ranh giới áp dụng ISMS (ghi rõ áp dụng tại văn phòng nào, cho hệ thống IT nào, phòng ban nào).<br><b>Bằng chứng:</b> Tài liệu Phạm vi ISMS (Scope Statement)."},
-  {"section": "Điều khoản 4-10", "id": "4.4", "question": "(4.4) ISMS và các quy trình (Chính sách, Quy trình) đã được thiết lập chưa?", "explanation": "<b>Ý nghĩa:</b> Yêu cầu tổng quát, tổ chức phải xây dựng, vận hành và cải tiến hệ thống quản lý.<br><b>Bằng chứng:</b> Hệ thống tài liệu quy trình đã được ban hành."},
-  {"section": "Điều khoản 4-10", "id": "5.1", "question": "(5.1) Lãnh đạo cấp cao có thể hiện sự cam kết không? (Bằng chứng: cấp nguồn lực, ngân sách)", "explanation": "<b>Ý nghĩa:</b> Lãnh đạo phải 'dẫn dắt' và 'chi tiền' (duyệt ngân sách, nhân sự, tham gia họp xem xét), không chỉ giao khoán cho IT.<br><b>Bằng chứng:</b> Biên bản họp có Lãnh đạo, Quyết định phê duyệt ngân sách ATTT."},
-  {"section": "Điều khoản 4-10", "id": "5.2", "question": "(5.2) Chính sách ATTT (1.1) đã được Lãnh đạo cấp cao phê duyệt và truyền thông chưa?", "explanation": "<b>Ý nghĩa:</b> 'Hiến pháp' về bảo mật của công ty, phải được ban hành cao nhất.<br><b>Bằng chứng:</b> Chính sách ATTT có chữ ký Giám đốc, email thông báo toàn công ty."},
-  {"section": "Điều khoản 4-10", "id": "5.3", "question": "(5.3) Đã có tài liệu phân công vai trò, trách nhiệm ATTT chưa? (Ví dụ: Ma trận RACI 7.2)", "explanation": "<b>Ý nghĩa:</b> 'Rõ người, rõ việc'. Ai chịu trách nhiệm chính (Accountable) khi có sự cố?<br><b>Bằng chứng:</b> Sơ đồ tổ chức ATTT, Ma trận phân nhiệm (RACI), JD."},
-  {"section": "Điều khoản 4-10", "id": "6.1.1", "question": "(6.1.1) Đã có các hành động để giải quyết rủi ro và cơ hội (từ 4.1) chưa?", "explanation": "<b>Ý nghĩa:</b> Đảm bảo hệ thống đạt mục tiêu, giảm tác động xấu từ các vấn đề đã xác định ở 4.1.<br><b>Bằng chứng:</b> Kế hoạch giải quyết rủi ro/cơ hội (tích hợp RTP)."},
-  {"section": "Điều khoản 4-10", "id": "6.1.2", "question": "(6.1.2) Đã có Quy trình Quản lý Rủi ro (2.1) và Ma trận Rủi ro (3.4) nhất quán chưa?", "explanation": "<b>Ý nghĩa:</b> Cần một 'công thức' thống nhất để tính điểm rủi ro (VD: Tác động x Khả năng).<br><b>Bằng chứng:</b> Quy trình Đánh giá rủi ro, Bảng tiêu chí chấm điểm."},
-  {"section": "Điều khoản 4-10", "id": "6.1.2b", "question": "(6.1.2) Đã có kết quả đánh giá rủi ro (bảng rủi ro) và tiêu chí chấp nhận rủi ro được phê duyệt chưa?", "explanation": "<b>Ý nghĩa:</b> Kết quả chạy quy trình. Rủi ro mức nào (VD: Trung bình trở lên) thì phải xử lý?<br><b>Bằng chứng:</b> Báo cáo/File Excel đánh giá rủi ro chi tiết."},
-  {"section": "Điều khoản 4-10", "id": "6.1.3", "question": "(6.1.3) Đã có Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?", "explanation": "<b>Ý nghĩa:</b> Ai làm gì, bao giờ xong để giảm các rủi ro đã xác định?<br><b>Bằng chứng:</b> Kế hoạch xử lý rủi ro (Risk Treatment Plan - RTP)."},
-  {"section": "Điều khoản 4-10", "id": "6.1.3b", "question": "(6.1.3) Đã có Tuyên bố Áp dụng (SoA) được phê duyệt, liên kết logic với RTP và liệt kê đủ 93 controls chưa?", "explanation": "<b>Ý nghĩa:</b> Tài liệu bắt buộc quan trọng nhất. Liệt kê 93 controls, cái nào dùng/không dùng, lý do.<br><b>Bằng chứng:</b> Tài liệu SoA (Statement of Applicability)."},
-  {"section": "Điều khoản 4-10", "id": "6.2", "question": "(6.2) Đã có các mục tiêu ATTT đo lường được (KPIs) ngoài các mục tiêu trong chính sách 1.1 chưa?", "explanation": "<b>Ý nghĩa:</b> Mục tiêu SMART (VD: Giảm 20% sự cố, 98% uptime, 100% nhân viên được đào tạo).<br><b>Bằng chứng:</b> Bảng theo dõi KPI/Mục tiêu ATTT năm."},
-  {"section": "Điều khoản 4-10", "id": "7.1", "question": "(7.1) Đã có bằng chứng về việc cung cấp nguồn lực (ngân sách, nhân sự) cho ISMS chưa?", "explanation": "<b>Ý nghĩa:</b> Có thực mới vực được đạo. Cần đủ người và tiền để vận hành hệ thống.<br><b>Bằng chứng:</b> Ngân sách ATTT được duyệt, quyết định bổ nhiệm đội ISMS."},
-  {"section": "Điều khoản 4-10", "id": "7.2", "question": "(7.2) Đã có hồ sơ năng lực (chứng chỉ) của các nhân sự ATTT chủ chốt chưa?", "explanation": "<b>Ý nghĩa:</b> Người làm bảo mật phải có trình độ phù hợp (Competence).<br><b>Bằng chứng:</b> CV, bằng cấp, chứng chỉ (CISSP, CISM, Security+...) của IT/Security."},
-  {"section": "Điều khoản 4-10", "id": "7.3", "question": "(7.3) Đã có bằng chứng về đào tạo nhận thức ATTT (A.6.3) chưa? (slide, danh sách tham dự, kết quả test)", "explanation": "<b>Ý nghĩa:</b> Đảm bảo tất cả nhân viên hiểu trách nhiệm cơ bản, không là 'điểm yếu' của hệ thống.<br><b>Bằng chứng:</b> Slide đào tạo, danh sách điểm danh, bài test."},
-  {"section": "Điều khoản 4-10", "id": "7.4", "question": "(7.4) Đã có quy trình truyền thông nội bộ và bên ngoài về ISMS chưa?", "explanation": "<b>Ý nghĩa:</b> Quy định rõ: Ai được truyền thông cái gì? Khi nào? Cho ai? (Đặc biệt khi có sự cố).<br><b>Bằng chứng:</b> Kế hoạch truyền thông, quy trình phản ứng sự cố."},
-  {"section": "Điều khoản 4-10", "id": "7.5", "question": "(7.5) Đã có Quy trình Kiểm soát Thông tin dạng văn bản (Document Control) chưa? (Có mã, phiên bản, phê duyệt, thu hồi tài liệu cũ?)", "explanation": "<b>Ý nghĩa:</b> Đảm bảo mọi người dùng đúng phiên bản quy trình mới nhất.<br><b>Bằng chứng:</b> Quy trình kiểm soát tài liệu, Master List danh mục."},
-  {"section": "Điều khoản 4-10", "id": "8.1", "question": "(8.1) Đã có bằng chứng về việc lập kế hoạch và kiểm soát vận hành chưa? (Ví dụ: Quy trình 2.6 - Quản lý Thay đổi)", "explanation": "<b>Ý nghĩa:</b> Vận hành phải có quy trình, thay đổi phải được kiểm soát để tránh sự cố.<br><b>Bằng chứng:</b> Quy trình quản lý thay đổi (Change Management), các phiếu RFC."},
-  {"section": "Điều khoản 4-10", "id": "8.2", "question": "(8.2) Đã có Báo cáo Đánh giá Rủi ro (kết quả của Quy trình 2.1) chưa?", "explanation": "<b>Ý nghĩa:</b> Thực hiện đánh giá rủi ro theo kế hoạch hoặc khi có thay đổi lớn.<br><b>Bằng chứng:</b> Các báo cáo đánh giá rủi ro gần nhất."},
-  {"section": "Điều khoản 4-10", "id": "8.3", "question": "(8.3) Đã có bằng chứng về việc thực hiện các Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?", "explanation": "<b>Ý nghĩa:</b> Đã lập kế hoạch thì phải làm (VD: RTP nói mua firewall thì phải có biên bản nghiệm thu firewall).<br><b>Bằng chứng:</b> Báo cáo tiến độ RTP, bằng chứng triển khai các dự án."},
-  {"section": "Điều khoản 4-10", "id": "9.1", "question": "(9.1) Tổ chức có đo lường, giám sát, phân tích và đánh giá ISMS không? (Có báo cáo KPI/metric không?)", "explanation": "<b>Ý nghĩa:</b> Không đo lường thì không quản lý được. Phải biết hệ thống đang khỏe hay yếu.<br><b>Bằng chứng:</b> Báo cáo giám sát định kỳ, dashboard KPI."},
-  {"section": "Điều khoản 4-10", "id": "9.2", "question": "(9.2) Đã có Chương trình và Báo cáo Đánh giá Nội bộ (3.1) gần nhất chưa? Đánh giá có khách quan không?", "explanation": "<b>Ý nghĩa:</b> Tự 'khám bệnh' định kỳ. Đảm bảo khách quan (không tự đánh giá việc mình làm).<br><b>Bằng chứng:</b> Kế hoạch & Báo cáo đánh giá nội bộ, các phiếu NC."},
-  {"section": "Điều khoản 4-10", "id": "9.3", "question": "(9.3) Đã có bằng chứng về cuộc họp Xem xét của Lãnh đạo (Management Review) gần nhất chưa? (slide, biên bản họp, danh sách tham dự)", "explanation": "<b>Ý nghĩa:</b> Cuộc họp quan trọng nhất năm để Lãnh đạo nắm tình hình và chỉ đạo.<br><b>Bằng chứng:</b> Biên bản họp Management Review (bắt buộc)."},
-  {"section": "Điều khoản 4-10", "id": "9.3b", "question": "(9.3) Cuộc họp Xem xét của Lãnh đạo có đủ các đầu vào (inputs) theo yêu cầu 9.3.2 không? (kết quả rủi ro, audit, sự cố...)", "explanation": "<b>Ý nghĩa:</b> Đảm bảo báo cáo đủ các thông tin đầu vào bắt buộc theo chuẩn ISO.<br><b>Bằng chứng:</b> Slide báo cáo trong cuộc họp (check list các mục)."},
-  {"section": "Điều khoản 4-10", "id": "10.1", "question": "(10.1) Đã có bằng chứng về các cơ hội cải tiến (từ 9.3) chưa?", "explanation": "<b>Ý nghĩa:</b> Hệ thống phải luôn được cải tiến tốt hơn (Continual Improvement).<br><b>Bằng chứng:</b> Danh sách các sáng kiến/dự án cải tiến ATTT."},
-  {"section": "Điều khoản 4-10", "id": "10.2", "question": "(10.2) Các Điểm không phù hợp (NCs) (từ 9.2) đã được phân tích nguyên nhân gốc rễ và thực hiện hành động khắc phục chưa?", "explanation": "<b>Ý nghĩa:</b> Sai phải sửa tận gốc để không lặp lại.<br><b>Bằng chứng:</b> Các phiếu hành động khắc phục (CAR), báo cáo phân tích nguyên nhân gốc rễ (Root Cause)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.1", "question": "(A.5.1) Chính sách ATTT (1.1) và các chính sách chuyên đề (1.2-1.10) đã được phê duyệt, ban hành, truyền thông chưa?", "explanation": "<b>Ý nghĩa:</b> Các 'bộ luật' con (VD: Chính sách mật khẩu, AUP, Truy cập) phải được ban hành.<br><b>Bằng chứng:</b> Hệ thống văn bản chính sách trên Portal nội bộ."},
-  {"section": "A.5 Tổ chức", "id": "A.5.2", "question": "(A.5.2) Đã có Ma trận RACI (7.2), Mô tả công việc? Nhân sự có hiểu trách nhiệm ATTT của mình không?", "explanation": "<b>Ý nghĩa:</b> Phân vai rõ ràng trong từng quy trình ATTT cụ thể.<br><b>Bằng chứng:</b> Ma trận RACI cho các quy trình chính (Sự cố, Thay đổi)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.3", "question": "(A.5.3) Các quy trình nhạy cảm (Quản lý thay đổi, Cấp quyền) có đảm bảo phân tách nhiệm vụ (người yêu cầu, phê duyệt, thực hiện khác nhau) không?", "explanation": "<b>Ý nghĩa:</b> Tránh 'vừa đá bóng vừa thổi còi'. Dev không nên tự deploy lên Production.<br><b>Bằng chứng:</b> Quy trình cấp quyền, log hệ thống thể hiện sự phân tách."},
-  {"section": "A.5 Tổ chức", "id": "A.5.4", "question": "(A.5.4) Cấp quản lý (Trưởng phòng) có thúc đẩy nhân viên tuân thủ chính sách ATTT không?", "explanation": "<b>Ý nghĩa:</b> Sếp phải làm gương thì lính mới nghe.<br><b>Bằng chứng:</b> Phỏng vấn nhân viên, các email nhắc nhở của quản lý."},
-  {"section": "A.5 Tổ chức", "id": "A.5.5", "question": "(A.5.5) Tổ chức có xác định và duy trì liên lạc với các cơ quan có thẩm quyền (VNCERT/CC, A05...) không?", "explanation": "<b>Ý nghĩa:</b> Biết gọi ai khi bị tấn công lớn hoặc cần hỗ trợ pháp lý.<br><b>Bằng chứng:</b> Danh bạ liên lạc khẩn cấp (Công an, VNCERT/CC)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.6", "question": "(A.5.6) Tổ chức có tham gia các diễn đàn, hiệp hội ATTT chuyên ngành (ISACA, (ISC)²) không?", "explanation": "<b>Ý nghĩa:</b> Cập nhật kiến thức mới, tránh 'ếch ngồi đáy giếng'.<br><b>Bằng chứng:</b> Thẻ hội viên, chứng nhận tham gia hội thảo chuyên ngành."},
-  {"section": "A.5 Tổ chức", "id": "A.5.7", "question": "(A.5.7) Tổ chức có thu thập và phân tích thông tin về mối đe dọa (Threat Intelligence) từ SOC/MSSP không? Có hành động gì được thực hiện không?", "explanation": "<b>Ý nghĩa:</b> 'Biết địch biết ta'. Chủ động phòng thủ trước các mối đe dọa mới.<br><b>Bằng chứng:</b> Báo cáo Threat Intel, các rule firewall cập nhật theo Intel."},
-  {"section": "A.5 Tổ chức", "id": "A.5.8", "question": "(A.5.8) Các dự án đang chạy có được đánh giá rủi ro ATTT trong quá trình thực hiện không?", "explanation": "<b>Ý nghĩa:</b> Bảo mật phải đi cùng dự án từ đầu (Security by Design).<br><b>Bằng chứng:</b> Báo cáo đánh giá rủi ro dự án, biên bản họp khởi động."},
-  {"section": "A.5 Tổ chức", "id": "A.5.9", "question": "(A.5.9) Danh sách Tài sản (3.2) có đầy đủ không (HW, SW, Data, Services...)?", "explanation": "<b>Ý nghĩa:</b> Không biết mình có gì thì không thể bảo vệ. Cần kiểm kê đủ.<br><b>Bằng chứng:</b> File Inventory/CMDB tài sản CNTT."},
-  {"section": "A.5 Tổ chức", "id": "A.5.10", "question": "(A.5.10) Chính sách Sử dụng Chấp nhận được (AUP) đã được truyền thông (qua Sổ tay nhân viên) chưa?", "explanation": "<b>Ý nghĩa:</b> Quy định rõ được làm gì/cấm làm gì (VD: cấm game, web đen).<br><b>Bằng chứng:</b> Sổ tay nhân viên, cam kết AUP đã ký."},
-  {"section": "A.5 Tổ chức", "id": "A.5.11", "question": "(A.5.11) Quy trình nghỉ việc (Off-boarding) của HR có đảm bảo nhân viên trả lại mọi tài sản (laptop, thẻ) không?", "explanation": "<b>Ý nghĩa:</b> Quan trọng nhất là thu hồi quyền truy cập ngay khi nghỉ.<br><b>Bằng chứng:</b> Checklist bàn giao nghỉ việc (có xác nhận IT)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.12", "question": "(A.5.12) Thông tin đã được phân loại (Mật, Nội bộ...) trong Chính sách (1.7) và Danh sách Tài sản (3.2) chưa?", "explanation": "<b>Ý nghĩa:</b> Phân loại để biết tài sản nào quan trọng cần ưu tiên bảo vệ.<br><b>Bằng chứng:</b> Quy định phân loại thông tin, danh sách tài sản có cột 'Mức độ mật'."},
-  {"section": "A.5 Tổ chức", "id": "A.5.13", "question": "(A.5.13) Thông tin nhạy cảm (tài liệu, email, ổ đĩa) có được dán nhãn \"Mật\" (hoặc tương đương) không?", "explanation": "<b>Ý nghĩa:</b> Dán nhãn trực quan để người dùng dễ nhận biết và bảo vệ.<br><b>Bằng chứng:</b> Quan sát thực tế tài liệu/email có nhãn 'MẬT'/'INTERNAL'."},
-  {"section": "A.5 Tổ chức", "id": "A.5.14", "question": "(A.5.14) Tổ chức có quy định về việc chuyển giao thông tin nhạy cảm ra ngoài (email, USB, Cloud) không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát đường đi của dữ liệu mật (VD: bắt buộc mã hóa khi gửi email ra ngoài).<br><b>Bằng chứng:</b> Quy định trao đổi thông tin, giải pháp DLP."},
-  {"section": "A.5 Tổ chức", "id": "A.5.15", "question": "(A.5.15) Chính sách KSTC (1.2) và Quy trình (2.5) có dựa trên nguyên tắc \"Cần biết\" và \"Đặc quyền tối thiểu\" không?", "explanation": "<b>Ý nghĩa:</b> Chỉ cấp quyền vừa đủ để làm việc, không cấp dư thừa.<br><b>Bằng chứng:</b> Ma trận phân quyền (Access Matrix)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.16", "question": "(A.5.16) Quy trình tạo/xóa tài khoản có đảm bảo mọi tài khoản được liên kết duy nhất với một cá nhân/hệ thống không?", "explanation": "<b>Ý nghĩa:</b> Tránh dùng chung tài khoản để đảm bảo quy trách nhiệm.<br><b>Bằng chứng:</b> Danh sách user trên AD (không có user chung kiểu 'ketoan1')."},
-  {"section": "A.5 Tổ chức", "id": "A.5.17", "question": "(A.5.17) Chính sách Mật khẩu (1.4) có được tuân thủ không (đủ phức tạp, đổi định kỳ, cấm mật khẩu mặc định, có MFA)?", "explanation": "<b>Ý nghĩa:</b> Mật khẩu yếu dễ bị hack. Cần độ phức tạp cao và khuyến nghị MFA.<br><b>Bằng chứng:</b> Cấu hình Password Policy trên AD/các hệ thống."},
-  {"section": "A.5 Tổ chức", "id": "A.5.18", "question": "(A.5.18) Đã có hồ sơ (email, Biểu mẫu 3.6) rà soát quyền truy cập 6 tháng gần nhất? Chủ sở hữu tài sản có rà soát và phê duyệt không?", "explanation": "<b>Ý nghĩa:</b> Định kỳ rà soát để cắt quyền thừa (VD: nhân viên đã chuyển phòng).<br><b>Bằng chứng:</b> Biên bản rà soát quyền (Access Review) định kỳ."},
-  {"section": "A.5 Tổ chức", "id": "A.5.19", "question": "(A.5.19) Tổ chức có đánh giá rủi ro ATTT của NCC (Cloud, ICT) trước khi ký hợp đồng không? (Xem Chính sách 1.10)", "explanation": "<b>Ý nghĩa:</b> 'Chọn bạn mà chơi'. Đảm bảo đối tác cũng an toàn.<br><b>Bằng chứng:</b> Phiếu đánh giá an ninh nhà cung cấp trước khi ký HĐ."},
-  {"section": "A.5 Tổ chức", "id": "A.5.20", "question": "(A.5.20) Hợp đồng NCC (sample) có bao gồm các điều khoản ATTT ràng buộc (tuân thủ, báo cáo sự cố, quyền audit) không?", "explanation": "<b>Ý nghĩa:</b> Ràng buộc pháp lý trách nhiệm nếu họ làm lộ dữ liệu của mình.<br><b>Bằng chứng:</b> Hợp đồng mẫu, thỏa thuận bảo mật (NDA/DPA) với đối tác."},
-  {"section": "A.5 Tổ chức", "id": "A.5.21", "question": "(A.5.21) Tổ chức quản lý rủi ro từ chuỗi cung ứng ICT (nhà cung cấp phần cứng, phần mềm) như thế nào?", "explanation": "<b>Ý nghĩa:</b> Tránh mua phải hàng có mã độc (Supply Chain Attack).<br><b>Bằng chứng:</b> Quy trình mua sắm ICT, yêu cầu CO/CQ, scan thiết bị trước khi dùng."},
-  {"section": "A.5 Tổ chức", "id": "A.5.22", "question": "(A.5.22) Tổ chức có rà soát hiệu suất ATTT của các NCC quan trọng hàng năm không (yêu cầu chứng chỉ, báo cáo)?", "explanation": "<b>Ý nghĩa:</b> Giám sát định kỳ xem đối tác còn giữ vững phong độ bảo mật không.<br><b>Bằng chứng:</b> Báo cáo đánh giá định kỳ nhà cung cấp."},
-  {"section": "A.5 Tổ chức", "id": "A.5.23", "question": "(A.5.23) Khi NCC (ví dụ: nhà cung cấp Cloud) thay đổi dịch vụ, tổ chức có quy trình đánh giá rủi ro không?", "explanation": "<b>Ý nghĩa:</b> Khi AWS/Azure thay đổi tính năng, có ảnh hưởng gì đến mình không?<br><b>Bằng chứng:</b> Đánh giá tác động khi đối tác có thay đổi lớn."},
-  {"section": "A.5 Tổ chức", "id": "A.5.24", "question": "(A.5.24) Kế hoạch Quản lý Sự cố (1.5, 2.2) đã rõ ràng vai trò, trách nhiệm (Đội IRT) chưa?", "explanation": "<b>Ý nghĩa:</b> Khi 'cháy nhà' thì ai làm gì? Cần rõ ràng trước.<br><b>Bằng chứng:</b> Quyết định thành lập Đội ứng cứu sự cố (IRT)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.25", "question": "(A.5.25) Các sự kiện ATTT (events) có được đánh giá để xác định xem chúng có phải là sự cố (incidents) không? Ai chịu trách nhiệm?", "explanation": "<b>Ý nghĩa:</b> Phân loại để biết cái nào là cảnh báo giả, cái nào là sự cố thật cần xử lý.<br><b>Bằng chứng:</b> Quy trình phân loại mức độ sự cố (P1, P2, P3)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.26", "question": "(A.5.26) Đã xem Nhật ký Sự cố (3.3)? Các bước xử lý (Ngăn chặn, Tiêu diệt, Phục hồi) có được ghi lại không?", "explanation": "<b>Ý nghĩa:</b> Ghi chép lại quá trình xử lý để rút kinh nghiệm và làm bằng chứng.<br><b>Bằng chứng:</b> Sổ nhật ký sự cố (Incident Logbook/Ticket)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.27", "question": "(A.5.27) Các sự cố nghiêm trọng (trong 3.3) có được phân tích nguyên nhân gốc rễ (root cause) và rút bài học kinh nghiệm không?", "explanation": "<b>Ý nghĩa:</b> Tìm nguyên nhân gốc để không bị lại lỗi tương tự.<br><b>Bằng chứng:</b> Báo cáo phân tích sau sự cố (Post-Incident Review)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.28", "question": "(A.5.28) Tổ chức có quy trình thu thập và bảo quản bằng chứng kỹ thuật số (digital forensics) khi xảy ra sự cố không?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ hiện trường số (dump RAM, copy ổ cứng) đúng cách để phục vụ điều tra.<br><b>Bằng chứng:</b> Quy trình điều tra số (Forensics)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.29", "question": "(A.5.29) Kế hoạch Kinh doanh Liên tục (BCP) có tích hợp các yêu cầu ATTT (bảo mật, toàn vẹn) khi hoạt động ở trạng thái dự phòng không?", "explanation": "<b>Ý nghĩa:</b> Chạy site dự phòng (DR) vẫn phải đảm bảo an toàn (vẫn cần firewall, antivirus...).<br><b>Bằng chứng:</b> Kế hoạch BCP/DRP có mục yêu cầu bảo mật."},
-  {"section": "A.5 Tổ chức", "id": "A.5.30", "question": "(A.5.30) Đã thực hiện BIA, xác định RTO/RPO chưa? Đã có báo cáo diễn tập DRP/BCP (theo Chính sách 1.6) chưa?", "explanation": "<b>Ý nghĩa:</b> Biết hệ thống nào quan trọng nhất và diễn tập phục hồi.<br><b>Bằng chứng:</b> Báo cáo BIA, Báo cáo kết quả diễn tập DRP."},
-  {"section": "A.5 Tổ chức", "id": "A.5.31", "question": "(A.5.31) Tổ chức có danh sách các yêu cầu pháp lý (Luật An ninh mạng, Nghị định 13) và yêu cầu hợp đồng liên quan đến ATTT không?", "explanation": "<b>Ý nghĩa:</b> Tránh bị phạt vì không biết luật. Liệt kê hết các luật phải tuân thủ.<br><b>Bằng chứng:</b> Danh mục văn bản pháp quy ATTT áp dụng."},
-  {"section": "A.5 Tổ chức", "id": "A.5.32", "question": "(A.5.32) Tổ chức có biện pháp bảo vệ IP (mã nguồn, tài liệu thiết kế) và tuân thủ bản quyền phần mềm không?", "explanation": "<b>Ý nghĩa:</b> Không dùng phần mềm lậu. Bảo vệ tài sản trí tuệ của mình.<br><b>Bằng chứng:</b> Chính sách bản quyền, danh sách license đã mua."},
-  {"section": "A.5 Tổ chức", "id": "A.5.33", "question": "(A.5.33) Các hồ sơ quan trọng (log, hợp đồng) có được bảo vệ khỏi mất mát, sửa đổi và được lưu trữ đủ thời gian không?", "explanation": "<b>Ý nghĩa:</b> Log phải lưu đủ lâu (VD: 12 tháng theo luật) để phục vụ điều tra.<br><b>Bằng chứng:</b> Chính sách lưu trữ, cấu hình retention trên hệ thống log."},
-  {"section": "A.5 Tổ chức", "id": "A.5.34", "question": "(A.5.34) Nếu tổ chức xử lý Thông tin Cá nhân (PII), các biện pháp nào được áp dụng để tuân thủ quy định (Nghị định 13)?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ dữ liệu cá nhân, lấy sự đồng ý khi thu thập.<br><b>Bằng chứng:</b> Chính sách bảo vệ dữ liệu cá nhân, Form đồng ý (Consent)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.35", "question": "(A.5.35) Việc rà soát ISMS (Đánh giá nội bộ 9.2) có được thực hiện bởi những người khách quan, độc lập không?", "explanation": "<b>Ý nghĩa:</b> Đảm bảo công bằng. Không tự đánh giá việc mình làm.<br><b>Bằng chứng:</b> Quyết định thành lập đoàn đánh giá (chéo giữa các phòng)."},
-  {"section": "A.5 Tổ chức", "id": "A.5.36", "question": "(A.5.36) Tổ chức có cơ chế nào để đảm bảo nhân viên tuân thủ các chính sách ATTT (ví dụ: kiểm tra, kỷ luật)?", "explanation": "<b>Ý nghĩa:</b> Có thưởng có phạt để đảm bảo thực thi chính sách.<br><b>Bằng chứng:</b> Quy định khen thưởng/kỷ luật ATTT."},
-  {"section": "A.5 Tổ chức", "id": "A.5.37", "question": "(A.5.37) Các quy trình vận hành (ví dụ: backup, vá lỗi) có được tài liệu hóa và sẵn có cho người thực hiện không?", "explanation": "<b>Ý nghĩa:</b> Tránh phụ thuộc vào trí nhớ cá nhân. Vận hành phải có hướng dẫn (SOP).<br><b>Bằng chứng:</b> Các tài liệu hướng dẫn vận hành (SOP) cho Sysadmin."},
-  {"section": "A.6 Con người", "id": "A.6.1", "question": "(A.6.1) Quy trình HR có bao gồm việc kiểm tra lý lịch (screening) cho các vị trí nhạy cảm (IT, Tài chính) trước khi tuyển dụng không?", "explanation": "<b>Ý nghĩa:</b> Tránh tuyển người có tiền án tiền sự vào vị trí nhạy cảm.<br><b>Bằng chứng:</b> Quy trình tuyển dụng, hồ sơ check background."},
-  {"section": "A.6 Con người", "id": "A.6.2", "question": "(A.6.2) Hợp đồng lao động hoặc thỏa thuận có bao gồm các điều khoản về trách nhiệm ATTT của nhân viên không?", "explanation": "<b>Ý nghĩa:</b> Ràng buộc pháp lý trách nhiệm bảo mật ngay từ đầu.<br><b>Bằng chứng:</b> Hợp đồng lao động mẫu, Cam kết bảo mật (NDA)."},
-  {"section": "A.6 Con người", "id": "A.6.3", "question": "(A.6.3) Đã có bằng chứng đào tạo nhận thức ATTT hàng năm (slide, danh sách tham dự)? (Giống 7.3)", "explanation": "<b>Ý nghĩa:</b> Nhắc lại kiến thức định kỳ vì thủ đoạn lừa đảo luôn mới.<br><b>Bằng chứng:</b> Hồ sơ các lớp đào tạo nhận thức đã tổ chức."},
-  {"section": "A.6 Con người", "id": "A.6.4", "question": "(A.6.4) Tổ chức có quy trình kỷ luật (trong Nội quy lao động) nếu nhân viên vi phạm chính sách ATTT không?", "explanation": "<b>Ý nghĩa:</b> Răn đe để đảm bảo tuân thủ.<br><b>Bằng chứng:</b> Nội quy lao động (có mục xử lý vi phạm ATTT)."},
-  {"section": "A.6 Con người", "id": "A.6.5", "question": "(A.6.5) Quy trình nghỉ việc (Off-boarding) có bao gồm việc nhắc nhở/ràng buộc trách nhiệm bảo mật sau khi nghỉ không?", "explanation": "<b>Ý nghĩa:</b> Nghỉ rồi vẫn phải giữ bí mật công ty cũ.<br><b>Bằng chứng:</b> Biên bản thanh lý hợp đồng (có điều khoản bảo mật)."},
-  {"section": "A.6 Con người", "id": "A.6.6", "question": "(A.6.6) Nhân viên và nhà thầu có ký Thỏa thuận Bảo mật (NDA / Confidentiality Agreement) không?", "explanation": "<b>Ý nghĩa:</b> Văn bản bắt buộc trước khi cho tiếp cận thông tin nhạy cảm.<br><b>Bằng chứng:</b> Các NDA đã ký được lưu trữ."},
-  {"section": "A.6 Con người", "id": "A.6.7", "question": "(A.6.7) Đã có chính sách và các biện pháp kỹ thuật (VPN, MFA, mã hóa) cho nhân viên làm việc từ xa (Remote working) chưa?", "explanation": "<b>Ý nghĩa:</b> Làm việc ở nhà rủi ro hơn. Cần VPN và MFA để bảo vệ.<br><b>Bằng chứng:</b> Chính sách WFH, cấu hình VPN/MFA."},
-  {"section": "A.6 Con người", "id": "A.6.8", "question": "(A.6.8) Phỏng vấn nhân viên: Nếu nhận được email lạ, họ biết cách báo cáo sự cố (cho IT/Helpdesk) theo Quy trình 2.2 không?", "explanation": "<b>Ý nghĩa:</b> Kiểm tra hiệu quả đào tạo. Nhân viên phải biết nút báo cáo ở đâu.<br><b>Bằng chứng:</b> Kết quả phỏng vấn ngẫu nhiên hoặc diễn tập Phishing."},
-  {"section": "A.7 Vật lý", "id": "A.7.1", "question": "(A.7.1) Vòng đai an ninh vật lý (cửa, tường, hàng rào) của văn phòng và phòng server có được xác định và bảo vệ không?", "explanation": "<b>Ý nghĩa:</b> Lớp bảo vệ đầu tiên ngăn người lạ đột nhập.<br><b>Bằng chứng:</b> Quan sát thực tế cửa, tường, bảo vệ trực."},
-  {"section": "A.7 Vật lý", "id": "A.7.2", "question": "(A.7.2) Quan sát: Việc ra vào các khu vực nhạy cảm (văn phòng, phòng server) có được kiểm soát không (thẻ từ, khóa)? Khách có được giám sát/đeo thẻ không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát ai được vào đâu. Khách phải có người kèm.<br><b>Bằng chứng:</b> Hệ thống kiểm soát ra vào (Access Control System), sổ nhật ký khách ra vào."},
-  {"section": "A.7 Vật lý", "id": "A.7.3", "question": "(A.7.3) Văn phòng và phòng server có được bảo vệ (khóa cửa, tủ rack) khi không có người giám sát không?", "explanation": "<b>Ý nghĩa:</b> Tránh kẻ gian lẻn vào khi vắng người.<br><b>Bằng chứng:</b> Quan sát các tủ rack, cửa phòng khi không có người."},
-  {"section": "A.7 Vật lý", "id": "A.7.4", "question": "(A.7.4) Quan sát: Có hệ thống giám sát (CCTV) tại các lối ra vào và khu vực nhạy cảm không? Log camera có được lưu trữ và bảo vệ không?", "explanation": "<b>Ý nghĩa:</b> Ghi hình để điều tra nếu có mất mát.<br><b>Bằng chứng:</b> Hệ thống CCTV, thời gian lưu trữ video."},
-  {"section": "A.7 Vật lý", "id": "A.7.5", "question": "(A.7.5) Phòng server có được bảo vệ khỏi các mối đe dọa môi trường không (cháy, ngập, nhiệt độ)? (Bằng chứng: bình chữa cháy, điều hòa, UPS)", "explanation": "<b>Ý nghĩa:</b> Chống nóng, ẩm, cháy, mất điện cho thiết bị.<br><b>Bằng chứng:</b> Hệ thống báo/chữa cháy, điều hòa, UPS, cảm biến môi trường."},
-  {"section": "A.7 Vật lý", "id": "A.7.6", "question": "(A.7.6) Các quy tắc làm việc tại khu vực an toàn (phòng server) có được định nghĩa và tuân thủ không (ví dụ: hạn chế mang thiết bị cá nhân)?", "explanation": "<b>Ý nghĩa:</b> Phòng server không phải cái kho. Cần quy định rõ việc ra vào.<br><b>Bằng chứng:</b> Nội quy phòng máy chủ (dán trước cửa)."},
-  {"section": "A.7 Vật lý", "id": "A.7.7", "question": "(A.7.7) Quan sát: Nhân viên có tuân thủ chính sách \"Bàn làm việc sạch\" (không để tài liệu nhạy cảm) và \"Màn hình sạch\" (khóa máy tính khi rời đi) không?", "explanation": "<b>Ý nghĩa:</b> Tránh lộ thông tin cho người đi ngang qua (shoulder surfing).<br><b>Bằng chứng:</b> Quan sát thực tế văn phòng giờ nghỉ trưa/cuối giờ."},
-  {"section": "A.7 Vật lý", "id": "A.7.8", "question": "(A.7.8) Thiết bị (máy chủ, switch) có được đặt ở vị trí an toàn, giảm thiểu rủi ro bị nhìn trộm hoặc hư hỏng không?", "explanation": "<b>Ý nghĩa:</b> Không đặt màn hình máy chủ hướng ra cửa sổ công cộng.<br><b>Bằng chứng:</b> Quan sát vị trí lắp đặt thiết bị."},
-  {"section": "A.7 Vật lý", "id": "A.7.9", "question": "(A.7.9) Các biện pháp nào được áp dụng để bảo vệ tài sản (ví dụ: laptop) khi nhân viên mang ra khỏi văn phòng (làm việc từ xa, công tác)?", "explanation": "<b>Ý nghĩa:</b> Laptop mang ra ngoài dễ mất. Cần mã hóa ổ cứng để bảo vệ dữ liệu.<br><b>Bằng chứng:</b> Chính sách thiết bị di động, cấu hình Bitlocker."},
-  {"section": "A.7 Vật lý", "id": "A.7.10", "question": "(A.7.10) Các thiết bị lưu trữ (USB, ổ cứng hỏng) có được quản lý (kiểm soát, cấp phát) và hủy bỏ an toàn (xóa dữ liệu, phá hủy vật lý) khi không còn sử dụng không?", "explanation": "<b>Ý nghĩa:</b> Ổ cứng hỏng vứt đi vẫn có thể bị khôi phục dữ liệu. Cần hủy vật lý.<br><b>Bằng chứng:</b> Biên bản hủy tài sản, quy trình hủy dữ liệu."},
-  {"section": "A.7 Vật lý", "id": "A.7.11", "question": "(A.7.11) Các hệ thống hỗ trợ (điện, điều hòa, mạng) cho phòng server có được bảo vệ, dự phòng (UPS, máy nổ) và bảo trì định kỳ không?", "explanation": "<b>Ý nghĩa:</b> Đảm bảo tính liên tục (Availability). Mất điện phải có UPS gánh trong lúc chờ máy nổ.<br><b>Bằng chứng:</b> Hồ sơ bảo trì hệ thống điện/lạnh, nhật ký chạy thử máy phát."},
-  {"section": "A.7 Vật lý", "id": "A.7.12", "question": "(A.7.12) Hệ thống cáp (mạng, điện) có được bảo vệ khỏi việc bị can thiệp hoặc hư hỏng vật lý không (ví dụ: đi trong máng cáp, ống gen)?", "explanation": "<b>Ý nghĩa:</b> Tránh chuột cắn hoặc ai đó cắt trộm/nghe lén. Cáp nên đi ngầm hoặc trong ống bảo vệ.<br><b>Bằng chứng:</b> Quan sát thực tế hệ thống máng cáp."},
-  {"section": "A.7 Vật lý", "id": "A.7.13", "question": "(A.7.13) Thiết bị (máy chủ, UPS) có được bảo trì định kỳ theo lịch của nhà cung cấp không? Hồ sơ bảo trì có được lưu lại không?", "explanation": "<b>Ý nghĩa:</b> Bảo trì để phát hiện sớm hỏng hóc.<br><b>Bằng chứng:</b> Kế hoạch và biên bản bảo trì thiết bị."},
-  {"section": "A.7 Vật lý", "id": "A.7.14", "question": "(A.7.14) Khi thanh lý hoặc tái sử dụng thiết bị (laptop, máy chủ), tổ chức có đảm bảo mọi dữ liệu nhạy cảm đã được xóa an toàn không?", "explanation": "<b>Ý nghĩa:</b> Wipe sạch dữ liệu trước khi bán máy cũ hoặc chuyển người khác dùng.<br><b>Bằng chứng:</b> Quy trình thanh lý tài sản, biên bản xóa dữ liệu."},
-  {"section": "A.8 Công nghệ", "id": "A.8.1", "question": "(A.8.1) Quan sát: Thiết bị đầu cuối (laptop, PC) có được bảo vệ không (cài Antivirus, bật mã hóa ổ cứng, chính sách màn hình khóa tự động)?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ 'cửa ngõ' máy tính nhân viên.<br><b>Bằng chứng:</b> Antivirus trên máy, policy màn hình khóa, mã hóa ổ cứng."},
-  {"section": "A.8 Công nghệ", "id": "A.8.2", "question": "(A.8.2) Quyền truy cập đặc quyền (admin, root) có bị hạn chế, giám sát và chỉ cấp khi thật sự cần thiết không?", "explanation": "<b>Ý nghĩa:</b> Admin là mục tiêu số 1 của hacker. Cần hạn chế số người biết và giám sát chặt.<br><b>Bằng chứng:</b> Danh sách tài khoản đặc quyền, log sử dụng các tài khoản này."},
-  {"section": "A.8 Công nghệ", "id": "A.8.3", "question": "(A.8.3) Việc truy cập thông tin (ví dụ: ổ đĩa dùng chung, CSDL) có được phân quyền (restriction) dựa trên vai trò, chức năng không?", "explanation": "<b>Ý nghĩa:</b> Phòng nào chỉ xem dữ liệu phòng đó. Không share 'Everyone - Full Control'.<br><b>Bằng chứng:</b> Cấu hình phân quyền trên File Server/Database."},
-  {"section": "A.8 Công nghệ", "id": "A.8.4", "question": "(A.8.4) (Nếu có) Quyền truy cập mã nguồn (source code) có được kiểm soát chặt chẽ (phân quyền trên Git, SVN) không?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ tài sản lõi (code) khỏi bị lộ hoặc sửa trộm.<br><b>Bằng chứng:</b> Phân quyền trên GitLab/GitHub/Bitbucket."},
-  {"section": "A.8 Công nghệ", "id": "A.8.5", "question": "(A.8.5) Hệ thống có cung cấp cơ chế xác thực an toàn không (ví dụ: không truyền mật khẩu clear text, có MFA)?", "explanation": "<b>Ý nghĩa:</b> Đăng nhập phải an toàn (HTTPS, MFA).<br><b>Bằng chứng:</b> Cấu hình hệ thống xác thực (SSO, LDAP, MFA)."},
-  {"section": "A.8 Công nghệ", "id": "A.8.6", "question": "(A.8.6) Tổ chức có giám sát dung lượng (capacity) của các hệ thống quan trọng (CPU, RAM, disk, bandwidth) để dự báo và mở rộng kịp thời không?", "explanation": "<b>Ý nghĩa:</b> Tránh sập hệ thống do đầy ổ cứng/quá tải.<br><b>Bằng chứng:</b> Các công cụ giám sát (Zabbix, SolarWinds) và báo cáo capacity."},
-  {"section": "A.8 Công nghệ", "id": "A.8.7", "question": "(A.8.7) Tổ chức có giải pháp bảo vệ chống mã độc (Antivirus/Antimalware) trên máy chủ, máy trạm không? Giải pháp này có được cập nhật thường xuyên không?", "explanation": "<b>Ý nghĩa:</b> Lớp bảo vệ cơ bản nhất chống virus/ransomware.<br><b>Bằng chứng:</b> Dashboard Antivirus tập trung, kiểm tra ngày cập nhật signature."},
-  {"section": "A.8 Công nghệ", "id": "A.8.8", "question": "(A.8.8) Đã có báo cáo quét lỗ hổng (Vulnerability Scan) gần nhất chưa? Các lỗ hổng \"Nghiêm trọng\" (Critical) đã được xử lý (vá lỗi) chưa?", "explanation": "<b>Ý nghĩa:</b> Chủ động tìm và vá lỗi trước khi hacker khai thác.<br><b>Bằng chứng:</b> Báo cáo scan (Nessus/Qualys) và ticket theo dõi việc vá lỗi."},
-  {"section": "A.8 Công nghệ", "id": "A.8.9", "question": "(A.8.9) Tổ chức có áp dụng cấu hình an toàn (hardening) cho các hệ thống mới triển khai (tắt dịch vụ/cổng không cần thiết) không? (Xem Chính sách 1.9)", "explanation": "<b>Ý nghĩa:</b> Không dùng cấu hình mặc định vì dễ bị hack. Phải 'cứng hóa' trước khi go-live.<br><b>Bằng chứng:</b> Hardening checklist cho OS/Database, kết quả scan compliance."},
-  {"section": "A.8 Công nghệ", "id": "A.8.10", "question": "(A.8.10) Khi dữ liệu không còn cần thiết, tổ chức có quy trình và công cụ để xóa an toàn (secure deletion) (ví dụ: ghi đè, degauss) không?", "explanation": "<b>Ý nghĩa:</b> Xóa thường vẫn khôi phục được. Cần xóa an toàn (ghi đè) dữ liệu nhạy cảm.<br><b>Bằng chứng:</b> Công cụ xóa dữ liệu an toàn, quy trình hủy dữ liệu số."},
-  {"section": "A.8 Công nghệ", "id": "A.8.11", "question": "(A.8.11) (Nếu có) Tổ chức có sử dụng kỹ thuật che giấu dữ liệu (data masking) khi sử dụng dữ liệu thật (production data) cho môi trường thử nghiệm (test) không?", "explanation": "<b>Ý nghĩa:</b> Dev không cần biết dữ liệu thật của khách hàng để test. Cần làm mờ đi.<br><b>Bằng chứng:</b> Quy trình tạo dữ liệu test, các script/công cụ masking."},
-  {"section": "A.8 Công nghệ", "id": "A.8.12", "question": "(A.8.12) Tổ chức có các biện pháp ngăn chặn rò rỉ dữ liệu (DLP) không (ví dụ: chặn USB, giám sát email, DLP gateway)?", "explanation": "<b>Ý nghĩa:</b> Ngăn chặn nhân viên gửi dữ liệu mật ra ngoài.<br><b>Bằng chứng:</b> Cấu hình giải pháp DLP, các quy định chặn cổng USB."},
-  {"section": "A.8 Công nghệ", "id": "A.8.13", "question": "(A.8.13) Đã có log sao lưu (backup) thành công của các hệ thống quan trọng (từ đêm qua) chưa? (Xem Chính sách 1.3)", "explanation": "<b>Ý nghĩa:</b> Cứu cánh cuối cùng khi bị ransomware. Backup phải thành công và test restore.<br><b>Bằng chứng:</b> Log backup hàng ngày, biên bản test khôi phục định kỳ."},
-  {"section": "A.8 Công nghệ", "id": "A.8.14", "question": "(A.8.14) Các biện pháp nào (ví dụ: HA, clustering, load balancing) được sử dụng để đảm bảo tính sẵn sàng (availability) của thông tin/dịch vụ?", "explanation": "<b>Ý nghĩa:</b> Một máy chết dịch vụ vẫn chạy. Cần dự phòng nóng (HA).<br><b>Bằng chứng:</b> Sơ đồ kiến trúc HA, cấu hình Load Balancer."},
-  {"section": "A.8 Công nghệ", "id": "A.8.15", "question": "(A.8.15) Các hệ thống quan trọng (máy chủ, firewall, CSDL) có được bật ghi nhật ký (logging) các sự kiện quan trọng không? (Xem Chính sách 1.8)", "explanation": "<b>Ý nghĩa:</b> 'Hộp đen' để điều tra sự cố. Phải bật ghi log.<br><b>Bằng chứng:</b> Cấu hình audit log trên OS, DB, Network device."},
-  {"section": "A.8 Công nghệ", "id": "A.8.16", "question": "(A.8.16) Log có được thu thập tập trung (SIEM/Syslog) và rà soát định kỳ (hoặc tự động) để phát hiện bất thường không? Log có được bảo vệ khỏi sửa đổi không?", "explanation": "<b>Ý nghĩa:</b> Gom log về một chỗ (SIEM) để dễ phân tích và bảo vệ.<br><b>Bằng chứng:</b> Hệ thống SIEM, các rule cảnh báo."},
-  {"section": "A.8 Công nghệ", "id": "A.8.17", "question": "(A.8.17) Tất cả các hệ thống trong phạm vi có được đồng bộ hóa thời gian (clock synchronization) với một nguồn chuẩn (NTP server) không?", "explanation": "<b>Ý nghĩa:</b> Để log chính xác phục vụ điều tra.<br><b>Bằng chứng:</b> Cấu hình NTP trên các thiết bị."},
-  {"section": "A.8 Công nghệ", "id": "A.8.18", "question": "(A.8.18) Việc sử dụng các tiện ích đặc quyền (ví dụ: các công cụ admin, debug) có được kiểm soát và hạn chế không?", "explanation": "<b>Ý nghĩa:</b> Chỉ admin mới được dùng các công cụ mạnh.<br><b>Bằng chứng:</b> Danh sách phần mềm được phép (whitelist) cho từng nhóm user."},
-  {"section": "A.8 Công nghệ", "id": "A.8.19", "question": "(A.8.19) Việc cài đặt phần mềm trên hệ thống vận hành (production) có được kiểm soát (thông qua Quản lý Thay đổi) không? Người dùng có bị cấm tự ý cài đặt không?", "explanation": "<b>Ý nghĩa:</b> Production phải ổn định. Không được tùy tiện cài thêm phần mềm lạ.<br><b>Bằng chứng:</b> Quy định cài đặt phần mềm, cấu hình chặn quyền Admin local."},
-  {"section": "A.8 Công nghệ", "id": "A.8.20", "question": "(A.8.20) Xem cấu hình Tường lửa (Firewall): Mạng có được phân đoạn (network segregation) thành các vùng (DMZ, LAN, Wifi, Server) không? (Xem Chính sách 1.9)", "explanation": "<b>Ý nghĩa:</b> Chia để trị. Máy tính nhân viên nhiễm virus không được lây sang máy chủ.<br><b>Bằng chứng:</b> Sơ đồ mạng, cấu hình VLAN/Firewall zone."},
-  {"section": "A.8 Công nghệ", "id": "A.8.21", "question": "(A.8.21) Các dịch vụ mạng (network services) có được cấu hình an toàn, tắt các tính năng không cần thiết không?", "explanation": "<b>Ý nghĩa:</b> Chỉ bật những gì cần thiết (Least Functionality).<br><b>Bằng chứng:</b> Kết quả scan port, hardening thiết bị mạng."},
-  {"section": "A.8 Công nghệ", "id": "A.8.22", "question": "(A.8.22) Việc lọc và kiểm soát luồng thông tin (traffic) giữa các phân đoạn mạng có được thực hiện (trên Firewall/Router) không?", "explanation": "<b>Ý nghĩa:</b> Dùng firewall chặn các kết nối không được phép giữa các vùng mạng.<br><b>Bằng chứng:</b> Review rule firewall (ví dụ: cấm từ Wifi Guest vào LAN)."},
-  {"section": "A.8 Công nghệ", "id": "A.8.23", "question": "(A.8.23) Tổ chức có giải pháp lọc web (web filtering) để chặn truy cập đến các trang web độc hại/không phù hợp không? (Xem Chính sách 1.9)", "explanation": "<b>Ý nghĩa:</b> Ngăn nhân viên vào web đen, web chứa mã độc.<br><b>Bằng chứng:</b> Cấu hình Web Proxy/Firewall Web Filter."},
-  {"section": "A.8 Công nghệ", "id": "A.8.24", "question": "(A.8.24) Tổ chức có chính sách và biện pháp sử dụng mật mã (cryptography) để bảo vệ thông tin không (ví dụ: mã hóa ổ cứng, SSL/TLS, mã hóa backup)?", "explanation": "<b>Ý nghĩa:</b> Dùng mã hóa chuẩn (AES, RSA...) để bảo vệ tính bí mật.<br><b>Bằng chứng:</b> Chính sách mã hóa, cấu hình SSL/TLS."},
+  {"section": "Điều khoản 4-10", "id": "4.1", "question": "(4.1) Đã có tài liệu xác định các vấn đề nội bộ/bên ngoài liên quan đến ATTT chưa?", "explanation": "<b>Ý nghĩa:</b> Xác định 'bối cảnh' để đánh giá rủi ro. Bên ngoài (Luật NĐ13, đối thủ...), Bên trong (Văn hóa, hạ tầng...).<br><b>Bằng chứng:</b> Tài liệu 'Bối cảnh tổ chức', Phân tích SWOT ATTT."},
+  {"section": "Điều khoản 4-10", "id": "4.2", "question": "(4.2) Đã có danh sách các bên quan tâm và các yêu cầu ATTT của họ chưa?", "explanation": "<b>Ý nghĩa:</b> Biết ai mong đợi gì (Khách hàng, Cơ quan quản lý, Cổ đông...) để đáp ứng.<br><b>Bằng chứng:</b> Danh sách các bên liên quan và yêu cầu cụ thể."},
+  {"section": "Điều khoản 4-10", "id": "4.3", "question": "(4.3) Đã có tài liệu định nghĩa Phạm vi ISMS (Scope document) rõ ràng và hợp lý chưa?", "explanation": "<b>Ý nghĩa:</b> Khoanh vùng áp dụng (văn phòng nào, hệ thống IT nào, phòng ban nào).<br><b>Bằng chứng:</b> Tài liệu Phạm vi ISMS (Scope Statement)."},
+  {"section": "Điều khoản 4-10", "id": "4.4", "question": "(4.4) ISMS và các quy trình (Chính sách, Quy trình) đã được thiết lập chưa?", "explanation": "<b>Ý nghĩa:</b> Yêu cầu tổng quát về việc xây dựng, vận hành và cải tiến hệ thống.<br><b>Bằng chứng:</b> Hệ thống tài liệu quy trình đã được ban hành."},
+  {"section": "Điều khoản 4-10", "id": "5.1", "question": "(5.1) Lãnh đạo cấp cao có thể hiện sự cam kết không? (Bằng chứng: cấp nguồn lực, ngân sách)", "explanation": "<b>Ý nghĩa:</b> Lãnh đạo phải 'dẫn dắt' và 'chi tiền' (duyệt ngân sách, nhân sự, tham gia họp).<br><b>Bằng chứng:</b> Biên bản họp Lãnh đạo, Quyết định phê duyệt ngân sách."},
+  {"section": "Điều khoản 4-10", "id": "5.2", "question": "(5.2) Chính sách ATTT (1.1) đã được Lãnh đạo cấp cao phê duyệt và truyền thông chưa?", "explanation": "<b>Ý nghĩa:</b> 'Hiến pháp' bảo mật của công ty.<br><b>Bằng chứng:</b> Chính sách ATTT có chữ ký Giám đốc, email thông báo."},
+  {"section": "Điều khoản 4-10", "id": "5.3", "question": "(5.3) Đã có tài liệu phân công vai trò, trách nhiệm ATTT chưa? (Ví dụ: Ma trận RACI 7.2)", "explanation": "<b>Ý nghĩa:</b> Ai chịu trách nhiệm chính khi có sự cố?<br><b>Bằng chứng:</b> Sơ đồ tổ chức ATTT, Ma trận RACI, JD."},
+  {"section": "Điều khoản 4-10", "id": "6.1.1", "question": "(6.1.1) Đã có các hành động để giải quyết rủi ro và cơ hội (từ 4.1) chưa?", "explanation": "<b>Ý nghĩa:</b> Đảm bảo hệ thống đạt mục tiêu, giảm tác động xấu.<br><b>Bằng chứng:</b> Kế hoạch giải quyết rủi ro/cơ hội (trong RTP)."},
+  {"section": "Điều khoản 4-10", "id": "6.1.2", "question": "(6.1.2) Đã có Quy trình Quản lý Rủi ro (2.1) và Ma trận Rủi ro (3.4) nhất quán chưa?", "explanation": "<b>Ý nghĩa:</b> Cần 'công thức' thống nhất để tính điểm rủi ro.<br><b>Bằng chứng:</b> Quy trình Đánh giá rủi ro, Bảng tiêu chí chấm điểm."},
+  {"section": "Điều khoản 4-10", "id": "6.1.2b", "question": "(6.1.2) Đã có kết quả đánh giá rủi ro (bảng rủi ro) và tiêu chí chấp nhận rủi ro được phê duyệt chưa?", "explanation": "<b>Ý nghĩa:</b> Kết quả chạy quy trình. Rủi ro mức nào phải xử lý?<br><b>Bằng chứng:</b> Báo cáo đánh giá rủi ro chi tiết."},
+  {"section": "Điều khoản 4-10", "id": "6.1.3", "question": "(6.1.3) Đã có Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?", "explanation": "<b>Ý nghĩa:</b> Ai làm gì, bao giờ xong để giảm rủi ro?<br><b>Bằng chứng:</b> Kế hoạch xử lý rủi ro (RTP)."},
+  {"section": "Điều khoản 4-10", "id": "6.1.3b", "question": "(6.1.3) Đã có Tuyên bố Áp dụng (SoA) được phê duyệt, liên kết logic với RTP và liệt kê đủ 93 controls chưa?", "explanation": "<b>Ý nghĩa:</b> Tài liệu bắt buộc quan trọng nhất. Liệt kê 93 controls (dùng/không dùng).<br><b>Bằng chứng:</b> Tài liệu SoA (Statement of Applicability)."},
+  {"section": "Điều khoản 4-10", "id": "6.2", "question": "(6.2) Đã có các mục tiêu ATTT đo lường được (KPIs) ngoài các mục tiêu trong chính sách 1.1 chưa?", "explanation": "<b>Ý nghĩa:</b> Mục tiêu SMART (VD: Giảm 20% sự cố).<br><b>Bằng chứng:</b> Bảng theo dõi KPI/Mục tiêu ATTT năm."},
+  {"section": "Điều khoản 4-10", "id": "7.1", "question": "(7.1) Đã có bằng chứng về việc cung cấp nguồn lực (ngân sách, nhân sự) cho ISMS chưa?", "explanation": "<b>Ý nghĩa:</b> Cần đủ người và tiền để vận hành.<br><b>Bằng chứng:</b> Ngân sách được duyệt, quyết định bổ nhiệm đội ISMS."},
+  {"section": "Điều khoản 4-10", "id": "7.2", "question": "(7.2) Đã có hồ sơ năng lực (chứng chỉ) của các nhân sự ATTT chủ chốt chưa?", "explanation": "<b>Ý nghĩa:</b> Người làm bảo mật phải có trình độ phù hợp.<br><b>Bằng chứng:</b> CV, bằng cấp, chứng chỉ (CISSP, CISM...) của IT/Security."},
+  {"section": "Điều khoản 4-10", "id": "7.3", "question": "(7.3) Đã có bằng chứng về đào tạo nhận thức ATTT (A.6.3) chưa? (slide, danh sách tham dự, kết quả test)", "explanation": "<b>Ý nghĩa:</b> Đào tạo để nhân viên không là 'điểm yếu'.<br><b>Bằng chứng:</b> Slide đào tạo, danh sách điểm danh, bài test."},
+  {"section": "Điều khoản 4-10", "id": "7.4", "question": "(7.4) Đã có quy trình truyền thông nội bộ và bên ngoài về ISMS chưa?", "explanation": "<b>Ý nghĩa:</b> Khi có sự cố thì báo ai? Ai phát ngôn?<br><b>Bằng chứng:</b> Kế hoạch truyền thông, quy trình phản ứng sự cố."},
+  {"section": "Điều khoản 4-10", "id": "7.5", "question": "(7.5) Đã có Quy trình Kiểm soát Thông tin dạng văn bản (Document Control) chưa? (Có mã, phiên bản, phê duyệt, thu hồi tài liệu cũ?)", "explanation": "<b>Ý nghĩa:</b> Đảm bảo dùng đúng phiên bản quy trình mới nhất.<br><b>Bằng chứng:</b> Quy trình kiểm soát tài liệu, Master List danh mục."},
+  {"section": "Điều khoản 4-10", "id": "8.1", "question": "(8.1) Đã có bằng chứng về việc lập kế hoạch và kiểm soát vận hành chưa? (Ví dụ: Quy trình 2.6 - Quản lý Thay đổi)", "explanation": "<b>Ý nghĩa:</b> Kiểm soát các thay đổi để không làm sập hệ thống.<br><b>Bằng chứng:</b> Quy trình quản lý thay đổi (Change Management), các RFC."},
+  {"section": "Điều khoản 4-10", "id": "8.2", "question": "(8.2) Đã có Báo cáo Đánh giá Rủi ro (kết quả của Quy trình 2.1) chưa?", "explanation": "<b>Ý nghĩa:</b> Đánh giá rủi ro định kỳ hoặc khi có thay đổi lớn.<br><b>Bằng chứng:</b> Các báo cáo đánh giá rủi ro gần nhất."},
+  {"section": "Điều khoản 4-10", "id": "8.3", "question": "(8.3) Đã có bằng chứng về việc thực hiện các Kế hoạch Xử lý Rủi ro (RTP - 3.5) chưa?", "explanation": "<b>Ý nghĩa:</b> Đã lập kế hoạch thì phải làm (VD: mua firewall thì phải lắp).<br><b>Bằng chứng:</b> Báo cáo tiến độ RTP, biên bản nghiệm thu."},
+  {"section": "Điều khoản 4-10", "id": "9.1", "question": "(9.1) Tổ chức có đo lường, giám sát, phân tích và đánh giá ISMS không? (Có báo cáo KPI/metric không?)", "explanation": "<b>Ý nghĩa:</b> Phải biết hệ thống đang khỏe hay yếu qua số liệu.<br><b>Bằng chứng:</b> Báo cáo giám sát định kỳ, dashboard KPI."},
+  {"section": "Điều khoản 4-10", "id": "9.2", "question": "(9.2) Đã có Chương trình và Báo cáo Đánh giá Nội bộ (3.1) gần nhất chưa? Đánh giá có khách quan không?", "explanation": "<b>Ý nghĩa:</b> Tự 'khám bệnh' định kỳ một cách khách quan.<br><b>Bằng chứng:</b> Kế hoạch & Báo cáo đánh giá nội bộ, phiếu NC."},
+  {"section": "Điều khoản 4-10", "id": "9.3", "question": "(9.3) Đã có bằng chứng về cuộc họp Xem xét của Lãnh đạo (Management Review) gần nhất chưa? (slide, biên bản họp, danh sách tham dự)", "explanation": "<b>Ý nghĩa:</b> Lãnh đạo họp để nắm tình hình và chỉ đạo.<br><b>Bằng chứng:</b> Biên bản họp Management Review (bắt buộc)."},
+  {"section": "Điều khoản 4-10", "id": "9.3b", "question": "(9.3) Cuộc họp Xem xét của Lãnh đạo có đủ các đầu vào (inputs) theo yêu cầu 9.3.2 không? (kết quả rủi ro, audit, sự cố...)", "explanation": "<b>Ý nghĩa:</b> Báo cáo đủ thông tin đầu vào bắt buộc theo chuẩn.<br><b>Bằng chứng:</b> Slide báo cáo cuộc họp (đủ checklist)."},
+  {"section": "Điều khoản 4-10", "id": "10.1", "question": "(10.1) Đã có bằng chứng về các cơ hội cải tiến (từ 9.3) chưa?", "explanation": "<b>Ý nghĩa:</b> Hệ thống phải luôn tốt hơn (Continual Improvement).<br><b>Bằng chứng:</b> Danh sách sáng kiến/dự án cải tiến."},
+  {"section": "Điều khoản 4-10", "id": "10.2", "question": "(10.2) Các Điểm không phù hợp (NCs) (từ 9.2) đã được phân tích nguyên nhân gốc rễ và thực hiện hành động khắc phục chưa?", "explanation": "<b>Ý nghĩa:</b> Có lỗi phải sửa tận gốc.<br><b>Bằng chứng:</b> Phiếu CAR, báo cáo phân tích nguyên nhân (Root Cause)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.1", "question": "(A.5.1) Chính sách ATTT (1.1) và các chính sách chuyên đề (1.2-1.10) đã được phê duyệt, ban hành, truyền thông chưa?", "explanation": "<b>Ý nghĩa:</b> Các 'bộ luật' con (mật khẩu, truy cập...) phải được ban hành.<br><b>Bằng chứng:</b> Hệ thống văn bản chính sách trên Portal."},
+  {"section": "A.5 Tổ chức", "id": "A.5.2", "question": "(A.5.2) Đã có Ma trận RACI (7.2), Mô tả công việc? Nhân sự có hiểu trách nhiệm ATTT của mình không?", "explanation": "<b>Ý nghĩa:</b> Phân vai rõ ràng trong từng quy trình.<br><b>Bằng chứng:</b> Ma trận RACI các quy trình chính."},
+  {"section": "A.5 Tổ chức", "id": "A.5.3", "question": "(A.5.3) Các quy trình nhạy cảm (Quản lý thay đổi, Cấp quyền) có đảm bảo phân tách nhiệm vụ (người yêu cầu, phê duyệt, thực hiện khác nhau) không?", "explanation": "<b>Ý nghĩa:</b> Tránh 'vừa đá bóng vừa thổi còi'.<br><b>Bằng chứng:</b> Quy trình cấp quyền, log hệ thống (3 vai khác nhau)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.4", "question": "(A.5.4) Cấp quản lý (Trưởng phòng) có thúc đẩy nhân viên tuân thủ chính sách ATTT không?", "explanation": "<b>Ý nghĩa:</b> Quản lý phải làm gương và nhắc nhở nhân viên.<br><b>Bằng chứng:</b> Phỏng vấn nhân viên, email nhắc nhở của quản lý."},
+  {"section": "A.5 Tổ chức", "id": "A.5.5", "question": "(A.5.5) Tổ chức có xác định và duy trì liên lạc với các cơ quan có thẩm quyền (VNCERT/CC, A05...) không?", "explanation": "<b>Ý nghĩa:</b> Biết gọi ai khi có sự cố lớn/cần hỗ trợ pháp lý.<br><b>Bằng chứng:</b> Danh bạ liên lạc khẩn cấp (Công an, VNCERT)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.6", "question": "(A.5.6) Tổ chức có tham gia các diễn đàn, hiệp hội ATTT chuyên ngành (ISACA, (ISC)²) không?", "explanation": "<b>Ý nghĩa:</b> Cập nhật kiến thức mới.<br><b>Bằng chứng:</b> Thẻ hội viên, chứng nhận tham gia hội thảo."},
+  {"section": "A.5 Tổ chức", "id": "A.5.7", "question": "(A.5.7) Tổ chức có thu thập và phân tích thông tin về mối đe dọa (Threat Intelligence) từ SOC/MSSP không? Có hành động gì được thực hiện không?", "explanation": "<b>Ý nghĩa:</b> Chủ động phòng thủ trước các mối đe dọa mới.<br><b>Bằng chứng:</b> Báo cáo Threat Intel, rule firewall cập nhật theo Intel."},
+  {"section": "A.5 Tổ chức", "id": "A.5.8", "question": "(A.5.8) Các dự án đang chạy có được đánh giá rủi ro ATTT trong quá trình thực hiện không?", "explanation": "<b>Ý nghĩa:</b> Bảo mật phải đi cùng dự án từ đầu.<br><b>Bằng chứng:</b> Báo cáo rủi ro dự án, biên bản họp khởi động."},
+  {"section": "A.5 Tổ chức", "id": "A.5.9", "question": "(A.5.9) Danh sách Tài sản (3.2) có đầy đủ không (HW, SW, Data, Services...)?", "explanation": "<b>Ý nghĩa:</b> Không biết mình có gì thì không thể bảo vệ.<br><b>Bằng chứng:</b> File Inventory/CMDB tài sản CNTT."},
+  {"section": "A.5 Tổ chức", "id": "A.5.10", "question": "(A.5.10) Chính sách Sử dụng Chấp nhận được (AUP) đã được truyền thông (qua Sổ tay nhân viên) chưa?", "explanation": "<b>Ý nghĩa:</b> Quy định rõ được làm gì/cấm làm gì trên máy công ty.<br><b>Bằng chứng:</b> Sổ tay nhân viên, cam kết AUP đã ký."},
+  {"section": "A.5 Tổ chức", "id": "A.5.11", "question": "(A.5.11) Quy trình nghỉ việc (Off-boarding) của HR có đảm bảo nhân viên trả lại mọi tài sản (laptop, thẻ) không?", "explanation": "<b>Ý nghĩa:</b> Thu hồi quyền truy cập ngay khi nghỉ.<br><b>Bằng chứng:</b> Checklist bàn giao nghỉ việc (có xác nhận IT)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.12", "question": "(A.5.12) Thông tin đã được phân loại (Mật, Nội bộ...) trong Chính sách (1.7) và Danh sách Tài sản (3.2) chưa?", "explanation": "<b>Ý nghĩa:</b> Phân loại để ưu tiên bảo vệ tài sản quan trọng.<br><b>Bằng chứng:</b> Quy định phân loại, danh sách tài sản có cột 'Mức độ mật'."},
+  {"section": "A.5 Tổ chức", "id": "A.5.13", "question": "(A.5.13) Thông tin nhạy cảm (tài liệu, email, ổ đĩa) có được dán nhãn \"Mật\" (hoặc tương đương) không?", "explanation": "<b>Ý nghĩa:</b> Dán nhãn trực quan để dễ nhận biết.<br><b>Bằng chứng:</b> Quan sát tài liệu/email có nhãn 'MẬT'."},
+  {"section": "A.5 Tổ chức", "id": "A.5.14", "question": "(A.5.14) Tổ chức có quy định về việc chuyển giao thông tin nhạy cảm ra ngoài (email, USB, Cloud) không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát đường đi dữ liệu mật (VD: bắt buộc mã hóa).<br><b>Bằng chứng:</b> Quy định trao đổi thông tin, DLP."},
+  {"section": "A.5 Tổ chức", "id": "A.5.15", "question": "(A.5.15) Chính sách KSTC (1.2) và Quy trình (2.5) có dựa trên nguyên tắc \"Cần biết\" và \"Đặc quyền tối thiểu\" không?", "explanation": "<b>Ý nghĩa:</b> Chỉ cấp quyền vừa đủ để làm việc.<br><b>Bằng chứng:</b> Ma trận phân quyền (Access Matrix)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.16", "question": "(A.5.16) Quy trình tạo/xóa tài khoản có đảm bảo mọi tài khoản được liên kết duy nhất với một cá nhân/hệ thống không?", "explanation": "<b>Ý nghĩa:</b> Tránh dùng tài khoản chung.<br><b>Bằng chứng:</b> Danh sách user (không có user chung)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.17", "question": "(A.5.17) Chính sách Mật khẩu (1.4) có được tuân thủ không (đủ phức tạp, đổi định kỳ, cấm mật khẩu mặc định, có MFA)?", "explanation": "<b>Ý nghĩa:</b> Mật khẩu yếu dễ bị hack. Cần độ phức tạp và MFA.<br><b>Bằng chứng:</b> Cấu hình Password Policy trên hệ thống."},
+  {"section": "A.5 Tổ chức", "id": "A.5.18", "question": "(A.5.18) Đã có hồ sơ (email, Biểu mẫu 3.6) rà soát quyền truy cập 6 tháng gần nhất? Chủ sở hữu tài sản có rà soát và phê duyệt không?", "explanation": "<b>Ý nghĩa:</b> Định kỳ rà soát để cắt quyền thừa.<br><b>Bằng chứng:</b> Biên bản rà soát quyền định kỳ."},
+  {"section": "A.5 Tổ chức", "id": "A.5.19", "question": "(A.5.19) Tổ chức có đánh giá rủi ro ATTT của NCC (Cloud, ICT) trước khi ký hợp đồng không? (Xem Chính sách 1.10)", "explanation": "<b>Ý nghĩa:</b> Đảm bảo đối tác an toàn trước khi hợp tác.<br><b>Bằng chứng:</b> Phiếu đánh giá an ninh nhà cung cấp."},
+  {"section": "A.5 Tổ chức", "id": "A.5.20", "question": "(A.5.20) Hợp đồng NCC (sample) có bao gồm các điều khoản ATTT ràng buộc (tuân thủ, báo cáo sự cố, quyền audit) không?", "explanation": "<b>Ý nghĩa:</b> Ràng buộc pháp lý trách nhiệm nếu họ làm lộ dữ liệu.<br><b>Bằng chứng:</b> Hợp đồng, NDA/DPA với đối tác."},
+  {"section": "A.5 Tổ chức", "id": "A.5.21", "question": "(A.5.21) Tổ chức quản lý rủi ro từ chuỗi cung ứng ICT (nhà cung cấp phần cứng, phần mềm) như thế nào?", "explanation": "<b>Ý nghĩa:</b> Tránh mua phải hàng có mã độc.<br><b>Bằng chứng:</b> Quy trình mua sắm, yêu cầu CO/CQ, scan thiết bị."},
+  {"section": "A.5 Tổ chức", "id": "A.5.22", "question": "(A.5.22) Tổ chức có rà soát hiệu suất ATTT của các NCC quan trọng hàng năm không (yêu cầu chứng chỉ, báo cáo)?", "explanation": "<b>Ý nghĩa:</b> Giám sát định kỳ đối tác.<br><b>Bằng chứng:</b> Báo cáo đánh giá định kỳ NCC."},
+  {"section": "A.5 Tổ chức", "id": "A.5.23", "question": "(A.5.23) Khi NCC (ví dụ: nhà cung cấp Cloud) thay đổi dịch vụ, tổ chức có quy trình đánh giá rủi ro không?", "explanation": "<b>Ý nghĩa:</b> Đánh giá tác động khi đối tác có thay đổi lớn.<br><b>Bằng chứng:</b> Báo cáo đánh giá tác động thay đổi NCC."},
+  {"section": "A.5 Tổ chức", "id": "A.5.24", "question": "(A.5.24) Kế hoạch Quản lý Sự cố (1.5, 2.2) đã rõ ràng vai trò, trách nhiệm (Đội IRT) chưa?", "explanation": "<b>Ý nghĩa:</b> Khi có sự cố ai làm gì? Cần rõ ràng trước.<br><b>Bằng chứng:</b> Quyết định thành lập Đội IRT."},
+  {"section": "A.5 Tổ chức", "id": "A.5.25", "question": "(A.5.25) Các sự kiện ATTT (events) có được đánh giá để xác định xem chúng có phải là sự cố (incidents) không? Ai chịu trách nhiệm?", "explanation": "<b>Ý nghĩa:</b> Phân loại để biết sự cố nào cần xử lý ngay.<br><b>Bằng chứng:</b> Quy trình phân loại sự cố (Triage)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.26", "question": "(A.5.26) Đã xem Nhật ký Sự cố (3.3)? Các bước xử lý (Ngăn chặn, Tiêu diệt, Phục hồi) có được ghi lại không?", "explanation": "<b>Ý nghĩa:</b> Ghi chép lại để rút kinh nghiệm.<br><b>Bằng chứng:</b> Sổ nhật ký/Ticket sự cố."},
+  {"section": "A.5 Tổ chức", "id": "A.5.27", "question": "(A.5.27) Các sự cố nghiêm trọng (trong 3.3) có được phân tích nguyên nhân gốc rễ (root cause) và rút bài học kinh nghiệm không?", "explanation": "<b>Ý nghĩa:</b> Tìm nguyên nhân gốc để không bị lại.<br><b>Bằng chứng:</b> Báo cáo phân tích sau sự cố."},
+  {"section": "A.5 Tổ chức", "id": "A.5.28", "question": "(A.5.28) Tổ chức có quy trình thu thập và bảo quản bằng chứng kỹ thuật số (digital forensics) khi xảy ra sự cố không?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ hiện trường số để điều tra.<br><b>Bằng chứng:</b> Quy trình điều tra số (Forensics)."},
+  {"section": "A.5 Tổ chức", "id": "A.5.29", "question": "(A.5.29) Kế hoạch Kinh doanh Liên tục (BCP) có tích hợp các yêu cầu ATTT (bảo mật, toàn vẹn) khi hoạt động ở trạng thái dự phòng không?", "explanation": "<b>Ý nghĩa:</b> Chạy dự phòng (DR) vẫn phải đảm bảo an toàn.<br><b>Bằng chứng:</b> Kế hoạch BCP/DRP có mục bảo mật."},
+  {"section": "A.5 Tổ chức", "id": "A.5.30", "question": "(A.5.30) Đã thực hiện BIA, xác định RTO/RPO chưa? Đã có báo cáo diễn tập DRP/BCP (theo Chính sách 1.6) chưa?", "explanation": "<b>Ý nghĩa:</b> Biết hệ thống quan trọng và diễn tập phục hồi.<br><b>Bằng chứng:</b> Báo cáo BIA, kết quả diễn tập DRP."},
+  {"section": "A.5 Tổ chức", "id": "A.5.31", "question": "(A.5.31) Tổ chức có danh sách các yêu cầu pháp lý (Luật An ninh mạng, Nghị định 13) và yêu cầu hợp đồng liên quan đến ATTT không?", "explanation": "<b>Ý nghĩa:</b> Liệt kê luật phải tuân thủ để tránh bị phạt.<br><b>Bằng chứng:</b> Danh mục văn bản pháp quy ATTT."},
+  {"section": "A.5 Tổ chức", "id": "A.5.32", "question": "(A.5.32) Tổ chức có biện pháp bảo vệ IP (mã nguồn, tài liệu thiết kế) và tuân thủ bản quyền phần mềm không?", "explanation": "<b>Ý nghĩa:</b> Không dùng phần mềm lậu, bảo vệ tài sản trí tuệ.<br><b>Bằng chứng:</b> Chính sách bản quyền, danh sách license."},
+  {"section": "A.5 Tổ chức", "id": "A.5.33", "question": "(A.5.33) Các hồ sơ quan trọng (log, hợp đồng) có được bảo vệ khỏi mất mát, sửa đổi và được lưu trữ đủ thời gian không?", "explanation": "<b>Ý nghĩa:</b> Log phải lưu đủ lâu để điều tra.<br><b>Bằng chứng:</b> Chính sách lưu trữ, cấu hình retention log."},
+  {"section": "A.5 Tổ chức", "id": "A.5.34", "question": "(A.5.34) Nếu tổ chức xử lý Thông tin Cá nhân (PII), các biện pháp nào được áp dụng để tuân thủ quy định (Nghị định 13)?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ dữ liệu cá nhân, có sự đồng ý (Consent).<br><b>Bằng chứng:</b> Chính sách bảo vệ PII, Form đồng ý."},
+  {"section": "A.5 Tổ chức", "id": "A.5.35", "question": "(A.5.35) Việc rà soát ISMS (Đánh giá nội bộ 9.2) có được thực hiện bởi những người khách quan, độc lập không?", "explanation": "<b>Ý nghĩa:</b> Đánh giá chéo để khách quan.<br><b>Bằng chứng:</b> Quyết định thành lập đoàn đánh giá độc lập."},
+  {"section": "A.5 Tổ chức", "id": "A.5.36", "question": "(A.5.36) Tổ chức có cơ chế nào để đảm bảo nhân viên tuân thủ các chính sách ATTT (ví dụ: kiểm tra, kỷ luật)?", "explanation": "<b>Ý nghĩa:</b> Có thưởng phạt để đảm bảo thực thi.<br><b>Bằng chứng:</b> Quy định khen thưởng/kỷ luật ATTT."},
+  {"section": "A.5 Tổ chức", "id": "A.5.37", "question": "(A.5.37) Các quy trình vận hành (ví dụ: backup, vá lỗi) có được tài liệu hóa và sẵn có cho người thực hiện không?", "explanation": "<b>Ý nghĩa:</b> Vận hành cần có hướng dẫn (SOP), tránh phụ thuộc trí nhớ.<br><b>Bằng chứng:</b> Các tài liệu SOP cho Sysadmin."},
+  {"section": "A.6 Con người", "id": "A.6.1", "question": "(A.6.1) Quy trình HR có bao gồm việc kiểm tra lý lịch (screening) cho các vị trí nhạy cảm (IT, Tài chính) trước khi tuyển dụng không?", "explanation": "<b>Ý nghĩa:</b> Tránh tuyển người có tiền án vào vị trí nhạy cảm.<br><b>Bằng chứng:</b> Quy trình tuyển dụng, hồ sơ check background."},
+  {"section": "A.6 Con người", "id": "A.6.2", "question": "(A.6.2) Hợp đồng lao động hoặc thỏa thuận có bao gồm các điều khoản về trách nhiệm ATTT của nhân viên không?", "explanation": "<b>Ý nghĩa:</b> Ràng buộc trách nhiệm bảo mật từ đầu.<br><b>Bằng chứng:</b> Hợp đồng lao động, NDA."},
+  {"section": "A.6 Con người", "id": "A.6.3", "question": "(A.6.3) Đã có bằng chứng đào tạo nhận thức ATTT hàng năm (slide, danh sách tham dự)? (Giống 7.3)", "explanation": "<b>Ý nghĩa:</b> Nhắc lại kiến thức định kỳ chống lừa đảo.<br><b>Bằng chứng:</b> Hồ sơ lớp đào tạo nhận thức."},
+  {"section": "A.6 Con người", "id": "A.6.4", "question": "(A.6.4) Tổ chức có quy trình kỷ luật (trong Nội quy lao động) nếu nhân viên vi phạm chính sách ATTT không?", "explanation": "<b>Ý nghĩa:</b> Răn đe để đảm bảo tuân thủ.<br><b>Bằng chứng:</b> Nội quy lao động (mục xử lý vi phạm ATTT)."},
+  {"section": "A.6 Con người", "id": "A.6.5", "question": "(A.6.5) Quy trình nghỉ việc (Off-boarding) có bao gồm việc nhắc nhở/ràng buộc trách nhiệm bảo mật sau khi nghỉ không?", "explanation": "<b>Ý nghĩa:</b> Nghỉ rồi vẫn phải giữ bí mật.<br><b>Bằng chứng:</b> Biên bản thanh lý (có điều khoản bảo mật)."},
+  {"section": "A.6 Con người", "id": "A.6.6", "question": "(A.6.6) Nhân viên và nhà thầu có ký Thỏa thuận Bảo mật (NDA / Confidentiality Agreement) không?", "explanation": "<b>Ý nghĩa:</b> Văn bản bắt buộc trước khi tiếp cận thông tin.<br><b>Bằng chứng:</b> Các NDA đã ký."},
+  {"section": "A.6 Con người", "id": "A.6.7", "question": "(A.6.7) Đã có chính sách và các biện pháp kỹ thuật (VPN, MFA, mã hóa) cho nhân viên làm việc từ xa (Remote working) chưa?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ khi làm việc từ xa (WFH).<br><b>Bằng chứng:</b> Chính sách WFH, cấu hình VPN/MFA."},
+  {"section": "A.6 Con người", "id": "A.6.8", "question": "(A.6.8) Phỏng vấn nhân viên: Nếu nhận được email lạ, họ biết cách báo cáo sự cố (cho IT/Helpdesk) theo Quy trình 2.2 không?", "explanation": "<b>Ý nghĩa:</b> Kiểm tra hiệu quả đào tạo.<br><b>Bằng chứng:</b> Kết quả phỏng vấn hoặc diễn tập Phishing."},
+  {"section": "A.7 Vật lý", "id": "A.7.1", "question": "(A.7.1) Vòng đai an ninh vật lý (cửa, tường, hàng rào) của văn phòng và phòng server có được xác định và bảo vệ không?", "explanation": "<b>Ý nghĩa:</b> Lớp bảo vệ đầu tiên ngăn đột nhập.<br><b>Bằng chứng:</b> Quan sát thực tế cửa, tường, bảo vệ."},
+  {"section": "A.7 Vật lý", "id": "A.7.2", "question": "(A.7.2) Quan sát: Việc ra vào các khu vực nhạy cảm (văn phòng, phòng server) có được kiểm soát không (thẻ từ, khóa)? Khách có được giám sát/đeo thẻ không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát ra vào. Khách phải có người kèm.<br><b>Bằng chứng:</b> Hệ thống kiểm soát ra vào (ACS), sổ nhật ký khách."},
+  {"section": "A.7 Vật lý", "id": "A.7.3", "question": "(A.7.3) Văn phòng và phòng server có được bảo vệ (khóa cửa, tủ rack) khi không có người giám sát không?", "explanation": "<b>Ý nghĩa:</b> Tránh kẻ gian lẻn vào khi vắng người.<br><b>Bằng chứng:</b> Quan sát tủ rack, cửa phòng khi vắng người."},
+  {"section": "A.7 Vật lý", "id": "A.7.4", "question": "(A.7.4) Quan sát: Có hệ thống giám sát (CCTV) tại các lối ra vào và khu vực nhạy cảm không? Log camera có được lưu trữ và bảo vệ không?", "explanation": "<b>Ý nghĩa:</b> Ghi hình để điều tra sau này.<br><b>Bằng chứng:</b> Hệ thống CCTV, thời gian lưu trữ video."},
+  {"section": "A.7 Vật lý", "id": "A.7.5", "question": "(A.7.5) Phòng server có được bảo vệ khỏi các mối đe dọa môi trường không (cháy, ngập, nhiệt độ)? (Bằng chứng: bình chữa cháy, điều hòa, UPS)", "explanation": "<b>Ý nghĩa:</b> Chống nóng, ẩm, cháy, mất điện.<br><b>Bằng chứng:</b> Hệ thống báo cháy, điều hòa, UPS, cảm biến."},
+  {"section": "A.7 Vật lý", "id": "A.7.6", "question": "(A.7.6) Các quy tắc làm việc tại khu vực an toàn (phòng server) có được định nghĩa và tuân thủ không (ví dụ: hạn chế mang thiết bị cá nhân)?", "explanation": "<b>Ý nghĩa:</b> Quy định rõ việc ra vào phòng server.<br><b>Bằng chứng:</b> Nội quy phòng máy chủ."},
+  {"section": "A.7 Vật lý", "id": "A.7.7", "question": "(A.7.7) Quan sát: Nhân viên có tuân thủ chính sách \"Bàn làm việc sạch\" (không để tài liệu nhạy cảm) và \"Màn hình sạch\" (khóa máy tính khi rời đi) không?", "explanation": "<b>Ý nghĩa:</b> Tránh lộ thông tin cho người đi ngang qua.<br><b>Bằng chứng:</b> Quan sát thực tế văn phòng."},
+  {"section": "A.7 Vật lý", "id": "A.7.8", "question": "(A.7.8) Thiết bị (máy chủ, switch) có được đặt ở vị trí an toàn, giảm thiểu rủi ro bị nhìn trộm hoặc hư hỏng không?", "explanation": "<b>Ý nghĩa:</b> Tránh đặt màn hình máy chủ hướng ra nơi công cộng.<br><b>Bằng chứng:</b> Quan sát vị trí lắp đặt."},
+  {"section": "A.7 Vật lý", "id": "A.7.9", "question": "(A.7.9) Các biện pháp nào được áp dụng để bảo vệ tài sản (ví dụ: laptop) khi nhân viên mang ra khỏi văn phòng (làm việc từ xa, công tác)?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ laptop mang ra ngoài (mã hóa ổ cứng).<br><b>Bằng chứng:</b> Chính sách thiết bị di động, cấu hình Bitlocker."},
+  {"section": "A.7 Vật lý", "id": "A.7.10", "question": "(A.7.10) Các thiết bị lưu trữ (USB, ổ cứng hỏng) có được quản lý (kiểm soát, cấp phát) và hủy bỏ an toàn (xóa dữ liệu, phá hủy vật lý) khi không còn sử dụng không?", "explanation": "<b>Ý nghĩa:</b> Hủy vật lý ổ cứng hỏng để tránh lộ dữ liệu.<br><b>Bằng chứng:</b> Biên bản hủy tài sản, quy trình hủy dữ liệu."},
+  {"section": "A.7 Vật lý", "id": "A.7.11", "question": "(A.7.11) Các hệ thống hỗ trợ (điện, điều hòa, mạng) cho phòng server có được bảo vệ, dự phòng (UPS, máy nổ) và bảo trì định kỳ không?", "explanation": "<b>Ý nghĩa:</b> Đảm bảo hoạt động liên tục (UPS, máy phát).<br><b>Bằng chứng:</b> Hồ sơ bảo trì, nhật ký máy phát."},
+  {"section": "A.7 Vật lý", "id": "A.7.12", "question": "(A.7.12) Hệ thống cáp (mạng, điện) có được bảo vệ khỏi việc bị can thiệp hoặc hư hỏng vật lý không (ví dụ: đi trong máng cáp, ống gen)?", "explanation": "<b>Ý nghĩa:</b> Tránh chuột cắn hoặc cắt trộm cáp.<br><b>Bằng chứng:</b> Quan sát hệ thống máng cáp."},
+  {"section": "A.7 Vật lý", "id": "A.7.13", "question": "(A.7.13) Thiết bị (máy chủ, UPS) có được bảo trì định kỳ theo lịch của nhà cung cấp không? Hồ sơ bảo trì có được lưu lại không?", "explanation": "<b>Ý nghĩa:</b> Bảo trì để tránh hỏng hóc.<br><b>Bằng chứng:</b> Kế hoạch và biên bản bảo trì."},
+  {"section": "A.7 Vật lý", "id": "A.7.14", "question": "(A.7.14) Khi thanh lý hoặc tái sử dụng thiết bị (laptop, máy chủ), tổ chức có đảm bảo mọi dữ liệu nhạy cảm đã được xóa an toàn không?", "explanation": "<b>Ý nghĩa:</b> Wipe sạch dữ liệu trước khi bán/chuyển giao.<br><b>Bằng chứng:</b> Quy trình thanh lý, biên bản xóa dữ liệu."},
+  {"section": "A.8 Công nghệ", "id": "A.8.1", "question": "(A.8.1) Quan sát: Thiết bị đầu cuối (laptop, PC) có được bảo vệ không (cài Antivirus, bật mã hóa ổ cứng, chính sách màn hình khóa tự động)?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ 'cửa ngõ' máy tính nhân viên.<br><b>Bằng chứng:</b> Antivirus, policy màn hình khóa, mã hóa ổ cứng."},
+  {"section": "A.8 Công nghệ", "id": "A.8.2", "question": "(A.8.2) Quyền truy cập đặc quyền (admin, root) có bị hạn chế, giám sát và chỉ cấp khi thật sự cần thiết không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát chặt tài khoản Admin.<br><b>Bằng chứng:</b> Danh sách Admin, log sử dụng."},
+  {"section": "A.8 Công nghệ", "id": "A.8.3", "question": "(A.8.3) Việc truy cập thông tin (ví dụ: ổ đĩa dùng chung, CSDL) có được phân quyền (restriction) dựa trên vai trò, chức năng không?", "explanation": "<b>Ý nghĩa:</b> Phân quyền theo phòng ban (Least Privilege).<br><b>Bằng chứng:</b> Cấu hình phân quyền File Server/DB."},
+  {"section": "A.8 Công nghệ", "id": "A.8.4", "question": "(A.8.4) (Nếu có) Quyền truy cập mã nguồn (source code) có được kiểm soát chặt chẽ (phân quyền trên Git, SVN) không?", "explanation": "<b>Ý nghĩa:</b> Bảo vệ source code khỏi lộ lọt/sửa trộm.<br><b>Bằng chứng:</b> Phân quyền trên Git."},
+  {"section": "A.8 Công nghệ", "id": "A.8.5", "question": "(A.8.5) Hệ thống có cung cấp cơ chế xác thực an toàn không (ví dụ: không truyền mật khẩu clear text, có MFA)?", "explanation": "<b>Ý nghĩa:</b> Đăng nhập an toàn (HTTPS, MFA).<br><b>Bằng chứng:</b> Cấu hình SSO, MFA."},
+  {"section": "A.8 Công nghệ", "id": "A.8.6", "question": "(A.8.6) Tổ chức có giám sát dung lượng (capacity) của các hệ thống quan trọng (CPU, RAM, disk, bandwidth) để dự báo và mở rộng kịp thời không?", "explanation": "<b>Ý nghĩa:</b> Tránh sập hệ thống do quá tải.<br><b>Bằng chứng:</b> Công cụ giám sát và báo cáo capacity."},
+  {"section": "A.8 Công nghệ", "id": "A.8.7", "question": "(A.8.7) Tổ chức có giải pháp bảo vệ chống mã độc (Antivirus/Antimalware) trên máy chủ, máy trạm không? Giải pháp này có được cập nhật thường xuyên không?", "explanation": "<b>Ý nghĩa:</b> Chống virus/ransomware cơ bản.<br><b>Bằng chứng:</b> Dashboard Antivirus, ngày cập nhật."},
+  {"section": "A.8 Công nghệ", "id": "A.8.8", "question": "(A.8.8) Đã có báo cáo quét lỗ hổng (Vulnerability Scan) gần nhất chưa? Các lỗ hổng \"Nghiêm trọng\" (Critical) đã được xử lý (vá lỗi) chưa?", "explanation": "<b>Ý nghĩa:</b> Chủ động tìm và vá lỗi.<br><b>Bằng chứng:</b> Báo cáo scan và ticket vá lỗi."},
+  {"section": "A.8 Công nghệ", "id": "A.8.9", "question": "(A.8.9) Tổ chức có áp dụng cấu hình an toàn (hardening) cho các hệ thống mới triển khai (tắt dịch vụ/cổng không cần thiết) không? (Xem Chính sách 1.9)", "explanation": "<b>Ý nghĩa:</b> 'Cứng hóa' hệ thống, không dùng mặc định.<br><b>Bằng chứng:</b> Checklist hardening, kết quả scan."},
+  {"section": "A.8 Công nghệ", "id": "A.8.10", "question": "(A.8.10) Khi dữ liệu không còn cần thiết, tổ chức có quy trình và công cụ để xóa an toàn (secure deletion) (ví dụ: ghi đè, degauss) không?", "explanation": "<b>Ý nghĩa:</b> Xóa an toàn (ghi đè) dữ liệu nhạy cảm.<br><b>Bằng chứng:</b> Công cụ/quy trình xóa dữ liệu."},
+  {"section": "A.8 Công nghệ", "id": "A.8.11", "question": "(A.8.11) (Nếu có) Tổ chức có sử dụng kỹ thuật che giấu dữ liệu (data masking) khi sử dụng dữ liệu thật (production data) cho môi trường thử nghiệm (test) không?", "explanation": "<b>Ý nghĩa:</b> Làm mờ dữ liệu thật khi test.<br><b>Bằng chứng:</b> Quy trình tạo data test, công cụ masking."},
+  {"section": "A.8 Công nghệ", "id": "A.8.12", "question": "(A.8.12) Tổ chức có các biện pháp ngăn chặn rò rỉ dữ liệu (DLP) không (ví dụ: chặn USB, giám sát email, DLP gateway)?", "explanation": "<b>Ý nghĩa:</b> Ngăn gửi dữ liệu mật ra ngoài.<br><b>Bằng chứng:</b> Giải pháp DLP, quy định chặn USB."},
+  {"section": "A.8 Công nghệ", "id": "A.8.13", "question": "(A.8.13) Đã có log sao lưu (backup) thành công của các hệ thống quan trọng (từ đêm qua) chưa? (Xem Chính sách 1.3)", "explanation": "<b>Ý nghĩa:</b> Backup để phục hồi khi bị sự cố. Phải test restore.<br><b>Bằng chứng:</b> Log backup, biên bản test khôi phục."},
+  {"section": "A.8 Công nghệ", "id": "A.8.14", "question": "(A.8.14) Các biện pháp nào (ví dụ: HA, clustering, load balancing) được sử dụng để đảm bảo tính sẵn sàng (availability) của thông tin/dịch vụ?", "explanation": "<b>Ý nghĩa:</b> Dự phòng nóng (HA) để hệ thống không gián đoạn.<br><b>Bằng chứng:</b> Sơ đồ HA, cấu hình Load Balancer."},
+  {"section": "A.8 Công nghệ", "id": "A.8.15", "question": "(A.8.15) Các hệ thống quan trọng (máy chủ, firewall, CSDL) có được bật ghi nhật ký (logging) các sự kiện quan trọng không? (Xem Chính sách 1.8)", "explanation": "<b>Ý nghĩa:</b> Bật ghi log để điều tra sự cố.<br><b>Bằng chứng:</b> Cấu hình audit log trên thiết bị."},
+  {"section": "A.8 Công nghệ", "id": "A.8.16", "question": "(A.8.16) Log có được thu thập tập trung (SIEM/Syslog) và rà soát định kỳ (hoặc tự động) để phát hiện bất thường không? Log có được bảo vệ khỏi sửa đổi không?", "explanation": "<b>Ý nghĩa:</b> Gom log về SIEM để phân tích và bảo vệ.<br><b>Bằng chứng:</b> Hệ thống SIEM, rule cảnh báo."},
+  {"section": "A.8 Công nghệ", "id": "A.8.17", "question": "(A.8.17) Tất cả các hệ thống trong phạm vi có được đồng bộ hóa thời gian (clock synchronization) với một nguồn chuẩn (NTP server) không?", "explanation": "<b>Ý nghĩa:</b> Đồng bộ thời gian để log chính xác.<br><b>Bằng chứng:</b> Cấu hình NTP."},
+  {"section": "A.8 Công nghệ", "id": "A.8.18", "question": "(A.8.18) Việc sử dụng các tiện ích đặc quyền (ví dụ: các công cụ admin, debug) có được kiểm soát và hạn chế không?", "explanation": "<b>Ý nghĩa:</b> Chỉ admin mới được dùng công cụ mạnh.<br><b>Bằng chứng:</b> Whitelist phần mềm."},
+  {"section": "A.8 Công nghệ", "id": "A.8.19", "question": "(A.8.19) Việc cài đặt phần mềm trên hệ thống vận hành (production) có được kiểm soát (thông qua Quản lý Thay đổi) không? Người dùng có bị cấm tự ý cài đặt không?", "explanation": "<b>Ý nghĩa:</b> Không tùy tiện cài cắm lên Production.<br><b>Bằng chứng:</b> Quy định cài đặt, chặn quyền admin user."},
+  {"section": "A.8 Công nghệ", "id": "A.8.20", "question": "(A.8.20) Xem cấu hình Tường lửa (Firewall): Mạng có được phân đoạn (network segregation) thành các vùng (DMZ, LAN, Wifi, Server) không? (Xem Chính sách 1.9)", "explanation": "<b>Ý nghĩa:</b> Chia mạng để ngăn lây lan virus.<br><b>Bằng chứng:</b> Sơ đồ mạng, cấu hình VLAN/Firewall."},
+  {"section": "A.8 Công nghệ", "id": "A.8.21", "question": "(A.8.21) Các dịch vụ mạng (network services) có được cấu hình an toàn, tắt các tính năng không cần thiết không?", "explanation": "<b>Ý nghĩa:</b> Chỉ bật dịch vụ cần thiết.<br><b>Bằng chứng:</b> Scan port, hardening thiết bị mạng."},
+  {"section": "A.8 Công nghệ", "id": "A.8.22", "question": "(A.8.22) Việc lọc và kiểm soát luồng thông tin (traffic) giữa các phân đoạn mạng có được thực hiện (trên Firewall/Router) không?", "explanation": "<b>Ý nghĩa:</b> Firewall chặn kết nối không phép.<br><b>Bằng chứng:</b> Review rule firewall."},
+  {"section": "A.8 Công nghệ", "id": "A.8.23", "question": "(A.8.23) Tổ chức có giải pháp lọc web (web filtering) để chặn truy cập đến các trang web độc hại/không phù hợp không? (Xem Chính sách 1.9)", "explanation": "<b>Ý nghĩa:</b> Chặn web đen, mã độc.<br><b>Bằng chứng:</b> Cấu hình Web Proxy/Filter."},
+  {"section": "A.8 Công nghệ", "id": "A.8.24", "question": "(A.8.24) Tổ chức có chính sách và biện pháp sử dụng mật mã (cryptography) để bảo vệ thông tin không (ví dụ: mã hóa ổ cứng, SSL/TLS, mã hóa backup)?", "explanation": "<b>Ý nghĩa:</b> Mã hóa để bảo vệ tính bí mật.<br><b>Bằng chứng:</b> Chính sách mã hóa, cấu hình SSL/TLS."},
   {"section": "A.8 Công nghệ", "id": "A.8.25", "question": "(A.8.25) (Nếu có) Quy trình phát triển phần mềm có tuân theo một vòng đời phát triển an toàn (secure development life cycle - SDLC) không?", "explanation": "<b>Ý nghĩa:</b> Bảo mật từ thiết kế (Security by Design).<br><b>Bằng chứng:</b> Quy trình DevSecOps/SDLC."},
-  {"section": "A.8 Công nghệ", "id": "A.8.26", "question": "(A.8.26) (Nếu có) Các yêu cầu ATTT (application security requirements) có được xác định và tích hợp vào quá trình phát triển không?", "explanation": "<b>Ý nghĩa:</b> Xác định yêu cầu bảo mật trước khi code.<br><b>Bằng chứng:</b> Tài liệu SRS có mục yêu cầu bảo mật."},
-  {"section": "A.8 Công nghệ", "id": "A.8.27", "question": "(A.8.27) (Nếu có) Các nguyên tắc kiến trúc và kỹ thuật an toàn có được áp dụng khi xây dựng hệ thống không?", "explanation": "<b>Ý nghĩa:</b> Áp dụng mô hình chuẩn (Zero Trust, Defense in Depth).<br><b>Bằng chứng:</b> Tài liệu thiết kế kiến trúc hệ thống (HLD/LLD)."},
-  {"section": "A.8 Công nghệ", "id": "A.8.28", "question": "(A.8.28) (Nếu có) Lập trình viên có được đào tạo và áp dụng các nguyên tắc lập trình an toàn (secure coding) (ví dụ: OWASP Top 10) không?", "explanation": "<b>Ý nghĩa:</b> Coder phải biết tránh lỗi cơ bản (SQLi, XSS).<br><b>Bằng chứng:</b> Chứng chỉ đào tạo Secure Coding."},
-  {"section": "A.8 Công nghệ", "id": "A.8.29", "question": "(A.8.29) (Nếu có) Việc kiểm thử an toàn (security testing, ví dụ: VAPT, SAST/DAST) có được thực hiện trước khi triển khai (go-live) không?", "explanation": "<b>Ý nghĩa:</b> Test kỹ trước khi tung ra (scan code, pentest).<br><b>Bằng chứng:</b> Báo cáo Pentest/Scan trước khi go-live."},
-  {"section": "A.8 Công nghệ", "id": "A.8.30", "question": "(A.8.30) (Nếu có) Nếu thuê ngoài phát triển phần mềm, tổ chức có các biện pháp kiểm soát ATTT (hợp đồng, rà soát code) không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát chặt code thuê ngoài.<br><b>Bằng chứng:</b> Hợp đồng outsource (có điều khoản bảo mật), biên bản review code."},
-  {"section": "A.8 Công nghệ", "id": "A.8.31", "question": "(A.8.31) (Nếu có) Môi trường Phát triển (Dev), Thử nghiệm (Test) và Vận hành (Production) có được tách biệt (segregation) không?", "explanation": "<b>Ý nghĩa:</b> Môi trường test bị hack không được ảnh hưởng môi trường thật.<br><b>Bằng chứng:</b> Kiến trúc mạng tách biệt, quy trình deploy."},
-  {"section": "A.8 Công nghệ", "id": "A.8.32", "question": "(A.8.32) Đã có bằng chứng (ticket, RFC) cho thấy các thay đổi (cấu hình, phần mềm) được phê duyệt, kiểm tra (theo QT 2.6) trước khi triển khai không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát deploy chặt chẽ để tránh lỗi.<br><b>Bằng chứng:</b> Ticket Change Management (RFC) đã được phê duyệt."},
-  {"section": "A.8 Công nghệ", "id": "A.8.33", "question": "(A.8.33) (Nếu có) Dữ liệu thử nghiệm (test information) có được bảo vệ và lựa chọn cẩn thận (tránh dùng dữ liệu PII thật) không?", "explanation": "<b>Ý nghĩa:</b> Tránh dùng dữ liệu thật của khách hàng để test.<br><b>Bằng chứng:</b> Quy trình quản lý dữ liệu test."},
-  {"section": "A.8 Công nghệ", "id": "A.8.34", "question": "(A.8.34) Các hoạt động đánh giá (audit tests, pentest) có được lập kế hoạch và giám sát để giảm thiểu rủi ro gián đoạn hệ thống vận hành không?", "explanation": "<b>Ý nghĩa:</b> Pentest không được làm sập hệ thống thật.<br><b>Bằng chứng:</b> Kế hoạch pentest, quy định Rules of Engagement (RoE)."}
+  {"section": "A.8 Công nghệ", "id": "A.8.26", "question": "(A.8.26) (Nếu có) Các yêu cầu ATTT (application security requirements) có được xác định và tích hợp vào quá trình phát triển không?", "explanation": "<b>Ý nghĩa:</b> Xác định yêu cầu bảo mật trước khi code.<br><b>Bằng chứng:</b> Tài liệu SRS có mục bảo mật."},
+  {"section": "A.8 Công nghệ", "id": "A.8.27", "question": "(A.8.27) (Nếu có) Các nguyên tắc kiến trúc và kỹ thuật an toàn có được áp dụng khi xây dựng hệ thống không?", "explanation": "<b>Ý nghĩa:</b> Áp dụng mô hình chuẩn (Zero Trust...).<br><b>Bằng chứng:</b> Tài liệu thiết kế kiến trúc (HLD/LLD)."},
+  {"section": "A.8 Công nghệ", "id": "A.8.28", "question": "(A.8.28) (Nếu có) Lập trình viên có được đào tạo và áp dụng các nguyên tắc lập trình an toàn (secure coding) (ví dụ: OWASP Top 10) không?", "explanation": "<b>Ý nghĩa:</b> Coder phải biết tránh lỗi (SQLi, XSS).<br><b>Bằng chứng:</b> Chứng chỉ đào tạo Secure Coding."},
+  {"section": "A.8 Công nghệ", "id": "A.8.29", "question": "(A.8.29) (Nếu có) Việc kiểm thử an toàn (security testing, ví dụ: VAPT, SAST/DAST) có được thực hiện trước khi triển khai (go-live) không?", "explanation": "<b>Ý nghĩa:</b> Scan code, pentest trước khi go-live.<br><b>Bằng chứng:</b> Báo cáo Pentest/Scan."},
+  {"section": "A.8 Công nghệ", "id": "A.8.30", "question": "(A.8.30) (Nếu có) Nếu thuê ngoài phát triển phần mềm, tổ chức có các biện pháp kiểm soát ATTT (hợp đồng, rà soát code) không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát code thuê ngoài.<br><b>Bằng chứng:</b> Hợp đồng outsource, review code."},
+  {"section": "A.8 Công nghệ", "id": "A.8.31", "question": "(A.8.31) (Nếu có) Môi trường Phát triển (Dev), Thử nghiệm (Test) và Vận hành (Production) có được tách biệt (segregation) không?", "explanation": "<b>Ý nghĩa:</b> Tách biệt môi trường Dev/Test/Prod.<br><b>Bằng chứng:</b> Kiến trúc mạng, quy trình deploy."},
+  {"section": "A.8 Công nghệ", "id": "A.8.32", "question": "(A.8.32) Đã có bằng chứng (ticket, RFC) cho thấy các thay đổi (cấu hình, phần mềm) được phê duyệt, kiểm tra (theo QT 2.6) trước khi triển khai không?", "explanation": "<b>Ý nghĩa:</b> Kiểm soát deploy chặt chẽ.<br><b>Bằng chứng:</b> Ticket Change Management (RFC) đã duyệt."},
+  {"section": "A.8 Công nghệ", "id": "A.8.33", "question": "(A.8.33) (Nếu có) Dữ liệu thử nghiệm (test information) có được bảo vệ và lựa chọn cẩn thận (tránh dùng dữ liệu PII thật) không?", "explanation": "<b>Ý nghĩa:</b> Tránh dùng dữ liệu thật để test.<br><b>Bằng chứng:</b> Quy trình quản lý dữ liệu test."},
+  {"section": "A.8 Công nghệ", "id": "A.8.34", "question": "(A.8.34) Các hoạt động đánh giá (audit tests, pentest) có được lập kế hoạch và giám sát để giảm thiểu rủi ro gián đoạn hệ thống vận hành không?", "explanation": "<b>Ý nghĩa:</b> Pentest không được làm sập hệ thống thật.<br><b>Bằng chứng:</b> Kế hoạch pentest, quy định RoE."}
 ];
 
 let currentQuestionIndex = 0, clientName = "", auditResults = [], isDirty = false, sections = [];
-const screens = { setup: document.getElementById('screen-setup'), audit: document.getElementById('screen-audit'), done: document.getElementById('screen-done') };
 const els = {
     clientNameInput: document.getElementById('clientName'), startButton: document.getElementById('startButton'),
     clientNameDisplay: document.getElementById('clientNameDisplay'), saveReportButton: document.getElementById('saveReportButton'),
@@ -274,6 +342,7 @@ const els = {
     prevButton: document.getElementById('prevButton'), nextButton: document.getElementById('nextButton'),
     controlCounter: document.getElementById('controlCounter'), reportFileName: document.getElementById('reportFileName')
 };
+const screens = { setup: document.getElementById('screen-setup'), audit: document.getElementById('screen-audit'), done: document.getElementById('screen-done') };
 
 window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 function showScreen(sid) { Object.values(screens).forEach(s => s.classList.remove('active')); screens[sid].classList.add('active'); }
@@ -281,7 +350,7 @@ function populateSidebar() {
     sections = [...new Set(CHECKLIST_DATA.map(item => item.section))]; els.sectionList.innerHTML = '';
     sections.forEach(sec => {
         const li = document.createElement('li'), btn = document.createElement('button');
-        btn.className = "w-full text-left p-3 rounded-lg font-medium text-gray-700 hover:bg-emerald-50 transition duration-150";
+        btn.className = "w-full text-left p-3 rounded-lg font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition duration-150";
         btn.textContent = sec; btn.onclick = () => jumpToSection(sec); li.appendChild(btn); els.sectionList.appendChild(li);
     });
 }
@@ -290,50 +359,36 @@ function jumpToSection(name) { saveCurrentAnswer(); currentQuestionIndex = CHECK
 function startAudit() {
     clientName = els.clientNameInput.value.trim(); if (clientName === "") return alert("Vui lòng nhập tên khách hàng.");
     els.clientNameDisplay.textContent = clientName;
-    // Khởi tạo mảng evidence_files rỗng để chứa nhiều file
     auditResults = CHECKLIST_DATA.map(item => ({ ...item, status: "Bỏ qua", note: "", evidence_files: [] }));
     populateSidebar(); currentQuestionIndex = 0; loadQuestion(0); updateProgress(); showScreen('audit'); isDirty = true;
 }
-
-// Hàm hiển thị danh sách file
 function renderEvidenceList() {
     const files = auditResults[currentQuestionIndex].evidence_files || []; els.evidenceList.innerHTML = '';
-    if (files.length === 0) { els.evidenceList.innerHTML = '<div class="text-sm text-gray-400 italic pl-1">Chưa có file bằng chứng.</div>'; return; }
+    if (files.length === 0) { els.evidenceList.innerHTML = '<div class="text-sm text-slate-400 italic pl-2">Chưa có file bằng chứng.</div>'; return; }
     files.forEach((url, index) => {
-        const div = document.createElement('div'); div.className = 'flex items-center justify-between p-2 bg-emerald-50 rounded-lg border border-emerald-100';
-        div.innerHTML = `<a href="${url}" target="_blank" class="text-sm text-emerald-600 hover:underline truncate flex-1 mr-2" title="${url.split('/').pop()}">📎 ${url.split('/').pop()}</a><button type="button" class="text-red-400 hover:text-red-600 focus:outline-none p-1" title="Xóa file này" onclick="removeEvidenceFile(${index})"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg></button>`;
+        const div = document.createElement('div'); div.className = 'flex items-center justify-between p-2.5 bg-emerald-50 rounded-lg border border-emerald-100 group hover:border-emerald-300 transition';
+        div.innerHTML = `<a href="${url}" target="_blank" class="text-sm text-emerald-700 hover:underline truncate flex-1 mr-3 font-medium" title="${url.split('/').pop()}">📄 ${url.split('/').pop()}</a><button type="button" class="text-slate-400 hover:text-red-500 focus:outline-none p-1.5 rounded-full hover:bg-red-50 transition" title="Xóa file này" onclick="removeEvidenceFile(${index})"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg></button>`;
         els.evidenceList.appendChild(div);
     });
 }
-// Hàm xóa file
-window.removeEvidenceFile = function(fileIndex) {
-    if (confirm('Bạn chắc chắn muốn xóa file này?')) { auditResults[currentQuestionIndex].evidence_files.splice(fileIndex, 1); renderEvidenceList(); }
-};
-
+window.removeEvidenceFile = function(fileIndex) { if (confirm('Bạn chắc chắn muốn xóa file này?')) { auditResults[currentQuestionIndex].evidence_files.splice(fileIndex, 1); renderEvidenceList(); }};
 function loadQuestion(idx) {
     const item = CHECKLIST_DATA[idx], res = auditResults[idx];
     els.controlSection.textContent = item.section; els.controlId.textContent = item.id; els.controlQuestion.textContent = item.question; els.controlStatus.value = res.status;
-    renderEvidenceList(); // Hiển thị danh sách file
-    els.controlEvidenceUpload.value = null; els.controlNote.value = res.note; els.controlCounter.textContent = `${idx + 1} / ${CHECKLIST_DATA.length}`;
+    renderEvidenceList(); els.controlEvidenceUpload.value = null; els.controlNote.value = res.note; els.controlCounter.textContent = `${idx + 1} / ${CHECKLIST_DATA.length}`;
     updateSidebarHighlight(item.section);
     els.prevButton.disabled = (idx === 0); els.prevButton.classList.toggle('opacity-50', idx === 0); els.prevButton.classList.toggle('cursor-not-allowed', idx === 0);
     const isLast = idx === CHECKLIST_DATA.length - 1;
     els.nextButton.innerHTML = isLast ? `Hoàn thành <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>` : `Tiếp theo <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>`;
     els.nextButton.classList.toggle('bg-emerald-800', isLast); els.nextButton.classList.toggle('hover:bg-emerald-900', isLast);
     els.nextButton.classList.toggle('bg-emerald-600', !isLast); els.nextButton.classList.toggle('hover:bg-emerald-700', !isLast);
-
-    const expArea = document.getElementById('explanationArea'), expContent = document.getElementById('explanationContent'), toggleBtn = document.getElementById('toggleExplanation');
-    if (item.explanation) {
-        expArea.classList.remove('hidden'); expContent.innerHTML = item.explanation; expContent.classList.add('hidden');
-        const newBtn = toggleBtn.cloneNode(true); toggleBtn.parentNode.replaceChild(newBtn, toggleBtn);
-        newBtn.addEventListener('click', () => expContent.classList.toggle('hidden'));
-    } else { expArea.classList.add('hidden'); }
+    const expArea = document.getElementById('explanationArea'), expContent = document.getElementById('explanationContent');
+    if (item.explanation) { expArea.classList.remove('hidden'); expContent.innerHTML = item.explanation; } else { expArea.classList.add('hidden'); }
 }
 async function handleFileUpload(e) {
     const files = e.target.files; if (!files || files.length === 0) return;
     els.uploadLoading.classList.remove('hidden');
     const safeName = clientName ? clientName.trim().replace(/[^a-z0-9]/gi, '-').toLowerCase() : 'unknown';
-    // Upload tuần tự từng file
     for (let i = 0; i < files.length; i++) {
         const formData = new FormData(); formData.append('file', files[i]);
         try {
@@ -348,26 +403,255 @@ function saveCurrentAnswer() { if(auditResults[currentQuestionIndex]) { auditRes
 function nextQuestion() { saveCurrentAnswer(); if (currentQuestionIndex < CHECKLIST_DATA.length - 1) { currentQuestionIndex++; loadQuestion(currentQuestionIndex); } else { generateReport(); } updateProgress(); }
 function prevQuestion() { saveCurrentAnswer(); if (currentQuestionIndex > 0) { currentQuestionIndex--; loadQuestion(currentQuestionIndex); } updateProgress(); }
 function updateProgress() { const answered = auditResults.filter(r => r.status !== "Bỏ qua").length; els.progressText.textContent = `${answered}/${CHECKLIST_DATA.length}`; els.progressBar.style.setProperty('--progress-width', `${(answered / CHECKLIST_DATA.length) * 100}%`); }
+
+// --- HÀM TẠO BÁO CÁO CHUYÊN NGHIỆP (V3.0 PRO) ---
 function generateReport() {
-    if (!confirm("Hoàn thành và tạo báo cáo?")) return;
+    if (!confirm("Bạn có chắc chắn muốn hoàn thành và xuất báo cáo không?")) return;
     saveCurrentAnswer(); updateProgress();
-    const now = new Date().toISOString().slice(0,10), safeName = clientName.replace(/[^a-z0-9]/gi, '_').toLowerCase(), fileName = `Bao_cao_Audit_ISO27001_${safeName}_${now}.md`;
-    let content = `# BÁO CÁO AUDIT ISO 27001:2022\n**Tổ chức:** ${clientName}\n**Ngày:** ${now}\n\n## 1. Tóm tắt NCs\n| ID | Phát hiện | Bằng chứng |\n| :--- | :--- | :--- |\n`;
-    const formatFiles = (files) => { if (!files || files.length === 0) return ""; return files.map(url => `[${url.split('/').pop()}](${url})`).join('<br>'); };
-    const ncs = auditResults.filter(r => r.status === "Không Tuân thủ (NC)");
-    content += ncs.length ? ncs.map(r => `| ${r.id} | ${r.note} | ${formatFiles(r.evidence_files)} |`).join('\n') : "| (Không có) | *Không phát hiện NC* | |";
-    content += "\n\n## 2. Chi tiết\n| Phần | ID | Trạng thái | Ghi chú | File |\n| :--- | :--- | :--- | :--- | :--- |\n";
-    content += auditResults.filter(r => r.status !== "Bỏ qua").map(r => `| ${r.section} | ${r.id} | ${r.status} | ${r.note} | ${formatFiles(r.evidence_files)} |`).join('\n');
-    saveAs(new Blob([content], { type: "text/markdown;charset=utf-8" }), fileName);
+
+    // 1. TÍNH TOÁN SỐ LIỆU DASHBOARD
+    const total = CHECKLIST_DATA.length;
+    const audited = auditResults.filter(r => r.status !== "Bỏ qua").length;
+    const compliant = auditResults.filter(r => r.status === "Tuân thủ").length;
+    const nc = auditResults.filter(r => r.status === "Không Tuân thủ (NC)").length;
+    const na = auditResults.filter(r => r.status === "Không Áp dụng").length;
+    // Công thức điểm chuẩn: (Tuân thủ / (Tổng đã đánh giá - N/A)) * 100
+    const denominator = audited - na;
+    const score = denominator > 0 ? Math.round((compliant / denominator) * 100) : 0;
+    
+    // Đánh giá tổng quan dựa trên điểm số
+    let evaluationText = "", evaluationColor = "";
+    if (score >= 90) { evaluationText = "Hệ thống Quản lý ATTT được vận hành TỐT. Rủi ro ở mức thấp."; evaluationColor = "text-emerald-600"; }
+    else if (score >= 70) { evaluationText = "Hệ thống ĐẠT YÊU CẦU cơ bản, cần khắc phục một số điểm NC."; evaluationColor = "text-amber-600"; }
+    else { evaluationText = "Hệ thống CẦN CẢI THIỆN GẤP. Nhiều rủi ro an ninh nghiêm trọng."; evaluationColor = "text-red-600"; }
+
+    // Chuẩn bị dữ liệu biểu đồ (Group by Section)
+    const sectionStats = {};
+    auditResults.forEach(r => {
+        if (!sectionStats[r.section]) sectionStats[r.section] = { total: 0, compliant: 0, nc: 0, na: 0 };
+        if (r.status !== "Bỏ qua") {
+            sectionStats[r.section].total++;
+            if (r.status === "Tuân thủ") sectionStats[r.section].compliant++;
+            if (r.status === "Không Tuân thủ (NC)") sectionStats[r.section].nc++;
+            if (r.status === "Không Áp dụng") sectionStats[r.section].na++;
+        }
+    });
+    const chartLabels = Object.keys(sectionStats);
+    const chartDataNC = chartLabels.map(sec => sectionStats[sec].nc);
+    const chartDataC = chartLabels.map(sec => sectionStats[sec].compliant);
+
+    // 2. TẠO NỘI DUNG HTML BÁO CÁO
+    const now = new Date();
+    const reportDate = `${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+    const reportHTML = `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Báo cáo Audit ISO 27001 - ${clientName}</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+    <style>
+        @media print {
+            .no-print { display: none; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .page-break { page-break-before: always; }
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="p-0 md:p-10">
+    <div class="container mx-auto my-10 rounded-xl" id="report-container">
+        <div class="flex justify-between items-center border-b-2 border-slate-800 pb-6 mb-8">
+            <div>
+                <h1 class="text-4xl font-extrabold text-slate-800 uppercase tracking-tight">Báo cáo Đánh giá</h1>
+                <div class="text-xl font-semibold text-emerald-600 mt-1">ISO/IEC 27001:2022</div>
+            </div>
+            <div class="text-right">
+                <div class="text-slate-500 font-medium">Tổ chức được đánh giá</div>
+                <div class="text-2xl font-bold text-slate-800">${clientName}</div>
+                <div class="text-slate-400 text-sm mt-1">Ngày báo cáo: ${reportDate}</div>
+            </div>
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-8 mb-10 border border-slate-200">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <span class="bg-emerald-600 w-2 h-8 mr-3 rounded-full"></span>
+                1. Tóm tắt Tổng quan (Executive Summary)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+                    <div class="relative w-40 h-40">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="${score >= 70 ? '#059669' : '#dc2626'}" stroke-width="3" stroke-dasharray="${score}, 100" class="transition-all duration-1000"/>
+                            <text x="18" y="20.35" class="text-3xl font-bold" text-anchor="middle" fill="${score >= 70 ? '#059669' : '#dc2626'}">${score}%</text>
+                        </svg>
+                    </div>
+                    <div class="mt-4 text-lg font-bold text-slate-700">Điểm Tuân thủ</div>
+                </div>
+                <div class="md:col-span-2 flex flex-col justify-center space-y-6">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                         <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <div class="text-3xl font-extrabold text-emerald-600">${compliant}</div>
+                            <div class="text-sm font-semibold text-emerald-800 mt-1">Tuân thủ (C)</div>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                            <div class="text-3xl font-extrabold text-red-600">${nc}</div>
+                            <div class="text-sm font-semibold text-red-800 mt-1">Không tuân thủ (NC)</div>
+                        </div>
+                         <div class="p-4 bg-slate-100 rounded-xl border border-slate-200">
+                            <div class="text-3xl font-extrabold text-slate-600">${na}</div>
+                            <div class="text-sm font-semibold text-slate-700 mt-1">Không áp dụng (N/A)</div>
+                        </div>
+                    </div>
+                    <div class="p-5 bg-white rounded-xl border-l-4 ${score >= 70 ? 'border-emerald-500' : 'border-red-500'} shadow-sm">
+                        <div class="text-sm font-bold text-slate-400 uppercase mb-1">Đánh giá của chuyên gia</div>
+                        <div class="text-lg font-bold ${evaluationColor}">${evaluationText}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-12">
+             <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <span class="bg-emerald-600 w-2 h-8 mr-3 rounded-full"></span>
+                2. Phân tích theo Lĩnh vực (Domain Analytics)
+            </h2>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200" style="height: 400px;">
+                <canvas id="domainChart"></canvas>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="mb-12 mt-10">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center text-red-700">
+                <span class="bg-red-600 w-2 h-8 mr-3 rounded-full"></span>
+                3. Các Phát hiện Quan trọng (Non-Conformities)
+            </h2>
+            ${nc === 0 ? '<div class="p-5 bg-emerald-50 text-emerald-700 rounded-xl font-medium border border-emerald-200">Tuyệt vời! Không phát hiện điểm không phù hợp (NC) nào trong phạm vi đánh giá.</div>' : 
+            `<table class="w-full text-sm text-left text-slate-700 border-collapse">
+                <thead class="text-xs text-white uppercase bg-red-700">
+                    <tr>
+                        <th class="px-4 py-3 rounded-tl-lg">ID</th>
+                        <th class="px-4 py-3">Nội dung Kiểm soát</th>
+                        <th class="px-4 py-3 rounded-tr-lg">Chi tiết Phát hiện lỗi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${auditResults.filter(r => r.status === "Không Tuân thủ (NC)").map((r, i) => `
+                        <tr class="border-b border-slate-200 bg-red-50/30 hover:bg-red-50">
+                            <td class="px-4 py-4 font-bold text-red-700 whitespace-nowrap align-top">${r.id}</td>
+                             <td class="px-4 py-4 font-medium align-top">${r.question}</td>
+                            <td class="px-4 py-4 text-slate-600 align-top">${r.note || 'Wait, chưa có ghi chú chi tiết.'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>`}
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <span class="bg-emerald-600 w-2 h-8 mr-3 rounded-full"></span>
+                4. Chi tiết Kết quả Đánh giá
+            </h2>
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="w-full text-sm text-left text-slate-700">
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                        <tr>
+                            <th class="px-4 py-3">ID</th>
+                            <th class="px-4 py-3">Trạng thái</th>
+                            <th class="px-4 py-3 w-1/3">Ghi chú / Phát hiện</th>
+                            <th class="px-4 py-3">Bằng chứng (Files)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                         ${auditResults.filter(r => r.status !== "Bỏ qua").map(r => `
+                            <tr class="bg-white hover:bg-slate-50 transition">
+                                <td class="px-4 py-4 font-medium align-top">${r.id}</td>
+                                <td class="px-4 py-4 align-top">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold 
+                                        ${r.status === 'Tuân thủ' ? 'bg-emerald-100 text-emerald-800' : 
+                                          r.status === 'Không Tuân thủ (NC)' ? 'bg-red-100 text-red-800' : 
+                                          'bg-slate-100 text-slate-800'}">
+                                        ${r.status}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-4 align-top text-slate-600 whitespace-pre-wrap">${r.note}</td>
+                                <td class="px-4 py-4 align-top">
+                                    ${r.evidence_files && r.evidence_files.length > 0 ? 
+                                      r.evidence_files.map(url => `<a href="${url}" target="_blank" class="text-blue-600 hover:underline block mb-1 truncate max-w-xs">📎 ${url.split('/').pop()}</a>`).join('') : 
+                                      '<span class="text-slate-400 italic">None</span>'}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-20 mt-20 pt-10 border-t-2 border-slate-800 page-break-inside-avoid">
+            <div>
+                <div class="font-bold text-slate-800 uppercase mb-20">Đại diện Đơn vị Đánh giá</div>
+                <div class="border-t border-slate-400 pt-2 font-medium">Ký và ghi rõ họ tên</div>
+            </div>
+            <div>
+                <div class="font-bold text-slate-800 uppercase mb-20">Đại diện ${clientName}</div>
+                <div class="border-t border-slate-400 pt-2 font-medium">Ký và ghi rõ họ tên</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-8 right-8 no-print">
+        <button onclick="window.print()" class="bg-blue-600 text-white p-4 rounded-full shadow-xl hover:bg-blue-700 transition flex items-center font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+            IN BÁO CÁO (PDF)
+        </button>
+    </div>
+
+    <script>
+        // Vẽ biểu đồ ngay khi mở báo cáo
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('domainChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ${JSON.stringify(chartLabels)},
+                    datasets: [
+                        { label: 'Tuân thủ', data: ${JSON.stringify(chartDataC)}, backgroundColor: '#059669' },
+                        { label: 'Không tuân thủ (NC)', data: ${JSON.stringify(chartDataNC)}, backgroundColor: '#dc2626' }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+        });
+    <\/script>
+</body>
+</html>
+    `;
+
+    // 3. LƯU FILE HTML
+    const safeName = clientName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const fileName = `Bao_cao_ISO27001_${safeName}_${now.toISOString().slice(0,10)}.html`;
+    saveAs(new Blob([reportHTML], { type: "text/html;charset=utf-8" }), fileName);
+
     els.reportFileName.textContent = fileName; showScreen('done'); isDirty = false;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    els.startButton.onclick = startAudit; els.prevButton.onclick = prevQuestion; els.nextButton.onclick = nextQuestion;
-    els.saveReportButton.onclick = generateReport; els.controlEvidenceUpload.onchange = handleFileUpload;
-    els.restartButton.onclick = () => { els.clientNameInput.value = ""; showScreen('setup'); };
-    // Cập nhật tiến độ ngay khi chọn dropdown status
+    els.startButton.addEventListener('click', startAudit);
     els.controlStatus.addEventListener('change', () => { saveCurrentAnswer(); updateProgress(); });
+    els.prevButton.addEventListener('click', prevQuestion);
+    els.nextButton.addEventListener('click', nextQuestion);
+    els.saveReportButton.addEventListener('click', generateReport);
+    els.controlEvidenceUpload.addEventListener('change', handleFileUpload);
+    els.restartButton.addEventListener('click', () => { els.clientNameInput.value = ""; showScreen('setup'); });
 });
 </script>
 </body>
